@@ -1,0 +1,84 @@
+# ==============================================================================
+# Bytecode and runtime artifacts
+# ==============================================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# ==============================================================================
+# Caches, models, checkpoints, and datasets
+# ==============================================================================
+cache/
+**/cache/
+*.npz
+*.pt
+*.pth
+*.pkl
+*.ckpt
+*.h5
+*.parquet
+*.feather
+*.bin
+*.tar.gz
+*.tar
+data/
+**/data/
+
+# ==============================================================================
+# Test, lint, and coverage
+# ==============================================================================
+.pytest_cache/
+**/.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# ==============================================================================
+# Build, packaging, and virtual environments
+# ==============================================================================
+build/
+dist/
+*.egg-info/
+**/*.egg-info/
+*.egg
+.eggs/
+.env
+.venv
+env/
+venv/
+
+# ==============================================================================
+# IDE, editor, and OS files
+# ==============================================================================
+.DS_Store
+**/.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# ==============================================================================
+# Jupyter Notebook checkpoints
+# ==============================================================================
+.ipynb_checkpoints/
+**/.ipynb_checkpoints/
+
+# ==============================================================================
+# Markdown files: Ignore unnecessary/scratch/temporary markdown files,
+# but keep the most important documentation (READMEs, CONTRIBUTING, docs)
+# ==============================================================================
+*.md
+*.MD
+!README.md
+!**/README.md
+!README.*
+!**/README.*
+!CONTRIBUTING.md
+!**/CONTRIBUTING.md
+!CHANGELOG.md
+!**/CHANGELOG.md
+!docs/**/*.md
