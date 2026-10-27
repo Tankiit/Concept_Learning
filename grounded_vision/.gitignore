@@ -82,3 +82,7 @@ venv/
 !CHANGELOG.md
 !**/CHANGELOG.md
 !docs/**/*.md
+!wiki/**/*.md
+!**/wiki/**/*.md
+!docs/*.md
+!wiki/*.md

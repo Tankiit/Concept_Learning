@@ -1,0 +1,1092 @@
+{
+  "method": "TreeSHAP on the same activation decision tree",
+  "n_images": 100,
+  "mean_reason_size": 3.83,
+  "mean_shap_grounded_overlap": 0.8861666666666668,
+  "interpretation": "SHAP ranks attribution; it does not guarantee sufficiency. Grounded reasons are verifier-sufficient subsets.",
+  "per_image": [
+    {
+      "sample_id": 2,
+      "k": 2,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        1988,
+        5618
+      ]
+    },
+    {
+      "sample_id": 4,
+      "k": 5,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        396,
+        999,
+        4161,
+        5618,
+        5903
+      ]
+    },
+    {
+      "sample_id": 5,
+      "k": 2,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        1988,
+        5618
+      ]
+    },
+    {
+      "sample_id": 7,
+      "k": 5,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        396,
+        999,
+        4161,
+        5618,
+        5903
+      ]
+    },
+    {
+      "sample_id": 8,
+      "k": 2,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        1988,
+        5618
+      ]
+    },
+    {
+      "sample_id": 9,
+      "k": 2,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        1988,
+        5618
+      ]
+    },
+    {
+      "sample_id": 11,
+      "k": 5,
+      "overlap_with_grounded_reason": 0.8,
+      "shap_feature_indices": [
+        396,
+        999,
+        1988,
+        4161,
+        5903
+      ]
+    },
+    {
+      "sample_id": 15,
+      "k": 2,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        1988,
+        5618
+      ]
+    },
+    {
+      "sample_id": 18,
+      "k": 2,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        1988,
+        5618
+      ]
+    },
+    {
+      "sample_id": 20,
+      "k": 2,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        1988,
+        5618
+      ]
+    },
+    {
+      "sample_id": 21,
+      "k": 2,
+      "overlap_with_grounded_reason": 0.5,
+      "shap_feature_indices": [
+        2133,
+        5618
+      ]
+    },
+    {
+      "sample_id": 23,
+      "k": 2,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        1988,
+        5618
+      ]
+    },
+    {
+      "sample_id": 30,
+      "k": 2,
+      "overlap_with_grounded_reason": 0.5,
+      "shap_feature_indices": [
+        5618,
+        5903
+      ]
+    },
+    {
+      "sample_id": 31,
+      "k": 6,
+      "overlap_with_grounded_reason": 0.6666666666666666,
+      "shap_feature_indices": [
+        396,
+        999,
+        1988,
+        2102,
+        4537,
+        5618
+      ]
+    },
+    {
+      "sample_id": 32,
+      "k": 2,
+      "overlap_with_grounded_reason": 0.5,
+      "shap_feature_indices": [
+        5618,
+        5903
+      ]
+    },
+    {
+      "sample_id": 35,
+      "k": 5,
+      "overlap_with_grounded_reason": 0.8,
+      "shap_feature_indices": [
+        396,
+        999,
+        1988,
+        4161,
+        5903
+      ]
+    },
+    {
+      "sample_id": 36,
+      "k": 2,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        1988,
+        5618
+      ]
+    },
+    {
+      "sample_id": 37,
+      "k": 2,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        1988,
+        5618
+      ]
+    },
+    {
+      "sample_id": 40,
+      "k": 2,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        1988,
+        5618
+      ]
+    },
+    {
+      "sample_id": 41,
+      "k": 5,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        396,
+        999,
+        4161,
+        5618,
+        5903
+      ]
+    },
+    {
+      "sample_id": 42,
+      "k": 5,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        396,
+        999,
+        4161,
+        5618,
+        5903
+      ]
+    },
+    {
+      "sample_id": 43,
+      "k": 2,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        1988,
+        5618
+      ]
+    },
+    {
+      "sample_id": 46,
+      "k": 2,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        1988,
+        5618
+      ]
+    },
+    {
+      "sample_id": 49,
+      "k": 2,
+      "overlap_with_grounded_reason": 0.5,
+      "shap_feature_indices": [
+        5618,
+        5903
+      ]
+    },
+    {
+      "sample_id": 51,
+      "k": 2,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        1988,
+        5618
+      ]
+    },
+    {
+      "sample_id": 53,
+      "k": 2,
+      "overlap_with_grounded_reason": 0.5,
+      "shap_feature_indices": [
+        5618,
+        5903
+      ]
+    },
+    {
+      "sample_id": 55,
+      "k": 2,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        1988,
+        5618
+      ]
+    },
+    {
+      "sample_id": 56,
+      "k": 2,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        1988,
+        5618
+      ]
+    },
+    {
+      "sample_id": 58,
+      "k": 2,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        1988,
+        5618
+      ]
+    },
+    {
+      "sample_id": 60,
+      "k": 2,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        1988,
+        5618
+      ]
+    },
+    {
+      "sample_id": 62,
+      "k": 2,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        396,
+        5618
+      ]
+    },
+    {
+      "sample_id": 64,
+      "k": 3,
+      "overlap_with_grounded_reason": 0.6666666666666666,
+      "shap_feature_indices": [
+        396,
+        1988,
+        2405
+      ]
+    },
+    {
+      "sample_id": 66,
+      "k": 2,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        396,
+        5618
+      ]
+    },
+    {
+      "sample_id": 67,
+      "k": 3,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        1988,
+        2405,
+        5618
+      ]
+    },
+    {
+      "sample_id": 69,
+      "k": 5,
+      "overlap_with_grounded_reason": 0.8,
+      "shap_feature_indices": [
+        2102,
+        4537,
+        5618,
+        5872,
+        5903
+      ]
+    },
+    {
+      "sample_id": 72,
+      "k": 4,
+      "overlap_with_grounded_reason": 0.75,
+      "shap_feature_indices": [
+        396,
+        999,
+        5618,
+        5903
+      ]
+    },
+    {
+      "sample_id": 73,
+      "k": 2,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        396,
+        5618
+      ]
+    },
+    {
+      "sample_id": 74,
+      "k": 2,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        396,
+        5618
+      ]
+    },
+    {
+      "sample_id": 75,
+      "k": 2,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        396,
+        5618
+      ]
+    },
+    {
+      "sample_id": 77,
+      "k": 4,
+      "overlap_with_grounded_reason": 0.75,
+      "shap_feature_indices": [
+        396,
+        999,
+        5618,
+        5903
+      ]
+    },
+    {
+      "sample_id": 78,
+      "k": 4,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        396,
+        3583,
+        4161,
+        5618
+      ]
+    },
+    {
+      "sample_id": 80,
+      "k": 2,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        396,
+        5618
+      ]
+    },
+    {
+      "sample_id": 81,
+      "k": 2,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        396,
+        5618
+      ]
+    },
+    {
+      "sample_id": 84,
+      "k": 2,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        396,
+        5618
+      ]
+    },
+    {
+      "sample_id": 86,
+      "k": 5,
+      "overlap_with_grounded_reason": 0.8,
+      "shap_feature_indices": [
+        396,
+        2102,
+        5618,
+        5872,
+        5903
+      ]
+    },
+    {
+      "sample_id": 89,
+      "k": 2,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        396,
+        5618
+      ]
+    },
+    {
+      "sample_id": 96,
+      "k": 5,
+      "overlap_with_grounded_reason": 0.8,
+      "shap_feature_indices": [
+        396,
+        999,
+        5618,
+        5903,
+        6086
+      ]
+    },
+    {
+      "sample_id": 97,
+      "k": 2,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        396,
+        5618
+      ]
+    },
+    {
+      "sample_id": 99,
+      "k": 2,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        396,
+        5618
+      ]
+    },
+    {
+      "sample_id": 102,
+      "k": 5,
+      "overlap_with_grounded_reason": 0.6,
+      "shap_feature_indices": [
+        396,
+        1988,
+        2102,
+        4537,
+        5903
+      ]
+    },
+    {
+      "sample_id": 104,
+      "k": 2,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        396,
+        5618
+      ]
+    },
+    {
+      "sample_id": 105,
+      "k": 2,
+      "overlap_with_grounded_reason": 0.5,
+      "shap_feature_indices": [
+        396,
+        1988
+      ]
+    },
+    {
+      "sample_id": 109,
+      "k": 5,
+      "overlap_with_grounded_reason": 0.8,
+      "shap_feature_indices": [
+        396,
+        999,
+        5618,
+        5903,
+        6086
+      ]
+    },
+    {
+      "sample_id": 110,
+      "k": 2,
+      "overlap_with_grounded_reason": 0.5,
+      "shap_feature_indices": [
+        396,
+        1988
+      ]
+    },
+    {
+      "sample_id": 111,
+      "k": 5,
+      "overlap_with_grounded_reason": 0.6,
+      "shap_feature_indices": [
+        1988,
+        2102,
+        4537,
+        5872,
+        5903
+      ]
+    },
+    {
+      "sample_id": 113,
+      "k": 2,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        396,
+        5618
+      ]
+    },
+    {
+      "sample_id": 115,
+      "k": 5,
+      "overlap_with_grounded_reason": 0.8,
+      "shap_feature_indices": [
+        396,
+        2102,
+        4537,
+        5618,
+        5903
+      ]
+    },
+    {
+      "sample_id": 116,
+      "k": 2,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        396,
+        5618
+      ]
+    },
+    {
+      "sample_id": 117,
+      "k": 3,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        1988,
+        2405,
+        5618
+      ]
+    },
+    {
+      "sample_id": 120,
+      "k": 5,
+      "overlap_with_grounded_reason": 0.8,
+      "shap_feature_indices": [
+        2102,
+        4161,
+        4537,
+        5618,
+        5872
+      ]
+    },
+    {
+      "sample_id": 121,
+      "k": 3,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        1988,
+        2405,
+        5618
+      ]
+    },
+    {
+      "sample_id": 122,
+      "k": 6,
+      "overlap_with_grounded_reason": 0.8333333333333334,
+      "shap_feature_indices": [
+        396,
+        1988,
+        2102,
+        4161,
+        5618,
+        5903
+      ]
+    },
+    {
+      "sample_id": 123,
+      "k": 6,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        396,
+        2102,
+        4161,
+        5618,
+        5872,
+        5903
+      ]
+    },
+    {
+      "sample_id": 124,
+      "k": 4,
+      "overlap_with_grounded_reason": 0.5,
+      "shap_feature_indices": [
+        999,
+        2102,
+        5618,
+        6086
+      ]
+    },
+    {
+      "sample_id": 125,
+      "k": 6,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        396,
+        2102,
+        4161,
+        5618,
+        5872,
+        5903
+      ]
+    },
+    {
+      "sample_id": 127,
+      "k": 6,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        396,
+        2102,
+        4161,
+        5618,
+        5872,
+        5903
+      ]
+    },
+    {
+      "sample_id": 128,
+      "k": 6,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        396,
+        2102,
+        4161,
+        5618,
+        5872,
+        5903
+      ]
+    },
+    {
+      "sample_id": 131,
+      "k": 6,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        396,
+        2102,
+        4161,
+        5618,
+        5872,
+        5903
+      ]
+    },
+    {
+      "sample_id": 136,
+      "k": 6,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        396,
+        2102,
+        4161,
+        5618,
+        5872,
+        5903
+      ]
+    },
+    {
+      "sample_id": 137,
+      "k": 5,
+      "overlap_with_grounded_reason": 0.6,
+      "shap_feature_indices": [
+        396,
+        1988,
+        2102,
+        5618,
+        5872
+      ]
+    },
+    {
+      "sample_id": 138,
+      "k": 6,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        396,
+        2102,
+        4161,
+        5618,
+        5872,
+        5903
+      ]
+    },
+    {
+      "sample_id": 140,
+      "k": 6,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        396,
+        2102,
+        4161,
+        5618,
+        5872,
+        5903
+      ]
+    },
+    {
+      "sample_id": 141,
+      "k": 6,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        396,
+        2102,
+        4161,
+        5618,
+        5872,
+        5903
+      ]
+    },
+    {
+      "sample_id": 142,
+      "k": 6,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        396,
+        2102,
+        4161,
+        5618,
+        5872,
+        5903
+      ]
+    },
+    {
+      "sample_id": 143,
+      "k": 6,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        396,
+        2102,
+        4161,
+        5618,
+        5872,
+        5903
+      ]
+    },
+    {
+      "sample_id": 145,
+      "k": 6,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        396,
+        2102,
+        4161,
+        5618,
+        5872,
+        5903
+      ]
+    },
+    {
+      "sample_id": 148,
+      "k": 6,
+      "overlap_with_grounded_reason": 0.8333333333333334,
+      "shap_feature_indices": [
+        396,
+        1988,
+        2102,
+        4161,
+        5618,
+        5903
+      ]
+    },
+    {
+      "sample_id": 151,
+      "k": 6,
+      "overlap_with_grounded_reason": 0.8333333333333334,
+      "shap_feature_indices": [
+        396,
+        1988,
+        2102,
+        4161,
+        5618,
+        5903
+      ]
+    },
+    {
+      "sample_id": 152,
+      "k": 6,
+      "overlap_with_grounded_reason": 0.8333333333333334,
+      "shap_feature_indices": [
+        396,
+        1988,
+        2102,
+        4537,
+        5618,
+        5903
+      ]
+    },
+    {
+      "sample_id": 153,
+      "k": 6,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        396,
+        2102,
+        4161,
+        5618,
+        5872,
+        5903
+      ]
+    },
+    {
+      "sample_id": 158,
+      "k": 6,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        396,
+        2102,
+        4161,
+        5618,
+        5872,
+        5903
+      ]
+    },
+    {
+      "sample_id": 159,
+      "k": 6,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        396,
+        2102,
+        4161,
+        5618,
+        5872,
+        5903
+      ]
+    },
+    {
+      "sample_id": 160,
+      "k": 6,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        396,
+        2102,
+        4161,
+        5618,
+        5872,
+        5903
+      ]
+    },
+    {
+      "sample_id": 164,
+      "k": 6,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        396,
+        2102,
+        4161,
+        5618,
+        5872,
+        5903
+      ]
+    },
+    {
+      "sample_id": 166,
+      "k": 6,
+      "overlap_with_grounded_reason": 0.8333333333333334,
+      "shap_feature_indices": [
+        396,
+        1988,
+        2102,
+        4161,
+        5618,
+        5903
+      ]
+    },
+    {
+      "sample_id": 168,
+      "k": 6,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        396,
+        2102,
+        4161,
+        5618,
+        5872,
+        5903
+      ]
+    },
+    {
+      "sample_id": 172,
+      "k": 6,
+      "overlap_with_grounded_reason": 0.8333333333333334,
+      "shap_feature_indices": [
+        396,
+        1988,
+        2102,
+        4161,
+        5618,
+        5903
+      ]
+    },
+    {
+      "sample_id": 174,
+      "k": 6,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        396,
+        2102,
+        4161,
+        5618,
+        5872,
+        5903
+      ]
+    },
+    {
+      "sample_id": 176,
+      "k": 6,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        396,
+        2102,
+        4161,
+        5618,
+        5872,
+        5903
+      ]
+    },
+    {
+      "sample_id": 177,
+      "k": 3,
+      "overlap_with_grounded_reason": 0.6666666666666666,
+      "shap_feature_indices": [
+        1988,
+        2405,
+        5872
+      ]
+    },
+    {
+      "sample_id": 181,
+      "k": 4,
+      "overlap_with_grounded_reason": 0.75,
+      "shap_feature_indices": [
+        396,
+        2133,
+        4161,
+        5618
+      ]
+    },
+    {
+      "sample_id": 182,
+      "k": 4,
+      "overlap_with_grounded_reason": 0.75,
+      "shap_feature_indices": [
+        396,
+        2133,
+        4161,
+        5618
+      ]
+    },
+    {
+      "sample_id": 184,
+      "k": 4,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        396,
+        3583,
+        4161,
+        5618
+      ]
+    },
+    {
+      "sample_id": 187,
+      "k": 4,
+      "overlap_with_grounded_reason": 0.75,
+      "shap_feature_indices": [
+        396,
+        2133,
+        4161,
+        5618
+      ]
+    },
+    {
+      "sample_id": 188,
+      "k": 2,
+      "overlap_with_grounded_reason": 0.5,
+      "shap_feature_indices": [
+        2133,
+        5618
+      ]
+    },
+    {
+      "sample_id": 189,
+      "k": 4,
+      "overlap_with_grounded_reason": 0.75,
+      "shap_feature_indices": [
+        396,
+        2133,
+        4161,
+        5618
+      ]
+    },
+    {
+      "sample_id": 194,
+      "k": 4,
+      "overlap_with_grounded_reason": 0.75,
+      "shap_feature_indices": [
+        396,
+        2133,
+        4161,
+        5618
+      ]
+    },
+    {
+      "sample_id": 195,
+      "k": 3,
+      "overlap_with_grounded_reason": 0.6666666666666666,
+      "shap_feature_indices": [
+        396,
+        3583,
+        5618
+      ]
+    },
+    {
+      "sample_id": 196,
+      "k": 4,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        396,
+        3583,
+        4161,
+        5618
+      ]
+    },
+    {
+      "sample_id": 197,
+      "k": 4,
+      "overlap_with_grounded_reason": 1.0,
+      "shap_feature_indices": [
+        396,
+        3583,
+        4161,
+        5618
+      ]
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "n_images": 100,
+  "accuracy": 0.95,
+  "mean_reason_size": 3.8,
+  "verified_rate": 1.0,
+  "pyxai_detected": true
+}
