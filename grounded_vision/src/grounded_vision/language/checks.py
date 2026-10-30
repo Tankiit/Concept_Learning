@@ -43,15 +43,32 @@ class ExplanationAuditor:
     Auditor that scans natural language explanations against grounded conditions.
     """
     def __init__(self):
-        # Known vocabulary tokens for parts and attributes
-        self.known_colors = {"yellow", "black", "white", "red", "brown", "blue", "grey", "gray"}
-        self.known_shapes = {"curved", "cone", "dagger", "hooked", "needle", "forked"}
+        # Known vocabulary tokens for parts and attributes. Extended to the full
+        # CUB-312 value vocabulary so unsupported-claim detection also fires on
+        # values outside the canonical 28.
+        self.known_colors = {
+            "yellow", "black", "white", "red", "brown", "blue", "grey", "gray",
+            "olive", "orange", "pink", "purple", "rufous", "buff", "iridescent",
+            "green", "yellowish", "buffy",
+        }
+        self.known_shapes = {
+            "curved", "cone", "dagger", "hooked", "needle", "forked",
+            "spatulate", "specialized", "all-purpose", "bulbous",
+            "rounded", "notched", "fan-shaped", "pointed", "squared",
+            "hooked_seabird", "curved_(up_or_down)",
+        }
         self.known_parts = {
-            "beak", "bill", "crown", "forehead", "breast", "belly", "wing", "tail", "throat", "back"
+            "beak", "bill", "crown", "forehead", "breast", "belly", "wing", "tail", "throat", "back",
+            "nape", "eye", "leg", "bird",
         }
 
     def _normalize_text(self, text: str) -> str:
         return text.lower().replace("-", " ").replace("_", " ")
+
+    def _normalize_value(self, value: str) -> str:
+        """Applies text normalization to a feature value token so that e.g.
+        'curved_(up_or_down)' matches its own verbalization."""
+        return value.lower().replace("-", " ").replace("_", " ").replace("(", "").replace(")", "").strip()
 
     def audit(
         self,
@@ -72,14 +89,15 @@ class ExplanationAuditor:
             if ":" in f_name and "=" in f_name:
                 part, attr_val = f_name.split(":", 1)
                 attr, val = attr_val.split("=", 1)
-                # Should mention part or attribute/value
+                # Should mention part or attribute/value (values normalized the
+                # same way as the text, so raw CUB values match their phrasing)
                 part_mentioned = (part in norm_text) or (part == "beak" and "bill" in norm_text)
-                val_mentioned = val in norm_text
+                val_mentioned = self._normalize_value(val) in norm_text
                 if not (part_mentioned and val_mentioned):
                     omitted.append(cond.feature_name)
             elif "=" in f_name:
                 attr, val = f_name.split("=", 1)
-                if val not in norm_text:
+                if self._normalize_value(val) not in norm_text:
                     omitted.append(cond.feature_name)
 
         # 2. Check for unsupported claims / hallucinations

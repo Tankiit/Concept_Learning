@@ -23,8 +23,20 @@ from .tree_verifier import TreeSufficiencyVerifier, extract_minimal_sufficient_c
 
 class PyXAIBackend:
     """
-    Unified manager for formal tree explanation generation via PyXAI with built-in native solver.
+    Unified manager for formal tree explanation generation.
+
+    HONESTY NOTE: despite the name, PyXAI is NOT used to compute anything
+    here. `pyxai_available` records whether the PyXAI module can be imported
+    (its bundled d4 compiler is an x86-64 Linux binary and cannot run on
+    macOS). All sufficient/contrastive explanations are computed by the
+    native exact solver (TreeSufficiencyVerifier). The actual PyXAI
+    integration — independent certification and minimum-cardinality audits
+    on Linux — lives in scripts/run_pyxai_modal.py.
     """
+
+    #: Identifies the engine that produces explanations from this backend.
+    solver = "native_tree_verifier"
+
     def __init__(self, tree_head: CertifiableTreeHead):
         self.tree_head = tree_head
         self.pyxai_available = False

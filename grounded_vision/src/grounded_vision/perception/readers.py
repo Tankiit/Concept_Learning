@@ -37,22 +37,23 @@ class PartDetector(nn.Module):
     """
     Predicts anatomical part presence and bounding box offsets from CLS or global features.
     """
-    def __init__(self, embedding_dim: int = 384, num_parts: int = 15):
+    def __init__(self, embedding_dim: int = 384, num_parts: int = 15,
+                 part_names=None):
         super().__init__()
         self.embedding_dim = embedding_dim
-        self.num_parts = num_parts
-        self.part_names = CUB_PARTS[:num_parts]
+        self.part_names = list(part_names) if part_names is not None else CUB_PARTS[:num_parts]
+        self.num_parts = len(self.part_names)
 
         # Multi-task head: part presence (logits) and normalized bbox (ymin, xmin, ymax, xmax)
         self.presence_head = nn.Sequential(
             nn.Linear(embedding_dim, 128),
             nn.ReLU(),
-            nn.Linear(128, num_parts),
+            nn.Linear(128, self.num_parts),
         )
         self.bbox_head = nn.Sequential(
             nn.Linear(embedding_dim, 256),
             nn.ReLU(),
-            nn.Linear(256, num_parts * 4),
+            nn.Linear(256, self.num_parts * 4),
             nn.Sigmoid(),
         )
 
@@ -89,13 +90,18 @@ class PartDetector(nn.Module):
 class AttributeReader(nn.Module):
     """
     Predicts fine-grained attribute probabilities conditioned on localized part region embeddings.
+
+    `attributes` is the active bound-attribute vocabulary (defaults to the
+    canonical 28); entries may bind to the whole-bird region part "bird".
     """
-    def __init__(self, embedding_dim: int = 384):
+    def __init__(self, embedding_dim: int = 384, attributes=None):
         super().__init__()
+        from ..data.cub import CANONICAL_BOUND_ATTRIBUTES
         self.embedding_dim = embedding_dim
-        # Dedicated linear probing head for each canonical bound attribute
+        self.attributes = list(attributes) if attributes is not None else list(CANONICAL_BOUND_ATTRIBUTES)
+        # Dedicated linear probing head for each bound attribute
         self.classifiers = nn.ModuleDict()
-        for attr_id, part, attr_name, val in CANONICAL_BOUND_ATTRIBUTES:
+        for attr_id, part, attr_name, val in self.attributes:
             key = f"attr_{attr_id}"
             self.classifiers[key] = nn.Linear(embedding_dim, 1)
 
@@ -129,22 +135,28 @@ class AttributeReader(nn.Module):
         attr_probs: Dict[int, float] = {}
         proto_matches: Dict[int, PrototypeMatch] = {}
 
-        # Index region features by part_name
+        # Index region features by part_name ("bird" region included)
         feat_by_part: Dict[str, torch.Tensor] = {}
         for r in regions:
             if r.id in region_features:
                 feat_by_part[r.part_name] = region_features[r.id]
 
-        for attr_id, part, attr_name, val in CANONICAL_BOUND_ATTRIBUTES:
+        # One prototype-match per part (not per attribute): match_region already
+        # returns every attribute bound to that part.
+        matches_by_part: Dict[str, Dict[int, PrototypeMatch]] = {}
+
+        for attr_id, part, attr_name, val in self.attributes:
             if part in feat_by_part:
                 r_feat = feat_by_part[part]
                 prob = self.predict_attribute(attr_id, r_feat)
                 attr_probs[attr_id] = prob
 
                 if prototype_bank is not None:
-                    matches = prototype_bank.match_region(r_feat, part_name=part)
-                    if attr_id in matches:
-                        proto_matches[attr_id] = matches[attr_id]
+                    if part not in matches_by_part:
+                        matches_by_part[part] = prototype_bank.match_region(r_feat, part_name=part)
+                    match = matches_by_part[part].get(attr_id)
+                    if match is not None:
+                        proto_matches[attr_id] = match
             else:
                 attr_probs[attr_id] = 0.0
 

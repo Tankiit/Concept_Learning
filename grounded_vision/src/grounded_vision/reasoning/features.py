@@ -27,9 +27,14 @@ class FeatureCompiler:
     """
     Compiles grounded facts into numerical arrays and maintains a 1-to-1
     invertible feature dictionary for interpretable tree reasoning.
+
+    `attributes` is the active bound-attribute vocabulary (defaults to the
+    canonical 28); whole-bird entries (part "bird") compile to "bird:{attr}={val}".
     """
-    def __init__(self, mode: RepresentationMode = RepresentationMode.BOUND):
+    def __init__(self, mode: RepresentationMode = RepresentationMode.BOUND, attributes=None):
         self.mode = mode
+        from ..data.cub import CANONICAL_BOUND_ATTRIBUTES
+        self.attributes = list(attributes) if attributes is not None else list(CANONICAL_BOUND_ATTRIBUTES)
         self.feature_names: List[str] = []
         self.feature_to_idx: Dict[str, int] = {}
         self.idx_to_feature: Dict[int, str] = {}
@@ -41,19 +46,19 @@ class FeatureCompiler:
 
         if self.mode == RepresentationMode.FLAT:
             # Global attributes: e.g. "bill_shape=curved", "breast_color=yellow"
-            for _, _, attr, val in CANONICAL_BOUND_ATTRIBUTES:
+            for _, _, attr, val in self.attributes:
                 feat = f"{attr}={val}"
                 if feat not in names:
                     names.append(feat)
 
         elif self.mode == RepresentationMode.BOUND:
             # Bound attributes: e.g. "beak:bill_shape=curved"
-            for _, part, attr, val in CANONICAL_BOUND_ATTRIBUTES:
+            for _, part, attr, val in self.attributes:
                 feat = f"{part}:{attr}={val}"
                 if feat not in names:
                     names.append(feat)
             # Add part presence features: e.g. "has_part(beak)"
-            canonical_parts = sorted(list(set(part for _, part, _, _ in CANONICAL_BOUND_ATTRIBUTES)))
+            canonical_parts = sorted(list(set(part for _, part, _, _ in self.attributes if part != "bird")))
             for p in canonical_parts:
                 feat = f"has_part({p})"
                 if feat not in names:
@@ -61,11 +66,11 @@ class FeatureCompiler:
 
         elif self.mode == RepresentationMode.RELATIONAL:
             # Bound attributes + part presence
-            for _, part, attr, val in CANONICAL_BOUND_ATTRIBUTES:
+            for _, part, attr, val in self.attributes:
                 feat = f"{part}:{attr}={val}"
                 if feat not in names:
                     names.append(feat)
-            canonical_parts = sorted(list(set(part for _, part, _, _ in CANONICAL_BOUND_ATTRIBUTES)))
+            canonical_parts = sorted(list(set(part for _, part, _, _ in self.attributes if part != "bird")))
             for p in canonical_parts:
                 feat = f"has_part({p})"
                 if feat not in names:
@@ -121,7 +126,7 @@ class FeatureCompiler:
             elif self.mode == RepresentationMode.BOUND:
                 if fact.predicate_type == PredicateType.HAS_ATTRIBUTE:
                     # subject_id is e.g. "part_beak_0" -> extract "beak"
-                    part_name = fact.subject_id.replace("part_", "").replace("_0", "")
+                    part_name = "bird" if fact.subject_id == "bird_0" else fact.subject_id.replace("part_", "").replace("_0", "")
                     feat_key = f"{part_name}:{fact.attribute}={fact.value}"
                     if feat_key in self.feature_to_idx:
                         idx = self.feature_to_idx[feat_key]
@@ -135,7 +140,7 @@ class FeatureCompiler:
 
             elif self.mode == RepresentationMode.RELATIONAL:
                 if fact.predicate_type == PredicateType.HAS_ATTRIBUTE:
-                    part_name = fact.subject_id.replace("part_", "").replace("_0", "")
+                    part_name = "bird" if fact.subject_id == "bird_0" else fact.subject_id.replace("part_", "").replace("_0", "")
                     feat_key = f"{part_name}:{fact.attribute}={fact.value}"
                     if feat_key in self.feature_to_idx:
                         idx = self.feature_to_idx[feat_key]

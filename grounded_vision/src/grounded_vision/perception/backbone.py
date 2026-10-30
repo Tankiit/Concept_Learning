@@ -33,7 +33,14 @@ class FrozenDINOBackbone(nn.Module):
         self.image_size = image_size
         self.grid_size = image_size // patch_size  # e.g., 224 // 14 = 16 (or 14 for 196)
         self.num_patches = self.grid_size * self.grid_size
-        self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
+        if device is None:
+            if torch.cuda.is_available():
+                device = "cuda"
+            elif torch.backends.mps.is_available():
+                device = "mps"
+            else:
+                device = "cpu"
+        self.device = device
         self.is_mock = force_mock
         self.model: Optional[nn.Module] = None
 
@@ -50,7 +57,12 @@ class FrozenDINOBackbone(nn.Module):
                 self.model.eval()
                 for p in self.model.parameters():
                     p.requires_grad = False
-                self.model.to(self.device)
+                try:
+                    self.model.to(self.device)
+                except Exception:
+                    # Some ops may be unsupported on the accelerator; fall back to CPU.
+                    self.device = "cpu"
+                    self.model.to("cpu")
             except Exception:
                 # Graceful fallback: self-contained deterministic Conv/ViT projection for offline execution
                 self.is_mock = True

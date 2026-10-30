@@ -20,21 +20,34 @@ class ExplanationTemplateGenerator:
         self.style = style
 
     def verbalize_condition(self, card: VisualEvidenceCard) -> str:
-        """Verbalizes a single visual evidence condition."""
+        """Verbalizes a single visual evidence condition.
+
+        Polarity matters: a certified condition like
+        "belly:belly_color=white <= 0.500" certifies the ABSENCE of the
+        concept, so it must be verbalized as absence ("no white belly color"),
+        never as presence.
+        """
         f_name = card.feature_name
         conf_str = f" [confidence: {card.confidence:.2f}]" if card.confidence else ""
+        negated = "<=" in card.condition_str
 
         if ":" in f_name and "=" in f_name:
             part, attr_val = f_name.split(":", 1)
             attr, val = attr_val.split("=", 1)
             attr_clean = attr.replace("_", " ")
+            if negated:
+                return f"no {val} {attr_clean} on the {part}{conf_str}"
             return f"a {val} {attr_clean} on the {part}{conf_str}"
         elif "has_part" in f_name:
             part = f_name.replace("has_part(", "").replace(")", "").strip()
+            if negated:
+                return f"the absence of the {part}{conf_str}"
             return f"the presence of the {part}{conf_str}"
         elif "=" in f_name:
             attr, val = f_name.split("=", 1)
             attr_clean = attr.replace("_", " ")
+            if negated:
+                return f"no {val} {attr_clean}{conf_str}"
             return f"a {val} {attr_clean}{conf_str}"
         elif "(" in f_name:
             # Spatial/relational e.g. above(crown, beak)

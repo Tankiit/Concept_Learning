@@ -27,6 +27,7 @@ def ground_perception_output(
     probability_threshold: float = 0.5,
     include_relations: bool = True,
     species_name: Optional[str] = None,
+    attributes=None,
 ) -> FactDatabase:
     """
     Transforms perception outputs into an explicit, verifiable FactDatabase.
@@ -36,10 +37,15 @@ def ground_perception_output(
         probability_threshold: Threshold for declaring binary truth value of attributes
         include_relations: Whether to compute and add anatomical and spatial relations
         species_name: Optional ground-truth or candidate species name
+        attributes: Active bound-attribute vocabulary (defaults to canonical 28).
+            Entries bound to part "bird" produce whole-bird facts with subject bird_0.
 
     Returns:
         Populated FactDatabase with entities, facts, and provenance
     """
+    from ..data.cub import CANONICAL_BOUND_ATTRIBUTES
+    if attributes is None:
+        attributes = CANONICAL_BOUND_ATTRIBUTES
     db = FactDatabase(sample_id=perception.sample_id)
 
     # 1. Instantiate root Bird entity
@@ -78,12 +84,16 @@ def ground_perception_output(
         db.add_fact(has_part_fact)
 
     # 3. Instantiate bound attribute facts
-    for attr_id, part_name, attr_name, val in CANONICAL_BOUND_ATTRIBUTES:
+    for attr_id, part_name, attr_name, val in attributes:
         prob = perception.attribute_probabilities.get(attr_id, 0.0)
         truth = prob >= probability_threshold
 
         r = region_by_part.get(part_name)
-        part_id = part_entities[part_name].id if part_name in part_entities else f"part_{part_name}_0"
+        if part_name == "bird":
+            # Whole-bird attributes: subject is the root bird entity itself
+            part_id = "bird_0"
+        else:
+            part_id = part_entities[part_name].id if part_name in part_entities else f"part_{part_name}_0"
 
         proto_match = perception.prototype_matches.get(attr_id)
         prov = None

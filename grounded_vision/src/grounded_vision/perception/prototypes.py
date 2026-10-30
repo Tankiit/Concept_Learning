@@ -38,11 +38,14 @@ class AttributePrototypeBank:
         embedding_dim: int = 384,
         num_prototypes_per_attr: int = 3,
         temperature: float = 0.1,
+        attributes=None,
     ):
+        from ..data.cub import CANONICAL_BOUND_ATTRIBUTES
         self.embedding_dim = embedding_dim
         self.num_prototypes_per_attr = num_prototypes_per_attr
         self.temperature = temperature
-        
+        self.attributes = list(attributes) if attributes is not None else list(CANONICAL_BOUND_ATTRIBUTES)
+
         # Mapping: attr_id -> Tensor of shape [num_prototypes, embedding_dim]
         self.prototypes: Dict[int, torch.Tensor] = {}
         # Prototype metadata registry
@@ -51,8 +54,8 @@ class AttributePrototypeBank:
         self._initialize_prototypes()
 
     def _initialize_prototypes(self) -> None:
-        """Initializes normalized prototype vectors for each canonical attribute."""
-        for attr_id, part, attr_name, val in CANONICAL_BOUND_ATTRIBUTES:
+        """Initializes normalized prototype vectors for each bound attribute."""
+        for attr_id, part, attr_name, val in self.attributes:
             # Deterministic initialization based on attr_id seed
             rng = np.random.RandomState(42 + attr_id)
             rand_vecs = rng.randn(self.num_prototypes_per_attr, self.embedding_dim).astype(np.float32)
@@ -107,7 +110,7 @@ class AttributePrototypeBank:
         feat = F.normalize(region_feature.unsqueeze(0), p=2, dim=1)  # [1, D]
         matches: Dict[int, PrototypeMatch] = {}
 
-        for attr_id, part, attr_name, val in CANONICAL_BOUND_ATTRIBUTES:
+        for attr_id, part, attr_name, val in self.attributes:
             if part_name is not None and part != part_name:
                 continue
             

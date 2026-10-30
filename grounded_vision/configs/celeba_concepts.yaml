@@ -1,0 +1,54 @@
+# CelebA concept-grounded track: predict a held-out attribute (Male) from the
+# other 39 per-image attributes, grounded on landmark part regions.
+# Fully local run (MPS caching, native training and verification — no Modal).
+experiment:
+  name: "celeba_concepts"
+  representation: "bound"
+  seed: 42
+
+data:
+  dataset: "celeba"
+  data_dir: "/Users/cril/tanmoy/research/data/img_align_celeba"
+  cache_dir: "/Users/cril/tanmoy/research/data/grounded_vision_runs/celeba_concepts"
+  target_attribute: "Male"
+  max_samples:
+    train: 20000
+    test: 5000
+  image_size: 224
+  num_classes: 2
+  num_parts: 5
+  num_attributes: 40
+  use_mock_if_missing: false
+
+perception:
+  backbone: "dinov2_vits14"
+  embedding_dim: 384
+  patch_size: 14
+  part_detection: true
+  num_prototypes_per_attribute: 5
+  roi_pool_size: 7
+
+predicates:
+  representation_mode: "bound"
+  probability_threshold: 0.5
+  include_part_binding: true
+  include_relations: false
+  track_provenance: true
+
+reasoning:
+  model_type: "decision_tree"
+  max_depth: 12
+  min_samples_leaf: 4
+  criterion: "gini"
+  enforce_domain_constraints: true
+
+explanations:
+  backend: "tree_verifier"
+  max_conditions: 6
+  find_contrastive: true
+  evidence_crops: true
+
+language:
+  template_style: "scientific"
+  decoder_model: "rule_based"
+  strict_faithfulness_audit: true
