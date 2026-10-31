@@ -25,8 +25,9 @@ def run_comparison(payload: dict) -> dict:
     from pyxai import Builder, Explaining
 
     n_features = payload["n_features"]
-    nodes = payload["nodes"]
+    nodes = payload.get("nodes")
     numeric = bool(payload.get("numeric", False))
+    forest_payload = payload.get("forest")
 
     def to_builder(nid: int):
         node = nodes[nid]
@@ -46,7 +47,21 @@ def run_comparison(payload: dict) -> dict:
             node["f"] + 1, operator="EQ", threshold=1, left=left, right=right
         )
 
-    tree = Builder.DecisionTree(
+    model = None
+    if forest_payload is not None:
+        # Ensemble payload: one node-list per tree; majority-vote forest
+        trees = []
+        for t_nodes in forest_payload:
+            nodes = t_nodes
+            trees.append(Builder.DecisionTree(
+                n_features, to_builder(0),
+                feature_names=[f"f{i+1}" for i in range(n_features)],
+                force_features_equal_to_binaries=True,
+            ))
+        model = Builder.RandomForest(trees, n_classes=int(payload["n_classes"]),
+                                     feature_names=[f"f{i+1}" for i in range(n_features)])
+        nodes = None
+    tree = model if model is not None else Builder.DecisionTree(
         n_features,
         to_builder(0),
         feature_names=[f"f{i+1}" for i in range(n_features)],
