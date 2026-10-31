@@ -124,13 +124,11 @@ def main():
 
     if "cub28_gt" in reports and "cub28_pred" in reports and "error" not in reports["cub28_gt"]:
         with open(TREES["cub28_gt"], "rb") as f:
-            gt_names = set(pickle.load(f)["tree_head"].feature_names)
+            gt_names = list(pickle.load(f)["tree_head"].feature_names)
         with open(TREES["cub28_pred"], "rb") as f:
-            pr = pickle.load(f)["tree_head"].clf.tree_
-        pr_used = {gt_names[i] for i in pr.feature if i != -2}
+            pr_used = {gt_names[i] for i in pickle.load(f)["tree_head"].clf.tree_.feature if i != -2}
         with open(TREES["cub28_gt"], "rb") as f:
-            gt = pickle.load(f)["tree_head"].clf.tree_
-        gt_used = {gt_names[i] for i in gt.feature if i != -2}
+            gt_used = {gt_names[i] for i in pickle.load(f)["tree_head"].clf.tree_.feature if i != -2}
         reports["cross_gt_vs_pred_regions"] = {
             "gt_used": len(gt_used), "pred_used": len(pr_used),
             "jaccard": len(gt_used & pr_used) / max(1, len(gt_used | pr_used)),
