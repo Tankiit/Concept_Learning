@@ -1,5 +1,7 @@
 # Grounded NLX examples
 
+> **Status (2026-11-01): invalidated pending regeneration.** The tile pooling bug discovered in external review (`mean` over the wrong axes — see [`RESULTS.md`](RESULTS.md) §1 and [`REVIEW_VALIDATION_ROADMAP.md`](REVIEW_VALIDATION_ROADMAP.md)) means the "tiles" referenced below were full-width row strips; the certified literals are valid tree conditions, but the tile boxes and part names attached to them are not. Kept for the record until the server rerun.
+
 The orange evidence tiles are shown in [activation_tree_grounded_examples.png](assets/activation_tree_grounded_examples.png). Each sentence below uses only a verified tree condition and either an exact tile or visible CUB part points inside that tile.
 
 ## Sample 2 — predicted class 0

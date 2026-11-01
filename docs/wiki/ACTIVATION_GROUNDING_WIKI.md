@@ -1,5 +1,7 @@
 # Activation grounding and contrastive NLX
 
+> **Status (2026-11-01): quantitative results below are invalidated pending regeneration** — the tile pooling bug found in external review (wrong `mean` axes; the "tiles" were row strips) affects the accuracy/reason-size numbers and all tile-derived grounding. The protocol descriptions remain accurate. See [`RESULTS.md`](RESULTS.md) §1 and [`REVIEW_VALIDATION_ROADMAP.md`](REVIEW_VALIDATION_ROADMAP.md).
+
 **Date:** 2026-10-27  
 **Dataset:** 100 cached real CUB-200-2011 training images  
 **Representation:** frozen DINO activation maps, 4×4 spatial pooling, 384 channels per tile

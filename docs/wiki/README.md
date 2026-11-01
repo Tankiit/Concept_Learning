@@ -6,26 +6,56 @@ Welcome to the **Grounded Vision** documentation wiki for certifiable, relationa
 
 ## Table of Contents
 
-1. [**Activation Grounding and Contrastive NLX**](ACTIVATION_GROUNDING_WIKI.md)
+1. [**Grounded Vision Framework — Architecture Reference**](GROUNDED_VISION_FRAMEWORK.md)
+   - Full module reference (perception → predicates → reasoning → explanations → language → evaluation)
+   - Configuration matrix (8 configs: flat / bound / relational, CUB-28 / CUB-312, CelebA)
+   - Setup, testing, and known repository issues (uncommitted `data/` subpackage)
+
+2. [**Experiment Tracks & Script Catalog**](EXPERIMENT_TRACKS.md)
+   - All 30 scripts: purpose, inputs, outputs, and where each track can run
+   - Core pipeline · activation grounding · reviewer analysis · CLEVR relational · validation milestone · Modal cloud
+
+3. [**Quantitative Results — Consolidated Index**](RESULTS.md)
+   - Activation-tree grounding on real CUB: invalidated pending regeneration (tile-pooling bug)
+   - CLEVR relational track: 69.8% accuracy, 100% relational + necessary certified reasons
+   - Core-pipeline mock smoke benchmark (recovered from the Modal image)
+   - Predicate grounding milestone (real CUB): 82.8% agreement; beak/belly grounding validated (7/16 predicates)
+   - Pending server-side artifacts and the results-refresh protocol
+
+4. [**The Research Story & Talk Track**](THE_STORY.md)
+   - One-liner, 5-minute arc, and the full five-act narrative
+   - The claim ladder (certified / grounded / not yet claimable) and anticipated Q&A
+   - Every number traced to a committed result file
+
+5. [**Review Validation Roadmap**](REVIEW_VALIDATION_ROADMAP.md)
+   - External review (2026-11-01): claim-by-claim verification against the code
+   - Fixed: verifier class mapping, negative relational templates, tile pooling (regeneration pending)
+   - Milestone executed: predicate grounding with perturbation specificity (beak/belly pass, crown/breast open)
+   - Open: three-valued predicates, binding-aware audit, binding-benefit study
+
+6. [**Activation Grounding and Contrastive NLX**](ACTIVATION_GROUNDING_WIKI.md)
    - Certified abductive and contrastive reasons on real CUB-200-2011 images
    - 4×4 spatial pooling over frozen DINO activation maps (6,144 features)
    - 100% verified sufficient-reason rate (mean size: 3.8 conditions)
    - Attribution baseline comparison: TreeSHAP vs. Formal Sufficiency (88.6% overlap)
    - Part-only NLX policy and model-level counterfactual sensitivity
 
-2. [**Grounded Natural Language Explanation (NLX) Examples**](NLX_EXAMPLES.md)
+7. [**Grounded Natural Language Explanation (NLX) Examples**](NLX_EXAMPLES.md)
    - Concrete faithful natural language explanation examples across species
    - Evidence tiles linked to validated CUB anatomical part locations
 
-3. [**CUB Real-Data Pipeline Run Report**](CUB_BOUND_REAL_FULL_RUN.md)
+8. [**CUB Real-Data Pipeline Run Report**](CUB_BOUND_REAL_FULL_RUN.md)
    - Full real CUB-200-2011 run configuration (`cub_bound_real_full.yaml`)
    - Feature caching and perception checkpoints
 
-4. [**Visual Evidence Gallery**](assets/)
+9. [**Visual Evidence Gallery**](assets/)
    - [Activation Tree Grounded Evidence Tiles](assets/activation_tree_grounded_examples.png)
    - [Activation Exemplar Prototype Matches](assets/activation_exemplar_examples.png)
 
-5. [**Quantitative Results & Metrics**](../../grounded_vision/results/)
-   - `activation_tree_grounded_metrics.json`
-   - `shap_vs_sufficient_results.json`
-   - `grounding_selected_reasons.json`
+10. [**Raw Result Files**](../../grounded_vision/results/)
+   - `activation_tree_grounded_metrics.json` (invalidated pending pooling-fix regeneration)
+   - `shap_vs_sufficient_results.json` (invalidated pending pooling-fix regeneration)
+   - `grounding_selected_reasons.json` (invalidated pending pooling-fix regeneration)
+   - `clevr_relational_results.json`
+   - `cub_bound_mock_benchmark_results.json`
+   - `predicate_grounding_milestone.json`
