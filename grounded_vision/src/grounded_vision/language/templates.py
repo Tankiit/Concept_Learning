@@ -50,12 +50,16 @@ class ExplanationTemplateGenerator:
                 return f"no {val} {attr_clean}{conf_str}"
             return f"a {val} {attr_clean}{conf_str}"
         elif "(" in f_name:
-            # Spatial/relational e.g. above(crown, beak)
+            # Spatial/relational e.g. above(crown, beak).
+            # A certified condition like "above(crown, beak) <= 0.500"
+            # certifies the ABSENCE of the relation and must verbalize as
+            # absence, exactly like attribute conditions.
             rel = f_name.split("(")[0]
             args = f_name.split("(")[1].replace(")", "").split(",")
             p1 = args[0].strip()
             p2 = args[1].strip() if len(args) > 1 else "other part"
-            return f"the {p1} situated {rel.replace('_', ' ')} the {p2}{conf_str}"
+            negation = "not " if negated else ""
+            return f"the {p1} {negation}situated {rel.replace('_', ' ')} the {p2}{conf_str}"
         return f"{f_name}{conf_str}"
 
     def generate_sufficient_explanation(

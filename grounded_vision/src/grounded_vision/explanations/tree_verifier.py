@@ -44,7 +44,10 @@ class TreeSufficiencyVerifier:
             )
             if is_leaf:
                 counts = self.tree.value[node_id][0]
-                pred_class = int(np.argmax(counts))
+                # sklearn indexes per-leaf class counts by POSITION in
+                # clf.classes_; map back to the actual label so sufficiency
+                # compares caller-supplied labels to labels, not to positions.
+                pred_class = self.clf.classes_[int(np.argmax(counts))]
                 self.leaves.append({
                     "node_id": node_id,
                     "pred_class": pred_class,

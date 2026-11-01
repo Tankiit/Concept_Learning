@@ -11,7 +11,9 @@ from grounded_vision.explanations.pyxai_backend import PyXAIBackend
 
 d=np.load(RUN/'train_features.npz'); fmap=d['feature_maps']; y=d['labels']; ids=d['sample_ids']
 # Explicit activation representation: 4x4 spatial tiles x 384 DINO channels.
-x=fmap.reshape(len(fmap),384,4,4,4,4).mean(axis=(4,5)).transpose(0,2,3,1).reshape(len(fmap),-1)
+# Pool over the WITHIN-TILE axes (3,5)=(row-in-block, col-in-block); the previous
+# mean(axis=(4,5)) averaged over all columns, turning 'tiles' into row strips.
+x=fmap.reshape(len(fmap),384,4,4,4,4).mean(axis=(3,5)).transpose(0,2,3,1).reshape(len(fmap),-1)
 names=[f'tile_r{r}_c{c}:dino_ch{k}' for r in range(4) for c in range(4) for k in range(384)]
 tree=CertifiableTreeHead(max_depth=6,min_samples_leaf=2,feature_names=names,class_names=[str(i) for i in range(200)])
 tree.fit(x,y); pred=tree.predict(x); backend=PyXAIBackend(tree)
