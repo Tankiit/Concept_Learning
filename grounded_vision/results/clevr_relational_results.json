@@ -1,0 +1,255 @@
+{
+  "source": "clevr_style_synthetic",
+  "selected_tree": "leaves_64",
+  "test_acc": 0.698,
+  "n_questions": {
+    "train": 4000,
+    "test": 1000
+  },
+  "positive_rate": 0.726,
+  "reason_mean": 4.915,
+  "reason_max": 15,
+  "frac_reasons_with_relational_literal": 1.0,
+  "mean_relational_literals_per_reason": 4.485,
+  "necessity_rate": 1.0,
+  "examples": [
+    {
+      "question": {
+        "scene": 931,
+        "A": [
+          [
+            "color",
+            "gray"
+          ],
+          [
+            "shape",
+            "cylinder"
+          ]
+        ],
+        "B": [
+          [
+            "shape",
+            "cylinder"
+          ]
+        ],
+        "rel": "front_of",
+        "answer": 1
+      },
+      "prediction": 1,
+      "reason": [
+        {
+          "condition": "exists(front_of(color=cyan;shape=sphere,shape=sphere))",
+          "op": "<=",
+          "thr": 0.5
+        },
+        {
+          "condition": "exists(right_of(color=yellow;shape=cylinder,shape=cylinder))",
+          "op": ">",
+          "thr": 0.5
+        },
+        {
+          "condition": "exists(behind(color=yellow;shape=cylinder,shape=sphere))",
+          "op": ">",
+          "thr": 0.5
+        }
+      ],
+      "contrastive": [
+        "exists(right_of(color=yellow;shape=cylinder,shape=cylinder)) <= 0.500",
+        "exists(behind(color=red;shape=cube,shape=cylinder)) > 0.500"
+      ]
+    },
+    {
+      "question": {
+        "scene": 162,
+        "A": [
+          [
+            "color",
+            "red"
+          ],
+          [
+            "shape",
+            "cylinder"
+          ]
+        ],
+        "B": [
+          [
+            "shape",
+            "cube"
+          ]
+        ],
+        "rel": "left_of",
+        "answer": 0
+      },
+      "prediction": 1,
+      "reason": [
+        {
+          "condition": "exists(front_of(color=cyan;shape=sphere,shape=sphere))",
+          "op": "<=",
+          "thr": 0.5
+        },
+        {
+          "condition": "exists(right_of(color=yellow;shape=cylinder,shape=cylinder))",
+          "op": "<=",
+          "thr": 0.5
+        },
+        {
+          "condition": "exists(front_of(color=brown;shape=cube,shape=cylinder))",
+          "op": "<=",
+          "thr": 0.5
+        },
+        {
+          "condition": "exists(front_of(color=cyan;shape=cylinder,shape=cylinder))",
+          "op": "<=",
+          "thr": 0.5
+        },
+        {
+          "condition": "exists(left_of(color=blue;shape=cylinder,shape=cylinder))",
+          "op": "<=",
+          "thr": 0.5
+        },
+        {
+          "condition": "exists(behind(color=green;shape=cube,shape=sphere))",
+          "op": "<=",
+          "thr": 0.5
+        },
+        {
+          "condition": "q.B.shape=cylinder",
+          "op": "<=",
+          "thr": 0.5
+        }
+      ],
+      "contrastive": [
+        "exists(left_of(color=blue;shape=cylinder,shape=cylinder)) > 0.500"
+      ]
+    },
+    {
+      "question": {
+        "scene": 656,
+        "A": [
+          [
+            "color",
+            "green"
+          ],
+          [
+            "shape",
+            "sphere"
+          ]
+        ],
+        "B": [
+          [
+            "shape",
+            "cube"
+          ]
+        ],
+        "rel": "front_of",
+        "answer": 1
+      },
+      "prediction": 1,
+      "reason": [
+        {
+          "condition": "exists(front_of(color=cyan;shape=sphere,shape=sphere))",
+          "op": "<=",
+          "thr": 0.5
+        },
+        {
+          "condition": "exists(right_of(color=yellow;shape=cylinder,shape=cylinder))",
+          "op": "<=",
+          "thr": 0.5
+        },
+        {
+          "condition": "exists(front_of(color=brown;shape=cube,shape=cylinder))",
+          "op": "<=",
+          "thr": 0.5
+        },
+        {
+          "condition": "exists(front_of(color=cyan;shape=cylinder,shape=cylinder))",
+          "op": "<=",
+          "thr": 0.5
+        },
+        {
+          "condition": "exists(left_of(color=blue;shape=cylinder,shape=cylinder))",
+          "op": "<=",
+          "thr": 0.5
+        },
+        {
+          "condition": "exists(behind(color=green;shape=cube,shape=sphere))",
+          "op": "<=",
+          "thr": 0.5
+        },
+        {
+          "condition": "q.B.shape=cylinder",
+          "op": "<=",
+          "thr": 0.5
+        }
+      ],
+      "contrastive": [
+        "q.B.shape=cylinder > 0.500"
+      ]
+    },
+    {
+      "question": {
+        "scene": 128,
+        "A": [
+          [
+            "color",
+            "green"
+          ],
+          [
+            "shape",
+            "sphere"
+          ]
+        ],
+        "B": [
+          [
+            "shape",
+            "cube"
+          ]
+        ],
+        "rel": "left_of",
+        "answer": 0
+      },
+      "prediction": 1,
+      "reason": [
+        {
+          "condition": "exists(front_of(color=cyan;shape=sphere,shape=sphere))",
+          "op": "<=",
+          "thr": 0.5
+        },
+        {
+          "condition": "exists(right_of(color=yellow;shape=cylinder,shape=cylinder))",
+          "op": "<=",
+          "thr": 0.5
+        },
+        {
+          "condition": "exists(front_of(color=brown;shape=cube,shape=cylinder))",
+          "op": "<=",
+          "thr": 0.5
+        },
+        {
+          "condition": "exists(front_of(color=cyan;shape=cylinder,shape=cylinder))",
+          "op": "<=",
+          "thr": 0.5
+        },
+        {
+          "condition": "exists(left_of(color=blue;shape=cylinder,shape=cylinder))",
+          "op": "<=",
+          "thr": 0.5
+        },
+        {
+          "condition": "exists(behind(color=green;shape=cube,shape=sphere))",
+          "op": "<=",
+          "thr": 0.5
+        },
+        {
+          "condition": "q.B.shape=cylinder",
+          "op": "<=",
+          "thr": 0.5
+        }
+      ],
+      "contrastive": [
+        "exists(left_of(color=blue;shape=cylinder,shape=cylinder)) > 0.500",
+        "q.A.color=cyan > 0.500"
+      ]
+    }
+  ]
+}

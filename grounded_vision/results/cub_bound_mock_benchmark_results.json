@@ -1,0 +1,59 @@
+{
+  "experiment_name": "cub_bound",
+  "representation": "bound",
+  "region_mode": "gt",
+  "n_test_samples": 120,
+  "perception": {
+    "mean_part_iou": 0.7570777985137969,
+    "part_localization_accuracy_pck": 0.9427777777777778,
+    "attribute_accuracy": 0.8583333333333333,
+    "attribute_precision": 0.5043103448275862,
+    "attribute_recall": 0.4875,
+    "attribute_f1": 0.4957627118644068,
+    "part_breakdown_iou": {
+      "crown": 0.8173258552055589,
+      "forehead": 0.741564796751129,
+      "beak": 0.8033466431179668,
+      "left_eye": 0.6049773789674936,
+      "right_eye": 0.5598789129313566,
+      "throat": 0.7732100941244109,
+      "nape": 0.6754049078785965,
+      "breast": 0.8242746423226414,
+      "back": 0.7788591378026649,
+      "belly": 0.839776164345628,
+      "left_wing": 0.8779595049186575,
+      "right_wing": 0.8586744097945238,
+      "left_leg": 0.6785017038056635,
+      "right_leg": 0.702531473854359,
+      "tail": 0.8198813518863013
+    }
+  },
+  "classification": {
+    "accuracy": 0.025,
+    "macro_f1": 0.021452702702702702,
+    "micro_f1": 0.025,
+    "expected_calibration_error": 0.2493452380952381
+  },
+  "explanations": {
+    "num_evaluated_samples": 120,
+    "sufficiency_rate": 1.0,
+    "mean_sparsity_conditions": 4.383333333333334,
+    "std_sparsity_conditions": 0.7765665171481163,
+    "nl_faithful_rate": 1.0,
+    "nl_mean_precision": 1.0,
+    "nl_mean_recall": 1.0,
+    "nl_hallucination_rate": 0.0
+  },
+  "interventions": {
+    "num_samples_evaluated": 120,
+    "intervened_features_count": 5,
+    "mean_prediction_flip_rate": 0.4383333333333333,
+    "feature_flip_rates": {
+      "beak:bill_color=black": 0.425,
+      "beak:bill_shape=cone": 0.38333333333333336,
+      "beak:bill_shape=curved": 0.25,
+      "belly:belly_color=yellow": 0.18333333333333332,
+      "breast:breast_color=yellow": 0.95
+    }
+  }
+}
