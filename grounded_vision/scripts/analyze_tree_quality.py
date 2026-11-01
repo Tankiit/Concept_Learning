@@ -55,7 +55,7 @@ def analyze(name: str, path: str) -> dict:
     leaf_samples = samples[is_leaf]
 
     # leaf class distributions -> purity
-    values = t.value[is_leaf, :, 0]                     # [n_leaves, n_classes]
+    values = t.value[is_leaf, 0, :]                     # [n_leaves, n_classes]
     total = values.sum(axis=1, keepdims=True)
     purity = values.max(axis=1) / np.maximum(total, 1e-9)
     preds_leaf = values.argmax(axis=1)
