@@ -25,6 +25,8 @@ cache/
 *.tar
 data/
 **/data/
+# The data/ rules above target dataset folders; keep the source package tracked.
+!src/grounded_vision/data/
 
 # ==============================================================================
 # Test, lint, and coverage
