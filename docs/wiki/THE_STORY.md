@@ -74,6 +74,7 @@ A useful contrast within our own results: a cache-only DINO baseline hits 95% tr
 - Compiler-based minimum-cardinality proofs via PyXAI on Linux/Modal, including Random-Forest ensemble payloads (majority-vote compilation).
 - Region-level image interventions to close the causal gap.
 - Channel→concept mapping validation to replace channel-speak with attribute-speak in NLX — only mappings that pass a predefined reliability threshold get promoted.
+- **Act V — where it goes** gets a concrete opening move from the milestone v2 result: the perturbation controls showed the crown/breast "failure" was mostly adjacent-control contamination (with farthest controls, crown probes pass 4/4), and the true remaining bottleneck is reader-head accuracy (0.69 deployed vs 0.82 probes) — so the immediate agenda is reader training, then relational expansion on the validated families.
 - The reviewer-analysis battery already scripted: GOSDT/RuleFit/RF scored in "proof-size currency," the 312-attribute ceiling, Matryoshka SAE abstraction levels, prototype-similarity trees, and validated tree search over the accuracy-vs-reason-size frontier.
 
 ### Epilogue — the anecdote (optional, for lab meetings)

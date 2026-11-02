@@ -88,6 +88,27 @@ Caveats: probes are milestone instruments (logistic regression on pooled feature
 
 Result file: [`results/predicate_grounding_milestone.json`](../../grounded_vision/results/predicate_grounding_milestone.json) (script: `scripts/run_predicate_grounding_milestone.py`, Modal launcher `scripts/run_milestone_modal.py`).
 
+### Milestone v2 (2026-11-02): deployed readers, richer controls, uncertainty estimates
+
+Script: `scripts/run_predicate_grounding_milestone_v2.py` — same 16 predicates, split, and images as v1, with three upgrades: (i) the **deployed `AttributeReader` heads** trained with the `fit_perception` protocol (per-region linear heads, BCE-with-logits with pos-weight, Adam, 40 epochs, seed 42) evaluated alongside the v1 logistic probes — both reading features pooled by the framework's own `pool_region_features`; (ii) **three control families** — *adjacent* (v1 rule; mean center distance 0.17), *farthest* visible scope part (0.27), and *distance-matched* (same 0.17 distance as adjacent, direction chosen off any part); (iii) **per-image effect records** (30,264 rows, every p0 and signed ΔP per condition) and bootstrap 95% CIs (1,000 resamples) on every specificity ratio. Files: [`predicate_grounding_milestone_v2.json`](../../grounded_vision/results/predicate_grounding_milestone_v2.json), [`predicate_grounding_milestone_v2_effects.jsonl`](../../grounded_vision/results/predicate_grounding_milestone_v2_effects.jsonl).
+
+Mean specificity (target-vs-control |ΔP| ratio) by part family, control family, and instrument:
+
+| Family | Probe: adjacent → farthest → dist-matched | Reader: adjacent → farthest → dist-matched |
+| --- | --- | --- |
+| beak | 2.85 → 4.42 → 2.64 (passes 4/4 \| 4/4 \| 4/4) | 2.32 → 3.23 → 2.64 (2/4 \| 2/4 \| 2/4) |
+| belly | 3.11 → 3.13 → 4.64 (3/3 \| 3/3 \| 3/3) | 2.76 → 2.79 → 3.95 (2/3 \| 2/3 \| 2/3) |
+| breast | 1.32 → **2.20** → 1.56 (0/5 \| **5/5** \| 2/5) | 1.37 → 1.87 → 1.48 (0/5 \| 2/5 \| 0/5) |
+| crown | 1.25 → **3.34** → 1.41 (0/4 \| **4/4** \| 0/4) | 1.34 → 3.57 → 1.49 (0/4 \| 1/4 \| 1/4) |
+
+**Finding 1 — the separation persists under the deployed readers.** The part-family pattern is unchanged (beak/belly 2.3–4×; crown/breast ~1.3–1.5 under adjacent controls), with tight CIs (e.g. crown `crown_color=black` blur, farthest control: 3.60, CI95 [3.16, 4.12]).
+
+**Finding 2 — region geometry (control adjacency) explains most of the v1 crown/breast failure.** With *farthest* controls, crown probes recover to 2.70–4.35 (4/4 pass) and breast to 1.5–2.7 (5/5 pass): the v1 "failure" was largely the anatomically adjacent control box overlapping the same visual content. The *distance-matched* control (same distance as adjacent, but off any part) gives intermediate ratios (crown ~1.3–1.6, breast ~1.4–1.7), decomposing the control effect into a content component (landing on another meaningful part) and a distance component.
+
+**Finding 3 — the residual bottleneck moves to the reader heads.** Deployed readers agree with annotations at 0.691 mean accuracy (AUROC 0.806) vs 0.824 (0.862) for the balanced probes, and several reader predicates miss the 0.70 accuracy bar despite strong specificity (e.g. crown farthest specificity 3.57 with only 1/4 passing). Per the review's decision rule, the next work is reader training (perception), not the proof layer.
+
+Caveats: masking/blur still establish sensitivity, not semantic correction; reader heads were trained reader-only on the 1,500-image milestone subset (the full-cache `fit_perception` run may close part of the agreement gap).
+
 ## 5. Pending results — produced on the dev server, not yet in this repo
 
 The reviewer-analysis track (Track C in [`EXPERIMENT_TRACKS.md`](EXPERIMENT_TRACKS.md)) runs only where the CRIL caches exist. After each server run, copy these into `grounded_vision/results/` and add a section above:

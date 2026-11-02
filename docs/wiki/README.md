@@ -12,14 +12,14 @@ Welcome to the **Grounded Vision** documentation wiki for certifiable, relationa
    - Setup, testing, and known repository issues (uncommitted `data/` subpackage)
 
 2. [**Experiment Tracks & Script Catalog**](EXPERIMENT_TRACKS.md)
-   - All 31 scripts: purpose, inputs, outputs, and where each track can run
+   - All 32 scripts: purpose, inputs, outputs, and where each track can run
    - Core pipeline · activation grounding · reviewer analysis · CLEVR relational · validation milestone · Modal cloud
 
 3. [**Quantitative Results — Consolidated Index**](RESULTS.md)
    - Activation track on real CUB, official train/test split: 56.8% held-out accuracy (4-species), 100% verified reasons on test; 200-class run shows certificates hold (4.3% accuracy — the honest trade)
    - CLEVR relational track: 69.8% accuracy, 100% relational + necessary certified reasons
    - Core-pipeline mock smoke benchmark (recovered from the Modal image)
-   - Predicate grounding milestone (real CUB): 82.8% agreement; beak/belly grounding validated (7/16 predicates)
+   - Predicate grounding milestone v1+v2 (real CUB): 82.8% probe agreement; separation persists under deployed readers; crown/breast v1 failure largely explained by adjacent controls
    - Pending server-side artifacts and the results-refresh protocol
 
 4. [**The Research Story & Talk Track**](THE_STORY.md)

@@ -97,6 +97,11 @@ Guardrails:
 
 Immediate refinements queued: non-adjacent distance-matched control regions; rerun with the deployed `AttributeReader` heads (not just probes) once retrained; extend the scope part list.
 
+**Executed as Milestone v2 (2026-11-02)** — [`RESULTS.md`](RESULTS.md) §4: deployed readers + three control families (adjacent / farthest / distance-matched) + 30,264 per-image effect records with bootstrap CIs. Answers to the two open questions:
+1. **Does the separation persist under deployed readers?** Yes — same part-family pattern (beak/belly 2.3–4×, crown/breast ~1.3–1.5× under adjacent controls), CIs tight.
+2. **Does region geometry explain the crown/breast failure?** Largely yes: with farthest controls, crown probes recover to 2.70–4.35 (4/4 pass) and breast to 1.5–2.7 (5/5) — the v1 failure was mostly adjacent-control contamination; distance-matched controls (same distance, off-part) split the effect into content and distance components.
+3. New bottleneck: **reader head quality** — deployed readers agree at 0.691 vs 0.824 for probes; next work is reader training (perception), per the decision rule.
+
 ---
 
 ## Related pages

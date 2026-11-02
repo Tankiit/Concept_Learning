@@ -1,6 +1,6 @@
 # Experiment tracks & script catalog
 
-All 31 scripts live in [`grounded_vision/scripts/`](../../grounded_vision/scripts). Paths below abbreviate `RUNS = /Users/cril/tanmoy/research/data/grounded_vision_runs` and `CUB = /Users/cril/tanmoy/research/data/CUB_200_2011/CUB_200_2011` — the development server where the real-data caches live. Full train/test feature caches also exist locally at `/Users/tanmoy/research/data/grounded_vision_runs/cub_bound_real_full/` (5,994 + 5,794 images, built 2026-11-02). See "Where each track can run" per section and [`GROUNDED_VISION_FRAMEWORK.md`](GROUNDED_VISION_FRAMEWORK.md) for the resolved `data/`-package history.
+All 32 scripts live in [`grounded_vision/scripts/`](../../grounded_vision/scripts). Paths below abbreviate `RUNS = /Users/cril/tanmoy/research/data/grounded_vision_runs` and `CUB = /Users/cril/tanmoy/research/data/CUB_200_2011/CUB_200_2011` — the development server where the real-data caches live. Full train/test feature caches also exist locally at `/Users/tanmoy/research/data/grounded_vision_runs/cub_bound_real_full/` (5,994 + 5,794 images, built 2026-11-02). See "Where each track can run" per section and [`GROUNDED_VISION_FRAMEWORK.md`](GROUNDED_VISION_FRAMEWORK.md) for the resolved `data/`-package history.
 
 ---
 
@@ -62,7 +62,7 @@ Only blocker off-server: the hard-coded `OUT` directory. **Result:** [`results/c
 
 ## Track F — Validation milestone (review requirement 2) — runs locally
 
-`run_predicate_grounding_milestone.py` (+ Modal launcher `run_milestone_modal.py`) — the first milestone of [`REVIEW_VALIDATION_ROADMAP.md`](REVIEW_VALIDATION_ROADMAP.md): recurring part–attribute predicates on real CUB, official disjoint test split, logistic probes on part-pooled DINOv2 features (only where the part is *visible* — unknown excluded), and perturbation specificity: blur/gray-mask the predicate's own part box vs the same edit geometry placed on a control part, plus stability under unrelated-part edits. Writes `results/predicate_grounding_milestone.json`. Requires a real CUB checkout (`--data-dir`; local copy at `/Users/tanmoy/research/data/CUB_200_2011/CUB_200_2011`, also on the `grounded-vision-cub-data` Modal volume — `attributes.txt` restored there 2026-11-01).
+`run_predicate_grounding_milestone.py` (+ Modal launcher `run_milestone_modal.py`, and **v2**: `run_predicate_grounding_milestone_v2.py`) — the review-validation milestones: v1 = recurring part–attribute predicates with logistic probes, correct-vs-control perturbations; v2 adds the **deployed `AttributeReader` heads** (fit_perception protocol), three control families (adjacent / farthest / distance-matched), and per-image effect records (30k rows) with bootstrap CIs — see [`RESULTS.md`](RESULTS.md) §4. Writes `results/predicate_grounding_milestone{,_v2,_v2_effects}.*`. Requires a real CUB checkout (`--data-dir`; local copy at `/Users/tanmoy/research/data/CUB_200_2011/CUB_200_2011`, also on the `grounded-vision-cub-data` Modal volume — `attributes.txt` restored there 2026-11-01).
 
 ## Track E — Cloud jobs (Modal)
 
