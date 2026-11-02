@@ -39,11 +39,13 @@ with out.open("w") as f:
 
 accuracy = float((pred == y).mean())
 depths = [paths.indptr[i + 1] - paths.indptr[i] - 1 for i in range(len(y))]
+import datetime
+class_counts = {int(k): int(v) for k, v in zip(*np.unique(y, return_counts=True))}
 summary.write_text(
     "# Cache-only DINO explainer\n\n"
-    "**Date:** 2026-10-27  \n"
+    f"**Date:** {datetime.date.today().isoformat()}  \n"
     "**Scope:** 100 real CUB training images from `train_features.npz`.\n\n"
-    f"- Classes represented: {dict(zip(*np.unique(y, return_counts=True)))}\n"
+    f"- Classes represented: {class_counts}\n"
     f"- Training accuracy: {accuracy:.1%}\n"
     f"- Mean certificate path length: {np.mean(depths):.2f} Boolean CLS-channel conditions\n"
     f"- Per-image certificates: `cache_only_explanations.jsonl`\n\n"

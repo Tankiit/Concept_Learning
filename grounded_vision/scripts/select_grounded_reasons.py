@@ -6,7 +6,7 @@ from grounded_vision.reasoning.tree_head import CertifiableTreeHead
 from grounded_vision.explanations.tree_verifier import TreeSufficiencyVerifier
 from grounded_vision.explanations.schema import ExplanationCondition,VerificationStatus
 root=Path('/Users/cril/tanmoy/research/data/CUB_200_2011/CUB_200_2011'); run=Path('/Users/cril/tanmoy/research/data/grounded_vision_runs/cub_bound_real_full')
-d=np.load(run/'train_features.npz'); fm=d['feature_maps']; y=d['labels']; ids=d['sample_ids']; x=fm.reshape(len(fm),384,4,4,4,4).mean((4,5)).transpose(0,2,3,1).reshape(len(fm),-1)
+d=np.load(run/'train_features.npz'); fm=d['feature_maps']; y=d['labels']; ids=d['sample_ids']; x=fm.reshape(len(fm),384,4,4,4,4).mean((3,5)).transpose(0,2,3,1).reshape(len(fm),-1)
 names=[f'tile_r{r}_c{c}:dino_ch{k}' for r in range(4) for c in range(4) for k in range(384)]; t=CertifiableTreeHead(max_depth=6,min_samples_leaf=2,feature_names=names);t.fit(x,y); v=TreeSufficiencyVerifier(t.clf,names)
 parts={}; pnames={int(z.split()[0]):z.split(maxsplit=1)[1] for z in (root/'parts/parts.txt').read_text().splitlines()}
 for z in (root/'parts/part_locs.txt').read_text().splitlines():

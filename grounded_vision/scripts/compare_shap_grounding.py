@@ -5,7 +5,7 @@ import shap
 sys.path.insert(0,'/Users/cril/tanmoy/research/Natural Language Explanation/grounded_vision/src')
 from grounded_vision.reasoning.tree_head import CertifiableTreeHead
 run=Path('/Users/cril/tanmoy/research/data/grounded_vision_runs/cub_bound_real_full');d=np.load(run/'train_features.npz');fm=d['feature_maps'];y=d['labels']
-x=fm.reshape(len(fm),384,4,4,4,4).mean((4,5)).transpose(0,2,3,1).reshape(len(fm),-1)
+x=fm.reshape(len(fm),384,4,4,4,4).mean((3,5)).transpose(0,2,3,1).reshape(len(fm),-1)
 names=[f'tile_r{r}_c{c}:dino_ch{k}' for r in range(4) for c in range(4) for k in range(384)];t=CertifiableTreeHead(max_depth=6,min_samples_leaf=2,feature_names=names);t.fit(x,y);p=t.predict(x)
 sv=shap.TreeExplainer(t.clf).shap_values(x)
 if isinstance(sv,list): vals=np.stack(sv,axis=1)[np.arange(len(x)),p]

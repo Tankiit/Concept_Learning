@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 root=Path('/Users/cril/tanmoy/research/data/CUB_200_2011/CUB_200_2011'); run=Path('/Users/cril/tanmoy/research/data/grounded_vision_runs/cub_bound_real_full')
 d=np.load(run/'train_features.npz'); fm=d['feature_maps']; ids=d['sample_ids']; labels=d['labels']
-emb=fm.reshape(len(fm),384,4,4,4,4).mean(axis=(4,5)).transpose(0,2,3,1) # n,r,c,d
+emb=fm.reshape(len(fm),384,4,4,4,4).mean(axis=(3,5)).transpose(0,2,3,1) # n,r,c,d (mean over within-tile axes)
 emb/=np.maximum(np.linalg.norm(emb,axis=-1,keepdims=True),1e-8)
 index={int(s):i for i,s in enumerate(ids)}; paths={int(x.split()[0]):x.split(maxsplit=1)[1] for x in (root/'images.txt').read_text().splitlines()}
 def crop(sid,r,c):
