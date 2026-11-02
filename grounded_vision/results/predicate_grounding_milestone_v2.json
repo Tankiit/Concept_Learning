@@ -1,0 +1,2597 @@
+{
+  "params": {
+    "data_dir": "/Users/tanmoy/research/data/CUB_200_2011/CUB_200_2011",
+    "parts": [
+      "breast",
+      "belly",
+      "crown",
+      "beak"
+    ],
+    "train_limit": 1500,
+    "test_limit": 500,
+    "pos_train_min": 30,
+    "pos_test_min": 10,
+    "reader_training": "AttributeReader per-region linear heads; BCE-with-logits pos_weight, Adam lr=0.001, 40 epochs, seed 42 (fit_perception protocol, reader-only)",
+    "pooling": "framework pool_region_features over GT part boxes",
+    "controls": {
+      "adjacent": "same-size box at next visible scope part center (v1 rule)",
+      "farthest": "same-size box at farthest visible scope part center",
+      "dist_matched": "same-size box at the adjacent-control distance, direction maximizing min distance to part centers"
+    },
+    "control_mean_distances": {
+      "adjacent": 0.1724495200532462,
+      "farthest": 0.26614574041295014,
+      "dist_matched": 0.1704176934501
+    },
+    "bootstrap": "1000 resamples, seed 1234",
+    "edits": [
+      "blur",
+      "mask"
+    ],
+    "seed": 42
+  },
+  "predicates": [
+    {
+      "instrument": "probe",
+      "feature": "beak:bill_shape=dagger",
+      "part": "beak",
+      "n_train": {
+        "pos": 218,
+        "neg": 1277
+      },
+      "agreement": {
+        "n_test": 499,
+        "accuracy": 0.7835671342685371,
+        "auroc": 0.815238160229289
+      },
+      "perturbation": {
+        "blur": {
+          "mean_abs_dp_target": 0.13438798206476935,
+          "mean_abs_dp_ctrl_adjacent": 0.04965481224968138,
+          "specificity_adjacent": {
+            "ratio": 2.70644426947021,
+            "ci95": [
+              2.4109390300902223,
+              3.0261615228960563
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.034400166375032494,
+          "specificity_farthest": {
+            "ratio": 3.90660849135624,
+            "ci95": [
+              3.423191320822785,
+              4.469844539067721
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.044037826423207097,
+          "specificity_dist_matched": {
+            "ratio": 3.0516488432760034,
+            "ci95": [
+              2.682144752734455,
+              3.501438557677787
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.07362217008282422
+        },
+        "mask": {
+          "mean_abs_dp_target": 0.14401392665210097,
+          "mean_abs_dp_ctrl_adjacent": 0.053129779198936126,
+          "specificity_adjacent": {
+            "ratio": 2.7106065341032832,
+            "ci95": [
+              2.4101840907855125,
+              3.032301397023877
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.03893566203993522,
+          "specificity_farthest": {
+            "ratio": 3.6987666089866384,
+            "ci95": [
+              3.2535986006163484,
+              4.236343942695142
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.04956649288590946,
+          "specificity_dist_matched": {
+            "ratio": 2.9054693658392887,
+            "ci95": [
+              2.6126976419549495,
+              3.291286908055385
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.07439227265443848
+        }
+      },
+      "passes_by_control": {
+        "adjacent": true,
+        "farthest": true,
+        "dist_matched": true
+      }
+    },
+    {
+      "instrument": "probe",
+      "feature": "beak:bill_shape=cone",
+      "part": "beak",
+      "n_train": {
+        "pos": 389,
+        "neg": 1106
+      },
+      "agreement": {
+        "n_test": 499,
+        "accuracy": 0.7655310621242485,
+        "auroc": 0.8238578228568887
+      },
+      "perturbation": {
+        "blur": {
+          "mean_abs_dp_target": 0.16452956204265265,
+          "mean_abs_dp_ctrl_adjacent": 0.05422038616731493,
+          "specificity_adjacent": {
+            "ratio": 3.0344594288750044,
+            "ci95": [
+              2.69709826343072,
+              3.4130050405729504
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.03481828653719285,
+          "specificity_farthest": {
+            "ratio": 4.72537790930356,
+            "ci95": [
+              4.1390533392646685,
+              5.457277775272426
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.062285045577555515,
+          "specificity_dist_matched": {
+            "ratio": 2.6415580259596223,
+            "ci95": [
+              2.325656004520782,
+              2.9944358508728044
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.07933211139314723
+        },
+        "mask": {
+          "mean_abs_dp_target": 0.21138796898498238,
+          "mean_abs_dp_ctrl_adjacent": 0.0669057010073763,
+          "specificity_adjacent": {
+            "ratio": 3.159491131580506,
+            "ci95": [
+              2.828344535586327,
+              3.5336025325300557
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.04508123029046488,
+          "specificity_farthest": {
+            "ratio": 4.689046142329727,
+            "ci95": [
+              4.103289968373299,
+              5.369884213279885
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.07672919351254018,
+          "specificity_dist_matched": {
+            "ratio": 2.7549874996461985,
+            "ci95": [
+              2.4851521988154484,
+              3.0820331968240087
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.10212546692748377
+        }
+      },
+      "passes_by_control": {
+        "adjacent": true,
+        "farthest": true,
+        "dist_matched": true
+      }
+    },
+    {
+      "instrument": "probe",
+      "feature": "beak:bill_color=black",
+      "part": "beak",
+      "n_train": {
+        "pos": 655,
+        "neg": 840
+      },
+      "agreement": {
+        "n_test": 499,
+        "accuracy": 0.717434869739479,
+        "auroc": 0.7879484670580561
+      },
+      "perturbation": {
+        "blur": {
+          "mean_abs_dp_target": 0.14498820818753583,
+          "mean_abs_dp_ctrl_adjacent": 0.04507229353110701,
+          "specificity_adjacent": {
+            "ratio": 3.2167923313569795,
+            "ci95": [
+              2.878942034387797,
+              3.6087436450495756
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.030929218668367182,
+          "specificity_farthest": {
+            "ratio": 4.687742349463949,
+            "ci95": [
+              4.120561257164581,
+              5.349911959011877
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.05421327764704161,
+          "specificity_dist_matched": {
+            "ratio": 2.6744040294241045,
+            "ci95": [
+              2.3971614206117513,
+              3.014744424897541
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.058272008098011564
+        },
+        "mask": {
+          "mean_abs_dp_target": 0.29854482245932923,
+          "mean_abs_dp_ctrl_adjacent": 0.08943361884339088,
+          "specificity_adjacent": {
+            "ratio": 3.3381722256159336,
+            "ci95": [
+              3.0671013295377403,
+              3.6709858636087644
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.048997702513274566,
+          "specificity_farthest": {
+            "ratio": 6.093037165945624,
+            "ci95": [
+              5.398733201587588,
+              6.935863517383436
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.12190392357624091,
+          "specificity_dist_matched": {
+            "ratio": 2.4490173384174456,
+            "ci95": [
+              2.273684931260173,
+              2.6468120323899527
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.1430114358970755
+        }
+      },
+      "passes_by_control": {
+        "adjacent": true,
+        "farthest": true,
+        "dist_matched": true
+      }
+    },
+    {
+      "instrument": "probe",
+      "feature": "beak:bill_color=yellow",
+      "part": "beak",
+      "n_train": {
+        "pos": 84,
+        "neg": 1411
+      },
+      "agreement": {
+        "n_test": 499,
+        "accuracy": 0.8376753507014028,
+        "auroc": 0.7394456289978677
+      },
+      "perturbation": {
+        "blur": {
+          "mean_abs_dp_target": 0.10588372755731673,
+          "mean_abs_dp_ctrl_adjacent": 0.04762385704955404,
+          "specificity_adjacent": {
+            "ratio": 2.223333726353612,
+            "ci95": [
+              1.985320629041996,
+              2.4872417437289176
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.03189736022529595,
+          "specificity_farthest": {
+            "ratio": 3.319513803319263,
+            "ci95": [
+              2.9267336798409618,
+              3.7526759397681975
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.046015346071040186,
+          "specificity_dist_matched": {
+            "ratio": 2.3010525096095016,
+            "ci95": [
+              2.071811876431743,
+              2.572874253829003
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.05033735045561919
+        },
+        "mask": {
+          "mean_abs_dp_target": 0.15607709391680546,
+          "mean_abs_dp_ctrl_adjacent": 0.06391061744682901,
+          "specificity_adjacent": {
+            "ratio": 2.4421152564619666,
+            "ci95": [
+              2.2146692646613912,
+              2.691016305268907
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.03683824069736195,
+          "specificity_farthest": {
+            "ratio": 4.236822686485743,
+            "ci95": [
+              3.815259841431668,
+              4.736588707544517
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.06583474168033773,
+          "specificity_dist_matched": {
+            "ratio": 2.3707405836669304,
+            "ci95": [
+              2.156749014911194,
+              2.5859292522944757
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.0764295596211342
+        }
+      },
+      "passes_by_control": {
+        "adjacent": true,
+        "farthest": true,
+        "dist_matched": true
+      }
+    },
+    {
+      "instrument": "probe",
+      "feature": "crown:crown_color=black",
+      "part": "crown",
+      "n_train": {
+        "pos": 505,
+        "neg": 967
+      },
+      "agreement": {
+        "n_test": 494,
+        "accuracy": 0.7307692307692307,
+        "auroc": 0.787271743793483
+      },
+      "perturbation": {
+        "blur": {
+          "mean_abs_dp_target": 0.14382396782264315,
+          "mean_abs_dp_ctrl_adjacent": 0.11315754360080822,
+          "specificity_adjacent": {
+            "ratio": 1.2710064503522494,
+            "ci95": [
+              1.1922221492330058,
+              1.3537589980196116
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.03991425218205111,
+          "specificity_farthest": {
+            "ratio": 3.603323624019162,
+            "ci95": [
+              3.160871983483609,
+              4.1177774662186
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.1023946394751134,
+          "specificity_dist_matched": {
+            "ratio": 1.4046044652327623,
+            "ci95": [
+              1.3139865788963365,
+              1.496285078799004
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.059179268119148046
+        },
+        "mask": {
+          "mean_abs_dp_target": 0.13160618636363042,
+          "mean_abs_dp_ctrl_adjacent": 0.1118689608363652,
+          "specificity_adjacent": {
+            "ratio": 1.1764316516369144,
+            "ci95": [
+              1.1129277591701232,
+              1.2484076501553734
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.04171502847787775,
+          "specificity_farthest": {
+            "ratio": 3.1548866479480795,
+            "ci95": [
+              2.7856087853295133,
+              3.5935516328617183
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.10015992138292312,
+          "specificity_dist_matched": {
+            "ratio": 1.3139605597381065,
+            "ci95": [
+              1.2212362063592788,
+              1.4038243858815325
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.061169178423699656
+        }
+      },
+      "passes_by_control": {
+        "adjacent": false,
+        "farthest": true,
+        "dist_matched": false
+      }
+    },
+    {
+      "instrument": "probe",
+      "feature": "crown:crown_color=yellow",
+      "part": "crown",
+      "n_train": {
+        "pos": 102,
+        "neg": 1370
+      },
+      "agreement": {
+        "n_test": 494,
+        "accuracy": 0.854251012145749,
+        "auroc": 0.9220398128321041
+      },
+      "perturbation": {
+        "blur": {
+          "mean_abs_dp_target": 0.078480025901128,
+          "mean_abs_dp_ctrl_adjacent": 0.061774923380542045,
+          "specificity_adjacent": {
+            "ratio": 1.2704188302700146,
+            "ci95": [
+              1.1724467044141624,
+              1.377987460716853
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.028319489948339403,
+          "specificity_farthest": {
+            "ratio": 2.7712372660768883,
+            "ci95": [
+              2.4444980356596338,
+              3.1550471999403005
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.0560755610861814,
+          "specificity_dist_matched": {
+            "ratio": 1.3995406266290165,
+            "ci95": [
+              1.2783044546140732,
+              1.538552553160515
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.03921610435130771
+        },
+        "mask": {
+          "mean_abs_dp_target": 0.17116966211528914,
+          "mean_abs_dp_ctrl_adjacent": 0.13355583387591805,
+          "specificity_adjacent": {
+            "ratio": 1.2816337343550022,
+            "ci95": [
+              1.2291961945723384,
+              1.338798808686183
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.04445672600260174,
+          "specificity_farthest": {
+            "ratio": 3.85025343758494,
+            "ci95": [
+              3.4538088254768695,
+              4.320705304775912
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.11702765881932582,
+          "specificity_dist_matched": {
+            "ratio": 1.4626427960893496,
+            "ci95": [
+              1.3810172753570678,
+              1.5556521459977335
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.0799864768937216
+        }
+      },
+      "passes_by_control": {
+        "adjacent": false,
+        "farthest": true,
+        "dist_matched": false
+      }
+    },
+    {
+      "instrument": "probe",
+      "feature": "crown:crown_color=red",
+      "part": "crown",
+      "n_train": {
+        "pos": 72,
+        "neg": 1400
+      },
+      "agreement": {
+        "n_test": 494,
+        "accuracy": 0.9473684210526315,
+        "auroc": 0.9817375886524823
+      },
+      "perturbation": {
+        "blur": {
+          "mean_abs_dp_target": 0.063785400569185,
+          "mean_abs_dp_ctrl_adjacent": 0.054934786182493665,
+          "specificity_adjacent": {
+            "ratio": 1.1611112921653965,
+            "ci95": [
+              1.0597641245973914,
+              1.2716331421342553
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.023596291894920966,
+          "specificity_farthest": {
+            "ratio": 2.70319594507621,
+            "ci95": [
+              2.393729716640012,
+              3.0975497611690486
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.04645922449452301,
+          "specificity_dist_matched": {
+            "ratio": 1.3729329592383646,
+            "ci95": [
+              1.2478424841320428,
+              1.5241694097827003
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.030131095696185814
+        },
+        "mask": {
+          "mean_abs_dp_target": 0.10114290310838177,
+          "mean_abs_dp_ctrl_adjacent": 0.07919092542204115,
+          "specificity_adjacent": {
+            "ratio": 1.2772031968227353,
+            "ci95": [
+              1.1884240356882505,
+              1.3730811908151763
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.02805328182538852,
+          "specificity_farthest": {
+            "ratio": 3.605385770475038,
+            "ci95": [
+              3.1130654334783454,
+              4.144875202664176
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.07243347676352967,
+          "specificity_dist_matched": {
+            "ratio": 1.3963557684601897,
+            "ci95": [
+              1.2881836895894643,
+              1.5172931194263115
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.04095043464054983
+        }
+      },
+      "passes_by_control": {
+        "adjacent": false,
+        "farthest": true,
+        "dist_matched": false
+      }
+    },
+    {
+      "instrument": "probe",
+      "feature": "crown:crown_color=white",
+      "part": "crown",
+      "n_train": {
+        "pos": 177,
+        "neg": 1295
+      },
+      "agreement": {
+        "n_test": 494,
+        "accuracy": 0.8461538461538461,
+        "auroc": 0.8847815855902109
+      },
+      "perturbation": {
+        "blur": {
+          "mean_abs_dp_target": 0.09132833451290531,
+          "mean_abs_dp_ctrl_adjacent": 0.07667573124948018,
+          "specificity_adjacent": {
+            "ratio": 1.191098317872573,
+            "ci95": [
+              1.099392375258222,
+              1.2921095105069866
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.03401165705098634,
+          "specificity_farthest": {
+            "ratio": 2.6852068505805655,
+            "ci95": [
+              2.384541500186232,
+              3.0244395107151107
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.06806284555146205,
+          "specificity_dist_matched": {
+            "ratio": 1.341823630395416,
+            "ci95": [
+              1.2341585395017736,
+              1.4650396590278447
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.046963887665794936
+        },
+        "mask": {
+          "mean_abs_dp_target": 0.18386261572934595,
+          "mean_abs_dp_ctrl_adjacent": 0.13476981806622357,
+          "specificity_adjacent": {
+            "ratio": 1.3642714545997163,
+            "ci95": [
+              1.290924937625408,
+              1.4359496973676116
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.04223019572000929,
+          "specificity_farthest": {
+            "ratio": 4.353818697606204,
+            "ci95": [
+              3.8445187531813807,
+              5.006100917011885
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.11491607406434509,
+          "specificity_dist_matched": {
+            "ratio": 1.5999729996553445,
+            "ci95": [
+              1.4966517221271858,
+              1.7188820045042894
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.0672416130451664
+        }
+      },
+      "passes_by_control": {
+        "adjacent": false,
+        "farthest": true,
+        "dist_matched": false
+      }
+    },
+    {
+      "instrument": "probe",
+      "feature": "breast:breast_color=yellow",
+      "part": "breast",
+      "n_train": {
+        "pos": 205,
+        "neg": 1187
+      },
+      "agreement": {
+        "n_test": 459,
+        "accuracy": 0.9019607843137255,
+        "auroc": 0.9465329991645781
+      },
+      "perturbation": {
+        "blur": {
+          "mean_abs_dp_target": 0.06554120535408366,
+          "mean_abs_dp_ctrl_adjacent": 0.04940090194627802,
+          "specificity_adjacent": {
+            "ratio": 1.3267208243557522,
+            "ci95": [
+              1.198047226336212,
+              1.4626115360393452
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.043495593777297746,
+          "specificity_farthest": {
+            "ratio": 1.506847008220232,
+            "ci95": [
+              1.3676196835113106,
+              1.6641315901204337
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.048346655466656806,
+          "specificity_dist_matched": {
+            "ratio": 1.35565127973093,
+            "ci95": [
+              1.2386194640267139,
+              1.4985082740241913
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.03649029048853546
+        },
+        "mask": {
+          "mean_abs_dp_target": 0.12213675766506904,
+          "mean_abs_dp_ctrl_adjacent": 0.08671227269989075,
+          "specificity_adjacent": {
+            "ratio": 1.4085290797045724,
+            "ci95": [
+              1.3129660677694377,
+              1.5067656489716714
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.04890154298867477,
+          "specificity_farthest": {
+            "ratio": 2.4976053964872844,
+            "ci95": [
+              2.2440118850136703,
+              2.7731691787478923
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.07207027725407184,
+          "specificity_dist_matched": {
+            "ratio": 1.6946897156298721,
+            "ci95": [
+              1.555523813549488,
+              1.847238796262487
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.050583207731538495
+        }
+      },
+      "passes_by_control": {
+        "adjacent": false,
+        "farthest": true,
+        "dist_matched": false
+      }
+    },
+    {
+      "instrument": "probe",
+      "feature": "breast:breast_color=white",
+      "part": "breast",
+      "n_train": {
+        "pos": 503,
+        "neg": 889
+      },
+      "agreement": {
+        "n_test": 459,
+        "accuracy": 0.775599128540305,
+        "auroc": 0.8707115761390638
+      },
+      "perturbation": {
+        "blur": {
+          "mean_abs_dp_target": 0.10574236719677366,
+          "mean_abs_dp_ctrl_adjacent": 0.0978332411545641,
+          "specificity_adjacent": {
+            "ratio": 1.0808429317977326,
+            "ci95": [
+              1.0013297298831092,
+              1.1718884102016325
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.053437940026838084,
+          "specificity_farthest": {
+            "ratio": 1.9787882381631248,
+            "ci95": [
+              1.7846076035003098,
+              2.2094716010597812
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.0732751194837217,
+          "specificity_dist_matched": {
+            "ratio": 1.4430869296673703,
+            "ci95": [
+              1.3268142817188942,
+              1.5743479827286144
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.04938298749542913
+        },
+        "mask": {
+          "mean_abs_dp_target": 0.15102177527811692,
+          "mean_abs_dp_ctrl_adjacent": 0.1141597046065012,
+          "specificity_adjacent": {
+            "ratio": 1.3228991420280576,
+            "ci95": [
+              1.244839695440964,
+              1.4090007353158769
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.05626302427653321,
+          "specificity_farthest": {
+            "ratio": 2.6842100512735274,
+            "ci95": [
+              2.4308512422972823,
+              2.963922884088924
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.09194425090606632,
+          "specificity_dist_matched": {
+            "ratio": 1.642536360782431,
+            "ci95": [
+              1.5393466027198872,
+              1.760380080542904
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.05541480113752878
+        }
+      },
+      "passes_by_control": {
+        "adjacent": false,
+        "farthest": true,
+        "dist_matched": false
+      }
+    },
+    {
+      "instrument": "probe",
+      "feature": "breast:breast_color=black",
+      "part": "breast",
+      "n_train": {
+        "pos": 299,
+        "neg": 1093
+      },
+      "agreement": {
+        "n_test": 459,
+        "accuracy": 0.8061002178649237,
+        "auroc": 0.8886924803591469
+      },
+      "perturbation": {
+        "blur": {
+          "mean_abs_dp_target": 0.10998126081214785,
+          "mean_abs_dp_ctrl_adjacent": 0.08596987316180746,
+          "specificity_adjacent": {
+            "ratio": 1.2793000241508738,
+            "ci95": [
+              1.1741514619481739,
+              1.389275986028777
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.05786899551154483,
+          "specificity_farthest": {
+            "ratio": 1.900521338584608,
+            "ci95": [
+              1.7167386969717489,
+              2.0998176722451807
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.07144998833775859,
+          "specificity_dist_matched": {
+            "ratio": 1.5392761198538496,
+            "ci95": [
+              1.3960559399034476,
+              1.6750923087950347
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.047828798428153615
+        },
+        "mask": {
+          "mean_abs_dp_target": 0.16089126500891346,
+          "mean_abs_dp_ctrl_adjacent": 0.11080852854789044,
+          "specificity_adjacent": {
+            "ratio": 1.451975467207632,
+            "ci95": [
+              1.3608277777910947,
+              1.5463346820058275
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.06150477738912127,
+          "specificity_farthest": {
+            "ratio": 2.615914923014928,
+            "ci95": [
+              2.3771662754876255,
+              2.906948249588548
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.09646543877391342,
+          "specificity_dist_matched": {
+            "ratio": 1.6678643362209258,
+            "ci95": [
+              1.5648008627366385,
+              1.783813882925273
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.056656737984491744
+        }
+      },
+      "passes_by_control": {
+        "adjacent": false,
+        "farthest": true,
+        "dist_matched": true
+      }
+    },
+    {
+      "instrument": "probe",
+      "feature": "breast:breast_color=red",
+      "part": "breast",
+      "n_train": {
+        "pos": 63,
+        "neg": 1329
+      },
+      "agreement": {
+        "n_test": 459,
+        "accuracy": 0.9150326797385621,
+        "auroc": 0.863431151241535
+      },
+      "perturbation": {
+        "blur": {
+          "mean_abs_dp_target": 0.07709481971730447,
+          "mean_abs_dp_ctrl_adjacent": 0.06009899037088474,
+          "specificity_adjacent": {
+            "ratio": 1.282797252358726,
+            "ci95": [
+              1.1656625707433645,
+              1.4215616268307885
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.04375097698843887,
+          "specificity_farthest": {
+            "ratio": 1.7621279574551367,
+            "ci95": [
+              1.5767804989833913,
+              1.9791401333606438
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.05244794163498121,
+          "specificity_dist_matched": {
+            "ratio": 1.4699303216484005,
+            "ci95": [
+              1.3254083186995613,
+              1.6316730323485196
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.0356034833823879
+        },
+        "mask": {
+          "mean_abs_dp_target": 0.0849733839100061,
+          "mean_abs_dp_ctrl_adjacent": 0.05817901596345678,
+          "specificity_adjacent": {
+            "ratio": 1.460550380628289,
+            "ci95": [
+              1.348693977037398,
+              1.5922368162531597
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.04573790671273692,
+          "specificity_farthest": {
+            "ratio": 1.8578328134624278,
+            "ci95": [
+              1.6897798697508535,
+              2.049491308843274
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.057016496804580555,
+          "specificity_dist_matched": {
+            "ratio": 1.490329793520032,
+            "ci95": [
+              1.3667044985786352,
+              1.620805161819904
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.03643243721762954
+        }
+      },
+      "passes_by_control": {
+        "adjacent": false,
+        "farthest": true,
+        "dist_matched": false
+      }
+    },
+    {
+      "instrument": "probe",
+      "feature": "breast:breast_pattern=striped",
+      "part": "breast",
+      "n_train": {
+        "pos": 171,
+        "neg": 1221
+      },
+      "agreement": {
+        "n_test": 459,
+        "accuracy": 0.7647058823529411,
+        "auroc": 0.7533822117482761
+      },
+      "perturbation": {
+        "blur": {
+          "mean_abs_dp_target": 0.10965638072852169,
+          "mean_abs_dp_ctrl_adjacent": 0.08480058523633399,
+          "specificity_adjacent": {
+            "ratio": 1.2931087730458006,
+            "ci95": [
+              1.1973935744075535,
+              1.3966636422582166
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.04578987487950526,
+          "specificity_farthest": {
+            "ratio": 2.3947735392830687,
+            "ci95": [
+              2.18559639438794,
+              2.6698041834598816
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.07056612055081639,
+          "specificity_dist_matched": {
+            "ratio": 1.5539522347633585,
+            "ci95": [
+              1.447301253578127,
+              1.6864041581305795
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.04214470206285055
+        },
+        "mask": {
+          "mean_abs_dp_target": 0.1209565237000113,
+          "mean_abs_dp_ctrl_adjacent": 0.09030111915642702,
+          "specificity_adjacent": {
+            "ratio": 1.3394797853001186,
+            "ci95": [
+              1.2464647707247432,
+              1.4422229354135316
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.043751813900975406,
+          "specificity_farthest": {
+            "ratio": 2.7646059195117094,
+            "ci95": [
+              2.491771367589477,
+              3.067455923476891
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.06977805064115343,
+          "specificity_dist_matched": {
+            "ratio": 1.7334465865498687,
+            "ci95": [
+              1.6171743191537011,
+              1.8747247832694223
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.04199684209328667
+        }
+      },
+      "passes_by_control": {
+        "adjacent": false,
+        "farthest": true,
+        "dist_matched": true
+      }
+    },
+    {
+      "instrument": "probe",
+      "feature": "belly:belly_color=yellow",
+      "part": "belly",
+      "n_train": {
+        "pos": 196,
+        "neg": 1102
+      },
+      "agreement": {
+        "n_test": 433,
+        "accuracy": 0.9122401847575058,
+        "auroc": 0.9571813065818449
+      },
+      "perturbation": {
+        "blur": {
+          "mean_abs_dp_target": 0.07358799409407618,
+          "mean_abs_dp_ctrl_adjacent": 0.028627934269157895,
+          "specificity_adjacent": {
+            "ratio": 2.5704961245965867,
+            "ci95": [
+              2.2807845519547647,
+              2.9024027809436923
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.028901406694910186,
+          "specificity_farthest": {
+            "ratio": 2.5461734396144715,
+            "ci95": [
+              2.2727218198745884,
+              2.8766702687505137
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.023671032956255687,
+          "specificity_dist_matched": {
+            "ratio": 3.1087783211686433,
+            "ci95": [
+              2.737029116597648,
+              3.5107197006793815
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.030981015271032288
+        },
+        "mask": {
+          "mean_abs_dp_target": 0.1326714653751273,
+          "mean_abs_dp_ctrl_adjacent": 0.0343746080641039,
+          "specificity_adjacent": {
+            "ratio": 3.859577544206856,
+            "ci95": [
+              3.4192537156007026,
+              4.3390047622201635
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.033331990554492576,
+          "specificity_farthest": {
+            "ratio": 3.9803043013056865,
+            "ci95": [
+              3.551436248873232,
+              4.481318055928729
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.02373613761143305,
+          "specificity_dist_matched": {
+            "ratio": 5.589429398623939,
+            "ci95": [
+              4.983027851809275,
+              6.392507074032693
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.04350358561402601
+        }
+      },
+      "passes_by_control": {
+        "adjacent": true,
+        "farthest": true,
+        "dist_matched": true
+      }
+    },
+    {
+      "instrument": "probe",
+      "feature": "belly:belly_color=white",
+      "part": "belly",
+      "n_train": {
+        "pos": 511,
+        "neg": 787
+      },
+      "agreement": {
+        "n_test": 433,
+        "accuracy": 0.76905311778291,
+        "auroc": 0.8659965384103314
+      },
+      "perturbation": {
+        "blur": {
+          "mean_abs_dp_target": 0.10955507406340335,
+          "mean_abs_dp_ctrl_adjacent": 0.04159495214872113,
+          "specificity_adjacent": {
+            "ratio": 2.6338550329783637,
+            "ci95": [
+              2.4001479388191114,
+              2.9266449543077027
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.04168853824540141,
+          "specificity_farthest": {
+            "ratio": 2.6279423235831056,
+            "ci95": [
+              2.398626026604264,
+              2.906857098589989
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.024907420617152475,
+          "specificity_dist_matched": {
+            "ratio": 4.398491347111164,
+            "ci95": [
+              3.908934919084148,
+              4.9921104046244675
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.038543121759117394
+        },
+        "mask": {
+          "mean_abs_dp_target": 0.123027510745174,
+          "mean_abs_dp_ctrl_adjacent": 0.05021162890254152,
+          "specificity_adjacent": {
+            "ratio": 2.4501796383456265,
+            "ci95": [
+              2.197871757387352,
+              2.727562277157059
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.04782275984118787,
+          "specificity_farthest": {
+            "ratio": 2.5725723725215714,
+            "ci95": [
+              2.311947309946448,
+              2.8646737252193386
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.026308294025461008,
+          "specificity_dist_matched": {
+            "ratio": 4.676377367004821,
+            "ci95": [
+              4.084137849469077,
+              5.417038698112783
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.04516088438377015
+        }
+      },
+      "passes_by_control": {
+        "adjacent": true,
+        "farthest": true,
+        "dist_matched": true
+      }
+    },
+    {
+      "instrument": "probe",
+      "feature": "belly:belly_color=black",
+      "part": "belly",
+      "n_train": {
+        "pos": 198,
+        "neg": 1100
+      },
+      "agreement": {
+        "n_test": 433,
+        "accuracy": 0.8498845265588915,
+        "auroc": 0.9110458507010232
+      },
+      "perturbation": {
+        "blur": {
+          "mean_abs_dp_target": 0.12477437268467931,
+          "mean_abs_dp_ctrl_adjacent": 0.03714440985795471,
+          "specificity_adjacent": {
+            "ratio": 3.3591696075353874,
+            "ci95": [
+              2.9529421131841223,
+              3.785290004520993
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.039632525002745354,
+          "specificity_farthest": {
+            "ratio": 3.1482821918622688,
+            "ci95": [
+              2.7674227990566163,
+              3.559013870256629
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.02898110913545366,
+          "specificity_dist_matched": {
+            "ratio": 4.305369132061209,
+            "ci95": [
+              3.7869215431736887,
+              4.908121933660716
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.04471415209714428
+        },
+        "mask": {
+          "mean_abs_dp_target": 0.1476066313460267,
+          "mean_abs_dp_ctrl_adjacent": 0.038716066550047216,
+          "specificity_adjacent": {
+            "ratio": 3.8125420400137906,
+            "ci95": [
+              3.390695604099421,
+              4.2343613725193565
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.03808641872927998,
+          "specificity_farthest": {
+            "ratio": 3.875571299974971,
+            "ci95": [
+              3.449135784701492,
+              4.355720060374157
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.025735496479533493,
+          "specificity_dist_matched": {
+            "ratio": 5.735526861252236,
+            "ci95": [
+              5.035290356458661,
+              6.57339896793689
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.04878618826739286
+        }
+      },
+      "passes_by_control": {
+        "adjacent": true,
+        "farthest": true,
+        "dist_matched": true
+      }
+    },
+    {
+      "instrument": "reader",
+      "feature": "beak:bill_shape=dagger",
+      "part": "beak",
+      "n_train": {
+        "pos": 218,
+        "neg": 1277
+      },
+      "agreement": {
+        "n_test": 499,
+        "accuracy": 0.7394789579158316,
+        "auroc": 0.7837109321686911
+      },
+      "perturbation": {
+        "blur": {
+          "mean_abs_dp_target": 0.01127562273241475,
+          "mean_abs_dp_ctrl_adjacent": 0.0049517299225908485,
+          "specificity_adjacent": {
+            "ratio": 2.277107780247253,
+            "ci95": [
+              2.0457835357917893,
+              2.5035616223078776
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.0034412857525812123,
+          "specificity_farthest": {
+            "ratio": 3.2765726368283192,
+            "ci95": [
+              2.9208856925389384,
+              3.7037887466329344
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.004468516560499081,
+          "specificity_dist_matched": {
+            "ratio": 2.5233480909725876,
+            "ci95": [
+              2.25779332840466,
+              2.828141721185848
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.006590577508102041
+        },
+        "mask": {
+          "mean_abs_dp_target": 0.014172990778405108,
+          "mean_abs_dp_ctrl_adjacent": 0.005913513397167106,
+          "specificity_adjacent": {
+            "ratio": 2.3967123817111395,
+            "ci95": [
+              2.1733272454021364,
+              2.627188612674995
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.004475032697937532,
+          "specificity_farthest": {
+            "ratio": 3.167125635738305,
+            "ci95": [
+              2.8525041507824382,
+              3.529117489131176
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.005120330798124264,
+          "specificity_dist_matched": {
+            "ratio": 2.7679834247422286,
+            "ci95": [
+              2.527447277122094,
+              3.057421335938632
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.0086422874757108
+        }
+      },
+      "passes_by_control": {
+        "adjacent": true,
+        "farthest": true,
+        "dist_matched": true
+      }
+    },
+    {
+      "instrument": "reader",
+      "feature": "beak:bill_shape=cone",
+      "part": "beak",
+      "n_train": {
+        "pos": 389,
+        "neg": 1106
+      },
+      "agreement": {
+        "n_test": 499,
+        "accuracy": 0.6012024048096193,
+        "auroc": 0.7929623203879176
+      },
+      "perturbation": {
+        "blur": {
+          "mean_abs_dp_target": 0.011464555480914986,
+          "mean_abs_dp_ctrl_adjacent": 0.005362625231962644,
+          "specificity_adjacent": {
+            "ratio": 2.1378625178920294,
+            "ci95": [
+              1.9114913956675592,
+              2.3825420928827885
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.0037086417894802975,
+          "specificity_farthest": {
+            "ratio": 3.091308390428709,
+            "ci95": [
+              2.738081274185177,
+              3.501336761757461
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.004608033475034939,
+          "specificity_dist_matched": {
+            "ratio": 2.4879496954670146,
+            "ci95": [
+              2.2281898180141506,
+              2.7833859593511776
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.006868773119483061
+        },
+        "mask": {
+          "mean_abs_dp_target": 0.017613180235535923,
+          "mean_abs_dp_ctrl_adjacent": 0.00633891580816739,
+          "specificity_adjacent": {
+            "ratio": 2.7785792978733337,
+            "ci95": [
+              2.5240003073392354,
+              3.0499957838778706
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.004431744257290521,
+          "specificity_farthest": {
+            "ratio": 3.9743223464578405,
+            "ci95": [
+              3.5581483967508203,
+              4.447930262087329
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.005709317380297399,
+          "specificity_dist_matched": {
+            "ratio": 3.084988810802186,
+            "ci95": [
+              2.8046529202051667,
+              3.4053437198915124
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.01034539746855925
+        }
+      },
+      "passes_by_control": {
+        "adjacent": false,
+        "farthest": false,
+        "dist_matched": false
+      }
+    },
+    {
+      "instrument": "reader",
+      "feature": "beak:bill_color=black",
+      "part": "beak",
+      "n_train": {
+        "pos": 655,
+        "neg": 840
+      },
+      "agreement": {
+        "n_test": 499,
+        "accuracy": 0.625250501002004,
+        "auroc": 0.699771689497717
+      },
+      "perturbation": {
+        "blur": {
+          "mean_abs_dp_target": 0.00914261915640745,
+          "mean_abs_dp_ctrl_adjacent": 0.0050142102227182335,
+          "specificity_adjacent": {
+            "ratio": 1.8233418126316974,
+            "ci95": [
+              1.6609991340584875,
+              1.9997908009086576
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.0035974440689316256,
+          "specificity_farthest": {
+            "ratio": 2.541420792435736,
+            "ci95": [
+              2.2697197435045555,
+              2.8368788677425827
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.004712942129146599,
+          "specificity_dist_matched": {
+            "ratio": 1.9398963335166095,
+            "ci95": [
+              1.7625501209494103,
+              2.1318628321809987
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.005976699616165262
+        },
+        "mask": {
+          "mean_abs_dp_target": 0.01095316930858788,
+          "mean_abs_dp_ctrl_adjacent": 0.004812040883219075,
+          "specificity_adjacent": {
+            "ratio": 2.2762003844947842,
+            "ci95": [
+              2.0554060121619324,
+              2.5296623885478247
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.004070236532387131,
+          "specificity_farthest": {
+            "ratio": 2.691039997659304,
+            "ci95": [
+              2.4142261279131176,
+              2.9801702290777285
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.0046264199551217305,
+          "specificity_dist_matched": {
+            "ratio": 2.3675259519970835,
+            "ci95": [
+              2.1408212090783003,
+              2.6265501964652445
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.006232795153129235
+        }
+      },
+      "passes_by_control": {
+        "adjacent": false,
+        "farthest": false,
+        "dist_matched": false
+      }
+    },
+    {
+      "instrument": "reader",
+      "feature": "beak:bill_color=yellow",
+      "part": "beak",
+      "n_train": {
+        "pos": 84,
+        "neg": 1411
+      },
+      "agreement": {
+        "n_test": 499,
+        "accuracy": 0.7835671342685371,
+        "auroc": 0.7191897654584222
+      },
+      "perturbation": {
+        "blur": {
+          "mean_abs_dp_target": 0.00914224785172151,
+          "mean_abs_dp_ctrl_adjacent": 0.0043311103551325674,
+          "specificity_adjacent": {
+            "ratio": 2.1108323506205564,
+            "ci95": [
+              1.9018465415312777,
+              2.320067541349992
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.0031456826086751445,
+          "specificity_farthest": {
+            "ratio": 2.906284259737163,
+            "ci95": [
+              2.574571794637338,
+              3.2835054270317268
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.0034882951236678986,
+          "specificity_dist_matched": {
+            "ratio": 2.6208355450465874,
+            "ci95": [
+              2.3566518286984817,
+              2.9205474994124243
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.005055488171223887
+        },
+        "mask": {
+          "mean_abs_dp_target": 0.013695353735424952,
+          "mean_abs_dp_ctrl_adjacent": 0.004938847316290907,
+          "specificity_adjacent": {
+            "ratio": 2.7729858524377735,
+            "ci95": [
+              2.514774257220627,
+              3.0533930357997017
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.003247855361812339,
+          "specificity_farthest": {
+            "ratio": 4.216737572877258,
+            "ci95": [
+              3.7489685793817986,
+              4.734362670314818
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.004107881046249298,
+          "specificity_dist_matched": {
+            "ratio": 3.3339216937475586,
+            "ci95": [
+              3.0670403541752504,
+              3.6675048795123315
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.0071984203202611384
+        }
+      },
+      "passes_by_control": {
+        "adjacent": true,
+        "farthest": true,
+        "dist_matched": true
+      }
+    },
+    {
+      "instrument": "reader",
+      "feature": "crown:crown_color=black",
+      "part": "crown",
+      "n_train": {
+        "pos": 505,
+        "neg": 967
+      },
+      "agreement": {
+        "n_test": 494,
+        "accuracy": 0.6720647773279352,
+        "auroc": 0.7005390483651353
+      },
+      "perturbation": {
+        "blur": {
+          "mean_abs_dp_target": 0.008945372302522544,
+          "mean_abs_dp_ctrl_adjacent": 0.007498889739214167,
+          "specificity_adjacent": {
+            "ratio": 1.192892896630316,
+            "ci95": [
+              1.1114685945387495,
+              1.2880628766935127
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.0036755376137219942,
+          "specificity_farthest": {
+            "ratio": 2.4337588790076636,
+            "ci95": [
+              2.175195979629151,
+              2.75954418189429
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.006650080444359103,
+          "specificity_dist_matched": {
+            "ratio": 1.3451524951266431,
+            "ci95": [
+              1.252174935458286,
+              1.4536520072669656
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.004590424197485895
+        },
+        "mask": {
+          "mean_abs_dp_target": 0.014022561039036584,
+          "mean_abs_dp_ctrl_adjacent": 0.010349257392921911,
+          "specificity_adjacent": {
+            "ratio": 1.3549340311727998,
+            "ci95": [
+              1.288968633334846,
+              1.417005591326021
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.004013859248354367,
+          "specificity_farthest": {
+            "ratio": 3.4935358146366644,
+            "ci95": [
+              3.1162205963798812,
+              3.980308901323158
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.009199810715822073,
+          "specificity_dist_matched": {
+            "ratio": 1.5242227772056463,
+            "ci95": [
+              1.4354008515054233,
+              1.6160055063418484
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.005827777359167091
+        }
+      },
+      "passes_by_control": {
+        "adjacent": false,
+        "farthest": false,
+        "dist_matched": false
+      }
+    },
+    {
+      "instrument": "reader",
+      "feature": "crown:crown_color=yellow",
+      "part": "crown",
+      "n_train": {
+        "pos": 102,
+        "neg": 1370
+      },
+      "agreement": {
+        "n_test": 494,
+        "accuracy": 0.5769230769230769,
+        "auroc": 0.8941232453009755
+      },
+      "perturbation": {
+        "blur": {
+          "mean_abs_dp_target": 0.01139812086999175,
+          "mean_abs_dp_ctrl_adjacent": 0.00904171355822791,
+          "specificity_adjacent": {
+            "ratio": 1.260615125284468,
+            "ci95": [
+              1.1881647374538267,
+              1.3439196120703842
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.004204649553607833,
+          "specificity_farthest": {
+            "ratio": 2.710837306336625,
+            "ci95": [
+              2.4503287743454356,
+              3.0299160533587663
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.007815785072593071,
+          "specificity_dist_matched": {
+            "ratio": 1.4583462523759183,
+            "ci95": [
+              1.3673063320459748,
+              1.5563500356098916
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.005879865695349118
+        },
+        "mask": {
+          "mean_abs_dp_target": 0.01893871256455719,
+          "mean_abs_dp_ctrl_adjacent": 0.013859088845581178,
+          "specificity_adjacent": {
+            "ratio": 1.3665193127465658,
+            "ci95": [
+              1.3088975394206837,
+              1.4270498223588257
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.006053981752048137,
+          "specificity_farthest": {
+            "ratio": 3.128306846671612,
+            "ci95": [
+              2.8631049168100873,
+              3.4415802899511365
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.013119741188369782,
+          "specificity_dist_matched": {
+            "ratio": 1.4435279090219961,
+            "ci95": [
+              1.3715238574709399,
+              1.5170613679558491
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.009066475949950224
+        }
+      },
+      "passes_by_control": {
+        "adjacent": false,
+        "farthest": false,
+        "dist_matched": false
+      }
+    },
+    {
+      "instrument": "reader",
+      "feature": "crown:crown_color=red",
+      "part": "crown",
+      "n_train": {
+        "pos": 72,
+        "neg": 1400
+      },
+      "agreement": {
+        "n_test": 494,
+        "accuracy": 0.694331983805668,
+        "auroc": 0.9261524822695035
+      },
+      "perturbation": {
+        "blur": {
+          "mean_abs_dp_target": 0.012488869942634212,
+          "mean_abs_dp_ctrl_adjacent": 0.008937794187290949,
+          "specificity_adjacent": {
+            "ratio": 1.3973100835542507,
+            "ci95": [
+              1.3008409540342487,
+              1.4917273067133823
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.003605819363825717,
+          "specificity_farthest": {
+            "ratio": 3.4635317753088217,
+            "ci95": [
+              3.0886518683835047,
+              3.9654535106394344
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.008274935698702269,
+          "specificity_dist_matched": {
+            "ratio": 1.5092407237185905,
+            "ci95": [
+              1.4117530338351303,
+              1.6139016161795334
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.005162714815895889
+        },
+        "mask": {
+          "mean_abs_dp_target": 0.024767636709850327,
+          "mean_abs_dp_ctrl_adjacent": 0.017357349818052068,
+          "specificity_adjacent": {
+            "ratio": 1.4269250184778428,
+            "ci95": [
+              1.3713581019021635,
+              1.4869271264873642
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.004940387389437873,
+          "specificity_farthest": {
+            "ratio": 5.013298504243093,
+            "ci95": [
+              4.460080573122629,
+              5.703508528375793
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.017827129798379505,
+          "specificity_dist_matched": {
+            "ratio": 1.3893227339435044,
+            "ci95": [
+              1.33753919300764,
+              1.4458979474104152
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.0092552426332726
+        }
+      },
+      "passes_by_control": {
+        "adjacent": false,
+        "farthest": false,
+        "dist_matched": false
+      }
+    },
+    {
+      "instrument": "reader",
+      "feature": "crown:crown_color=white",
+      "part": "crown",
+      "n_train": {
+        "pos": 177,
+        "neg": 1295
+      },
+      "agreement": {
+        "n_test": 494,
+        "accuracy": 0.7975708502024291,
+        "auroc": 0.7595088349805331
+      },
+      "perturbation": {
+        "blur": {
+          "mean_abs_dp_target": 0.010324618956338056,
+          "mean_abs_dp_ctrl_adjacent": 0.008024502500348729,
+          "specificity_adjacent": {
+            "ratio": 1.28663664269397,
+            "ci95": [
+              1.1978224662321877,
+              1.3873146935887462
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.0033951970609093483,
+          "specificity_farthest": {
+            "ratio": 3.0409483665059414,
+            "ci95": [
+              2.6988194599870323,
+              3.459797114868901
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.006586741158354137,
+          "specificity_dist_matched": {
+            "ratio": 1.5674851505654006,
+            "ci95": [
+              1.4595838574786333,
+              1.6884119294343953
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.0048270796635533795
+        },
+        "mask": {
+          "mean_abs_dp_target": 0.022806793511637793,
+          "mean_abs_dp_ctrl_adjacent": 0.015790417911070078,
+          "specificity_adjacent": {
+            "ratio": 1.4443438824788035,
+            "ci95": [
+              1.39386891621035,
+              1.5011709578809531
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.004314625794105684,
+          "specificity_farthest": {
+            "ratio": 5.285926196147697,
+            "ci95": [
+              4.729223552530449,
+              6.030128086455836
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.013621117663286959,
+          "specificity_dist_matched": {
+            "ratio": 1.6743702004064627,
+            "ci95": [
+              1.5970514845236874,
+              1.760243095989361
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.008260809186740443
+        }
+      },
+      "passes_by_control": {
+        "adjacent": false,
+        "farthest": true,
+        "dist_matched": true
+      }
+    },
+    {
+      "instrument": "reader",
+      "feature": "breast:breast_color=yellow",
+      "part": "breast",
+      "n_train": {
+        "pos": 205,
+        "neg": 1187
+      },
+      "agreement": {
+        "n_test": 459,
+        "accuracy": 0.6383442265795207,
+        "auroc": 0.9193817878028404
+      },
+      "perturbation": {
+        "blur": {
+          "mean_abs_dp_target": 0.008328859647634503,
+          "mean_abs_dp_ctrl_adjacent": 0.005961704163250061,
+          "specificity_adjacent": {
+            "ratio": 1.397060206203518,
+            "ci95": [
+              1.2889226431803134,
+              1.5064066411894543
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.005060737883603132,
+          "specificity_farthest": {
+            "ratio": 1.6457796944236405,
+            "ci95": [
+              1.4964864962079256,
+              1.8056767873513417
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.005941846921293304,
+          "specificity_dist_matched": {
+            "ratio": 1.4017290849057484,
+            "ci95": [
+              1.2835579893734126,
+              1.530505462916428
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.003911740704559293
+        },
+        "mask": {
+          "mean_abs_dp_target": 0.015292326739151233,
+          "mean_abs_dp_ctrl_adjacent": 0.009687251125285828,
+          "specificity_adjacent": {
+            "ratio": 1.5786033149522616,
+            "ci95": [
+              1.4937834511264139,
+              1.6855204994862265
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.006386160006450412,
+          "specificity_farthest": {
+            "ratio": 2.3946043825561913,
+            "ci95": [
+              2.195489011866069,
+              2.6310815242347974
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.009291243189560303,
+          "specificity_dist_matched": {
+            "ratio": 1.6458859624225297,
+            "ci95": [
+              1.5525490350886448,
+              1.75647810737271
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.0055705128953174666
+        }
+      },
+      "passes_by_control": {
+        "adjacent": false,
+        "farthest": false,
+        "dist_matched": false
+      }
+    },
+    {
+      "instrument": "reader",
+      "feature": "breast:breast_color=white",
+      "part": "breast",
+      "n_train": {
+        "pos": 503,
+        "neg": 889
+      },
+      "agreement": {
+        "n_test": 459,
+        "accuracy": 0.7516339869281046,
+        "auroc": 0.8262953853849682
+      },
+      "perturbation": {
+        "blur": {
+          "mean_abs_dp_target": 0.007413391194312401,
+          "mean_abs_dp_ctrl_adjacent": 0.006539514381641396,
+          "specificity_adjacent": {
+            "ratio": 1.1336302302697383,
+            "ci95": [
+              1.0481035375306451,
+              1.2378212828113553
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.0049340861944851015,
+          "specificity_farthest": {
+            "ratio": 1.5024851415442346,
+            "ci95": [
+              1.3699760542859734,
+              1.6519394651774317
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.005553369753241279,
+          "specificity_dist_matched": {
+            "ratio": 1.3349356379494635,
+            "ci95": [
+              1.230329536333102,
+              1.464885742154674
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.003767119675939639
+        },
+        "mask": {
+          "mean_abs_dp_target": 0.01162061199123823,
+          "mean_abs_dp_ctrl_adjacent": 0.008499109472324646,
+          "specificity_adjacent": {
+            "ratio": 1.3672740690160567,
+            "ci95": [
+              1.2808276056180383,
+              1.4729955770091843
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.00623495802120965,
+          "specificity_farthest": {
+            "ratio": 1.8637835173401383,
+            "ci95": [
+              1.719796109188528,
+              2.0312669710042983
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.007343852247288025,
+          "specificity_dist_matched": {
+            "ratio": 1.5823591760754103,
+            "ci95": [
+              1.4855619833434655,
+              1.6904735995094464
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.0047826502058241115
+        }
+      },
+      "passes_by_control": {
+        "adjacent": false,
+        "farthest": true,
+        "dist_matched": false
+      }
+    },
+    {
+      "instrument": "reader",
+      "feature": "breast:breast_color=black",
+      "part": "breast",
+      "n_train": {
+        "pos": 299,
+        "neg": 1093
+      },
+      "agreement": {
+        "n_test": 459,
+        "accuracy": 0.7538126361655774,
+        "auroc": 0.8123737373737374
+      },
+      "perturbation": {
+        "blur": {
+          "mean_abs_dp_target": 0.007858012951017724,
+          "mean_abs_dp_ctrl_adjacent": 0.005988750712284595,
+          "specificity_adjacent": {
+            "ratio": 1.3121289111097498,
+            "ci95": [
+              1.205124902962305,
+              1.4350225727335593
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.004834258608309013,
+          "specificity_farthest": {
+            "ratio": 1.6254846063699513,
+            "ci95": [
+              1.476868641801253,
+              1.7720594894173214
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.005534592861703279,
+          "specificity_dist_matched": {
+            "ratio": 1.4197996397153971,
+            "ci95": [
+              1.306497328193278,
+              1.5474735503635524
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.0037232607213500274
+        },
+        "mask": {
+          "mean_abs_dp_target": 0.012359021665743493,
+          "mean_abs_dp_ctrl_adjacent": 0.008364583607073183,
+          "specificity_adjacent": {
+            "ratio": 1.4775417697173316,
+            "ci95": [
+              1.3922662922568525,
+              1.5750373307617163
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.006484483516813623,
+          "specificity_farthest": {
+            "ratio": 1.9059377101812,
+            "ci95": [
+              1.7676782324619562,
+              2.06059990185172
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.008033907231682007,
+          "specificity_dist_matched": {
+            "ratio": 1.5383575275807566,
+            "ci95": [
+              1.4502345887080421,
+              1.6403795489089539
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.005434158147896383
+        }
+      },
+      "passes_by_control": {
+        "adjacent": false,
+        "farthest": true,
+        "dist_matched": false
+      }
+    },
+    {
+      "instrument": "reader",
+      "feature": "breast:breast_color=red",
+      "part": "breast",
+      "n_train": {
+        "pos": 63,
+        "neg": 1329
+      },
+      "agreement": {
+        "n_test": 459,
+        "accuracy": 0.6209150326797386,
+        "auroc": 0.8393058690744921
+      },
+      "perturbation": {
+        "blur": {
+          "mean_abs_dp_target": 0.007229084867277955,
+          "mean_abs_dp_ctrl_adjacent": 0.005827327179752924,
+          "specificity_adjacent": {
+            "ratio": 1.2405489934382687,
+            "ci95": [
+              1.1544765407388102,
+              1.3456109166722623
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.004157605189383679,
+          "specificity_farthest": {
+            "ratio": 1.738761748166278,
+            "ci95": [
+              1.5748394606864735,
+              1.9143788012469671
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.004817829542430138,
+          "specificity_dist_matched": {
+            "ratio": 1.5004858108017594,
+            "ci95": [
+              1.384951650915345,
+              1.6551538147102738
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.0032474336930609477
+        },
+        "mask": {
+          "mean_abs_dp_target": 0.0110189726409829,
+          "mean_abs_dp_ctrl_adjacent": 0.007777801915711048,
+          "specificity_adjacent": {
+            "ratio": 1.4167206571209707,
+            "ci95": [
+              1.3394276045625049,
+              1.5030125103731016
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.005669021203886709,
+          "specificity_farthest": {
+            "ratio": 1.9437169565406172,
+            "ci95": [
+              1.7942426789945307,
+              2.126118113935032
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.007885689763981272,
+          "specificity_dist_matched": {
+            "ratio": 1.39733783229886,
+            "ci95": [
+              1.3147756731766722,
+              1.4762359311212891
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.00498095712067861
+        }
+      },
+      "passes_by_control": {
+        "adjacent": false,
+        "farthest": false,
+        "dist_matched": false
+      }
+    },
+    {
+      "instrument": "reader",
+      "feature": "breast:breast_pattern=striped",
+      "part": "breast",
+      "n_train": {
+        "pos": 171,
+        "neg": 1221
+      },
+      "agreement": {
+        "n_test": 459,
+        "accuracy": 0.6993464052287581,
+        "auroc": 0.7173343807279393
+      },
+      "perturbation": {
+        "blur": {
+          "mean_abs_dp_target": 0.010980642763877486,
+          "mean_abs_dp_ctrl_adjacent": 0.008708724983377394,
+          "specificity_adjacent": {
+            "ratio": 1.260878347270877,
+            "ci95": [
+              1.1693775998325548,
+              1.3722580645991687
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.005829671434327668,
+          "specificity_farthest": {
+            "ratio": 1.8835783264248194,
+            "ci95": [
+              1.7145493877052966,
+              2.0615584106689138
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.007441691778324268,
+          "specificity_dist_matched": {
+            "ratio": 1.4755573182782538,
+            "ci95": [
+              1.3636074375955094,
+              1.590971843243008
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.005169832606893912
+        },
+        "mask": {
+          "mean_abs_dp_target": 0.016513396192480018,
+          "mean_abs_dp_ctrl_adjacent": 0.011247500030563289,
+          "specificity_adjacent": {
+            "ratio": 1.4681836983869745,
+            "ci95": [
+              1.392072913191618,
+              1.5639778088300256
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.007403288726453428,
+          "specificity_farthest": {
+            "ratio": 2.230548719986343,
+            "ci95": [
+              2.064815696713795,
+              2.4158788242169003
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.010846225979021691,
+          "specificity_dist_matched": {
+            "ratio": 1.5225015802196566,
+            "ci95": [
+              1.4386597091027848,
+              1.617135347632327
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.006868617153288925
+        }
+      },
+      "passes_by_control": {
+        "adjacent": false,
+        "farthest": false,
+        "dist_matched": false
+      }
+    },
+    {
+      "instrument": "reader",
+      "feature": "belly:belly_color=yellow",
+      "part": "belly",
+      "n_train": {
+        "pos": 196,
+        "neg": 1102
+      },
+      "agreement": {
+        "n_test": 433,
+        "accuracy": 0.5496535796766744,
+        "auroc": 0.9146072914117935
+      },
+      "perturbation": {
+        "blur": {
+          "mean_abs_dp_target": 0.008299222168691164,
+          "mean_abs_dp_ctrl_adjacent": 0.003681344193068718,
+          "specificity_adjacent": {
+            "ratio": 2.2543999510605515,
+            "ci95": [
+              2.03924563007638,
+              2.512631214695022
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.003799726313311288,
+          "specificity_farthest": {
+            "ratio": 2.1841631434393416,
+            "ci95": [
+              1.9754365762178456,
+              2.4373266305575116
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.002694380613727878,
+          "specificity_dist_matched": {
+            "ratio": 3.0801966605633218,
+            "ci95": [
+              2.768060742626633,
+              3.4170265431076547
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.0036190331693426105
+        },
+        "mask": {
+          "mean_abs_dp_target": 0.014235266224066049,
+          "mean_abs_dp_ctrl_adjacent": 0.0041995720279684795,
+          "specificity_adjacent": {
+            "ratio": 3.389694504406984,
+            "ci95": [
+              3.062537319695402,
+              3.7263534494512807
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.004094852655093609,
+          "specificity_farthest": {
+            "ratio": 3.476380574123644,
+            "ci95": [
+              3.137525830686323,
+              3.8459556827144366
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.0032757489703268707,
+          "specificity_dist_matched": {
+            "ratio": 4.3456523540158765,
+            "ci95": [
+              3.9056354603143015,
+              4.814581616170009
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.004654981327846107
+        }
+      },
+      "passes_by_control": {
+        "adjacent": false,
+        "farthest": false,
+        "dist_matched": false
+      }
+    },
+    {
+      "instrument": "reader",
+      "feature": "belly:belly_color=white",
+      "part": "belly",
+      "n_train": {
+        "pos": 511,
+        "neg": 787
+      },
+      "agreement": {
+        "n_test": 433,
+        "accuracy": 0.7182448036951501,
+        "auroc": 0.7796121244397106
+      },
+      "perturbation": {
+        "blur": {
+          "mean_abs_dp_target": 0.006838124357249941,
+          "mean_abs_dp_ctrl_adjacent": 0.003379102323126848,
+          "specificity_adjacent": {
+            "ratio": 2.0236511663021473,
+            "ci95": [
+              1.831529047137283,
+              2.220173977454248
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.003443635432329244,
+          "specificity_farthest": {
+            "ratio": 1.9857283070829292,
+            "ci95": [
+              1.7922290388882336,
+              2.1918521091203576
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.0020936965667072674,
+          "specificity_dist_matched": {
+            "ratio": 3.2660531931827066,
+            "ci95": [
+              2.9432154196823554,
+              3.657267013851721
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.0031639576944779944
+        },
+        "mask": {
+          "mean_abs_dp_target": 0.010213192973896758,
+          "mean_abs_dp_ctrl_adjacent": 0.00429202777959458,
+          "specificity_adjacent": {
+            "ratio": 2.379572896161796,
+            "ci95": [
+              2.1635084537948552,
+              2.613022549939542
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.004062268461421235,
+          "specificity_farthest": {
+            "ratio": 2.5141600243533744,
+            "ci95": [
+              2.2906011407640445,
+              2.7700253859242725
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.002608585096121385,
+          "specificity_dist_matched": {
+            "ratio": 3.915223233116835,
+            "ci95": [
+              3.465977127472724,
+              4.436108686628202
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.00390342632745944
+        }
+      },
+      "passes_by_control": {
+        "adjacent": true,
+        "farthest": true,
+        "dist_matched": true
+      }
+    },
+    {
+      "instrument": "reader",
+      "feature": "belly:belly_color=black",
+      "part": "belly",
+      "n_train": {
+        "pos": 198,
+        "neg": 1100
+      },
+      "agreement": {
+        "n_test": 433,
+        "accuracy": 0.8267898383371824,
+        "auroc": 0.8080712391057219
+      },
+      "perturbation": {
+        "blur": {
+          "mean_abs_dp_target": 0.011210317493310976,
+          "mean_abs_dp_ctrl_adjacent": 0.0038250416310775088,
+          "specificity_adjacent": {
+            "ratio": 2.9307700607046847,
+            "ci95": [
+              2.637022375169282,
+              3.2542009989974283
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.003825864395423519,
+          "specificity_farthest": {
+            "ratio": 2.930139789251471,
+            "ci95": [
+              2.6263492084655486,
+              3.282021522907638
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.0032195513573309567,
+          "specificity_dist_matched": {
+            "ratio": 3.4819502002305227,
+            "ci95": [
+              3.114810327883682,
+              3.9057179296083846
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.004197520783903784
+        },
+        "mask": {
+          "mean_abs_dp_target": 0.020265525538155995,
+          "mean_abs_dp_ctrl_adjacent": 0.005644231897028159,
+          "specificity_adjacent": {
+            "ratio": 3.590484216076654,
+            "ci95": [
+              3.3089632098544026,
+              3.9189897867875096
+            ]
+          },
+          "mean_abs_dp_ctrl_farthest": 0.005522826733820433,
+          "specificity_farthest": {
+            "ratio": 3.669411791258071,
+            "ci95": [
+              3.369088972912435,
+              4.006988994371283
+            ]
+          },
+          "mean_abs_dp_ctrl_dist_matched": 0.003618945701017666,
+          "specificity_dist_matched": {
+            "ratio": 5.599842388477182,
+            "ci95": [
+              5.052759372279315,
+              6.208301843044715
+            ]
+          },
+          "mean_abs_dp_unrelated": 0.007738479416676904
+        }
+      },
+      "passes_by_control": {
+        "adjacent": true,
+        "farthest": true,
+        "dist_matched": true
+      }
+    }
+  ],
+  "family_summary": [
+    {
+      "instrument": "probe",
+      "part": "beak",
+      "n_predicates": 4,
+      "mean_specificity_adjacent": 2.853926862977187,
+      "n_pass_adjacent": 4,
+      "mean_specificity_farthest": 4.419614394648843,
+      "n_pass_farthest": 4,
+      "mean_specificity_dist_matched": 2.643609774479887,
+      "n_pass_dist_matched": 4,
+      "mean_accuracy": 0.7760521042084167
+    },
+    {
+      "instrument": "probe",
+      "part": "belly",
+      "n_predicates": 3,
+      "mean_specificity_adjacent": 3.114303331279435,
+      "n_pass_adjacent": 3,
+      "mean_specificity_farthest": 3.125140988143679,
+      "n_pass_farthest": 3,
+      "mean_specificity_dist_matched": 4.635662071203669,
+      "n_pass_dist_matched": 3,
+      "mean_accuracy": 0.8437259430331023
+    },
+    {
+      "instrument": "probe",
+      "part": "breast",
+      "n_predicates": 5,
+      "mean_specificity_adjacent": 1.3246203660577556,
+      "n_pass_adjacent": 0,
+      "mean_specificity_farthest": 2.1963227185456047,
+      "n_pass_farthest": 5,
+      "mean_specificity_dist_matched": 1.559076367836704,
+      "n_pass_dist_matched": 2,
+      "mean_accuracy": 0.8326797385620914
+    },
+    {
+      "instrument": "probe",
+      "part": "crown",
+      "n_predicates": 4,
+      "mean_specificity_adjacent": 1.2491468660093252,
+      "n_pass_adjacent": 0,
+      "mean_specificity_farthest": 3.3409135299208863,
+      "n_pass_farthest": 4,
+      "mean_specificity_dist_matched": 1.4114792256798188,
+      "n_pass_dist_matched": 0,
+      "mean_accuracy": 0.8446356275303644
+    },
+    {
+      "instrument": "reader",
+      "part": "beak",
+      "n_predicates": 4,
+      "mean_specificity_adjacent": 2.321702797238571,
+      "n_pass_adjacent": 2,
+      "mean_specificity_farthest": 3.2331014540203293,
+      "n_pass_farthest": 2,
+      "mean_specificity_dist_matched": 2.640806193286482,
+      "n_pass_dist_matched": 2,
+      "mean_accuracy": 0.687374749498998
+    },
+    {
+      "instrument": "reader",
+      "part": "belly",
+      "n_predicates": 3,
+      "mean_specificity_adjacent": 2.761428799118803,
+      "n_pass_adjacent": 2,
+      "mean_specificity_farthest": 2.7933306049181383,
+      "n_pass_farthest": 2,
+      "mean_specificity_dist_matched": 3.948153004931074,
+      "n_pass_dist_matched": 2,
+      "mean_accuracy": 0.6982294072363356
+    },
+    {
+      "instrument": "reader",
+      "part": "breast",
+      "n_predicates": 5,
+      "mean_specificity_adjacent": 1.3652570197485747,
+      "n_pass_adjacent": 0,
+      "mean_specificity_farthest": 1.8734680803533414,
+      "n_pass_farthest": 2,
+      "mean_specificity_dist_matched": 1.4818949570247837,
+      "n_pass_dist_matched": 0,
+      "mean_accuracy": 0.6928104575163399
+    },
+    {
+      "instrument": "reader",
+      "part": "crown",
+      "n_predicates": 4,
+      "mean_specificity_adjacent": 1.341272124129877,
+      "n_pass_adjacent": 0,
+      "mean_specificity_farthest": 3.571267961107265,
+      "n_pass_farthest": 1,
+      "mean_specificity_dist_matched": 1.4889585302955202,
+      "n_pass_dist_matched": 1,
+      "mean_accuracy": 0.6852226720647774
+    }
+  ]
+}
