@@ -1,0 +1,44 @@
+{
+  "protocol": {
+    "split": "official CUB train_test_split.txt",
+    "n_train": 5994,
+    "n_test": 5794,
+    "classes_in_test": 200,
+    "tree": "CART depth 6, gini, min_samples_leaf 2, seed 42",
+    "pooling": "4x4 tiles x 384 channels, mean over within-tile axes (3,5)",
+    "reason_samples": 500,
+    "seed": 42
+  },
+  "train_accuracy": 0.08341675008341674,
+  "test_accuracy": 0.04297549188816017,
+  "verified_rate_on_test": 1.0,
+  "mean_reason_size_on_test": 5.978,
+  "grounding_selected": {
+    "mean_shortest": 5.978,
+    "mean_selected": 5.98,
+    "mean_part_score": 7.972
+  },
+  "shap_overlap_on_test": 0.9506333333333334,
+  "nlx_examples": [
+    {
+      "sample_id": 17,
+      "prediction": 2,
+      "text": "The activation tree predicts class 2 because activation channel 255 in the belly, breast, throat area is <= 4.126; and activation channel 166 in the crown, nape, right wing area is > 0.979; and activation channel 238 in the belly, breast, throat area is <= -3.388; and activation channel 109 in the tile (row 4, column 2) is > 0.686; and activation channel 54 in the tile (row 4, column 3) is <= 2.122; and activation channel 111 in the beak area is > -1.772."
+    },
+    {
+      "sample_id": 27,
+      "prediction": 0,
+      "text": "The activation tree predicts class 0 because activation channel 255 in the right wing area is <= 4.126; and activation channel 166 in the back, beak, crown, forehead, nape, right eye, throat area is > 0.979; and activation channel 238 in the right wing area is <= -3.388; and activation channel 109 in the tile (row 4, column 2) is > 0.686; and activation channel 54 in the tile (row 4, column 3) is > 2.122."
+    },
+    {
+      "sample_id": 28,
+      "prediction": 2,
+      "text": "The activation tree predicts class 2 because activation channel 255 in the left leg, tail area is <= 4.126; and activation channel 166 in the tile (row 2, column 3) is > 0.979; and activation channel 238 in the left leg, tail area is <= -3.388; and activation channel 109 in the tile (row 4, column 2) is > 0.686; and activation channel 54 in the tile (row 4, column 3) is <= 2.122; and activation channel 111 in the tile (row 3, column 4) is > -1.772."
+    },
+    {
+      "sample_id": 47,
+      "prediction": 0,
+      "text": "The activation tree predicts class 0 because activation channel 255 in the beak, crown, forehead, left eye, left wing, right eye, throat area is <= 4.126; and activation channel 166 in the tile (row 2, column 3) is <= 0.979; and activation channel 382 in the tile (row 1, column 3) is > -2.599; and activation channel 363 in the tile (row 2, column 2) is <= -3.181; and activation channel 251 in the tile (row 2, column 3) is > -2.049; and activation channel 370 in the tile (row 2, column 2) is > -2.031."
+    }
+  ]
+}

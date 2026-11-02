@@ -1,11 +1,11 @@
 # Cache-only DINO explainer
 
-**Date:** 2026-10-27  
+**Date:** 2026-11-02  
 **Scope:** 100 real CUB training images from `train_features.npz`.
 
-- Classes represented: {np.int64(0): np.int64(30), np.int64(1): np.int64(30), np.int64(2): np.int64(30), np.int64(3): np.int64(10)}
-- Training accuracy: 98.0%
-- Mean certificate path length: 3.30 Boolean CLS-channel conditions
+- Classes represented: {0: 30, 1: 30, 2: 30, 3: 10}
+- Training accuracy: 95.0%
+- Mean certificate path length: 3.60 Boolean CLS-channel conditions
 - Per-image certificates: `cache_only_explanations.jsonl`
 
 ## Interpretation

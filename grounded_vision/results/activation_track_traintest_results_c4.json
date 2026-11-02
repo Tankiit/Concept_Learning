@@ -1,0 +1,44 @@
+{
+  "protocol": {
+    "split": "official CUB train_test_split.txt",
+    "n_train": 120,
+    "n_test": 118,
+    "classes_in_test": 4,
+    "tree": "CART depth 6, gini, min_samples_leaf 2, seed 42",
+    "pooling": "4x4 tiles x 384 channels, mean over within-tile axes (3,5)",
+    "reason_samples": 118,
+    "seed": 42
+  },
+  "train_accuracy": 0.95,
+  "test_accuracy": 0.5677966101694916,
+  "verified_rate_on_test": 1.0,
+  "mean_reason_size_on_test": 3.788135593220339,
+  "grounding_selected": {
+    "mean_shortest": 3.788135593220339,
+    "mean_selected": 3.8983050847457625,
+    "mean_part_score": 3.016949152542373
+  },
+  "shap_overlap_on_test": 0.8790960451977401,
+  "nlx_examples": [
+    {
+      "sample_id": 1,
+      "prediction": 3,
+      "text": "The activation tree predicts class 3 because activation channel 52 in the throat area is <= 0.611; and activation channel 95 in the tile (row 2, column 3) is <= 1.914."
+    },
+    {
+      "sample_id": 3,
+      "prediction": 0,
+      "text": "The activation tree predicts class 0 because activation channel 52 in the back, left wing, right wing area is > 0.611; and activation channel 242 in the tile (row 4, column 3) is <= -0.774; and activation channel 208 in the crown, forehead, nape, right eye area is <= 3.126."
+    },
+    {
+      "sample_id": 6,
+      "prediction": 0,
+      "text": "The activation tree predicts class 0 because activation channel 52 in the right wing area is > 0.611; and activation channel 12 in the tile (row 1, column 3) is > -2.350; and activation channel 56 in the left wing area is <= -0.766; and activation channel 158 in the tile (row 3, column 4) is > 1.277."
+    },
+    {
+      "sample_id": 10,
+      "prediction": 3,
+      "text": "The activation tree predicts class 3 because activation channel 52 in the belly, breast area is <= 0.611; and activation channel 95 in the tile (row 2, column 3) is <= 1.914."
+    }
+  ]
+}
