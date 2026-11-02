@@ -1,25 +1,33 @@
 # Quantitative results — consolidated index
 
-**Last verified:** 2026-11-01 (every number below re-checked against the JSON files in [`grounded_vision/results/`](../../grounded_vision/results/)).
+**Last verified:** 2026-11-02 (every number below re-checked against the JSON files in [`grounded_vision/results/`](../../grounded_vision/results/)).
 
 ---
 
-## 1. Activation-tree grounding on real CUB (2026-10-27)
+## 1. Activation-tree grounding on real CUB (regenerated 2026-11-02)
 
-> **⚠ invalidated by the tile-pooling bug (found 2026-11-01, external review).** The pooling line in `run_activation_tree_grounding.py` averaged over the wrong axes (`mean(axis=(4,5))` instead of `(3,5)`), so the 16 "tiles" were actually full-width row strips. The numbers below describe a model over row-strip features; every tile box, attached part name, and exemplar crop in the derived artifacts is invalid. The script is fixed; **regeneration on the server (where `train_features.npz` lives) is pending**, after which this section and `results/activation_*.json`, `shap_vs_sufficient_results.json`, `grounding_selected_reasons.json`, the two evidence PNGs, and `NLX_EXAMPLES.md` must be replaced. See [`REVIEW_VALIDATION_ROADMAP.md`](REVIEW_VALIDATION_ROADMAP.md).
+> **Protocol upgrade.** The original track (2026-10-27) fit and evaluated on the same ~100 training images, and its tile pooling averaged over the wrong axes (found in external review, 2026-11-01 — the "tiles" were row strips). Everything below is regenerated from a fresh local cache (`cache_features.py --split all` over the full official split) with the corrected pooling (`mean` over within-tile axes) and the tree fit on TRAIN only, evaluated on held-out TEST.
 
-Setup: 100 real CUB-200-2011 training images (4 species, 30/30/30/10), frozen DINOv2 feature maps `[384,16,16]` average-pooled to a 4×4 tile grid → 6,144 features; depth-6 CART (Gini, `min_samples_leaf=2`, seed 42); reasons certified by the independent tree verifier.
+Setup: frozen DINOv2 feature maps `[384,16,16]` → 4×4 tile grid × 384 channels (6,144 features, corrected pooling); depth-6 CART (Gini, `min_samples_leaf=2`, seed 42) on train; reasons certified on test by the independent verifier. Script: `scripts/run_activation_track_traintest.py`.
 
-| Metric | Value | Source |
-| --- | ---: | --- |
-| In-cache tree accuracy | 95.0% | `activation_tree_grounded_metrics.json` |
-| Verified sufficient-reason rate | 100.0% | `activation_tree_grounded_metrics.json` |
-| Mean sufficient-reason size | 3.8 conditions | `activation_tree_grounded_metrics.json` |
-| TreeSHAP top-|reason| overlap with the certified reason | 88.6% (mean reason size 3.83) | `shap_vs_sufficient_results.json` |
+**Official-split evaluation (primary result):**
 
-Interpretation (unchanged): TreeSHAP ranks attribution but does not certify sufficiency; the grounded reasons are verifier-sufficient subsets. Details and per-image data: [`ACTIVATION_GROUNDING_WIKI.md`](ACTIVATION_GROUNDING_WIKI.md), [`grounding_selected_reasons.json`](../../grounded_vision/results/grounding_selected_reasons.json), [`shap_vs_sufficient_results.json`](../../grounded_vision/results/shap_vs_sufficient_results.json).
+| Metric | 4-species subset (120 train / 118 test) | Full CUB-200 (5,994 train / 5,794 test) |
+| --- | ---: | ---: |
+| Train accuracy | 95.0% | 8.3% |
+| **Test accuracy (held-out)** | **56.8%** | **4.3%** |
+| Verified sufficient-reason rate on test | 100% (118/118) | 100% (500/500 sampled) |
+| Mean certified reason size on test | 3.79 conditions | 5.98 conditions |
+| Grounding-selected reason (size / part score) | 3.90 / 3.02 | 5.98 / 7.97 |
+| TreeSHAP top-|reason| overlap on test | 87.9% | 95.1% |
 
-**Cache-only DINO baseline** (same 100 images, thresholded CLS-token tree, exact path certificates): 98.0% training accuracy, mean certificate path length 3.30 — no spatial grounding; see [`cache_only_explainer_summary.md`](cache_only_explainer_summary.md).
+Reading: the historical "95.0% accuracy" was **in-cache** (train) accuracy; under the official split the same protocol generalizes at 56.8% on the 4-species subset. The certificate layer itself is scale-stable — 100% of held-out explanations remain verifier-sufficient with ~4–6-condition reasons and part-grounded tiles at both scales — while the depth-6 activation tree is plainly not a competitive 200-class head (4.3% vs 0.5% chance). That separation (certificates hold, classifier accuracy is the binding constraint) is the track's central honest finding, and the motivation for the concept-tree and tree-method-comparison tracks.
+
+**Historical in-cache protocol, rerun with fixed pooling** (same 100 images as 2026-10-27, identified by sample-id set): accuracy 95.0%, verified 100%, mean reason 3.69; TreeSHAP overlap 85.3%. Kept in `activation_tree_grounded_metrics.json`, `grounding_selected_reasons.json`, `shap_vs_sufficient_results.json` for continuity; all three numbers are train-side by construction.
+
+**Cache-only DINO baseline** (thresholded CLS-token tree, exact path certificates, same 100 images): 95.0% training accuracy, mean certificate path 3.60 conditions — no spatial grounding; see [`cache_only_explainer_summary.md`](cache_only_explainer_summary.md).
+
+Provenance: caches rebuilt locally from `/Users/tanmoy/research/data/CUB_200_2011` (the train transform includes a random horizontal flip, so features are a fresh draw of the same protocol, not bit-identical to the 2026-10-27 cache); `pyxai_detected` is `false` in the rerun metrics because the PyXAI package is not installed locally — certification used the native verifier throughout, as before. Evidence tiles: [`assets/activation_traintest_examples.png`](assets/activation_traintest_examples.png) (test images), [`assets/activation_traintest_exemplars.png`](assets/activation_traintest_exemplars.png) (test→train exemplar retrieval); per-sample data in `activation_track_traintest_results{,_c4}.json`.
 
 ## 2. Certified relational reasoning on CLEVR-style scenes (2026-11-01) — NEW
 

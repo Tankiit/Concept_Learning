@@ -1,6 +1,6 @@
 # Activation grounding and contrastive NLX
 
-> **Status (2026-11-01): quantitative results below are invalidated pending regeneration** — the tile pooling bug found in external review (wrong `mean` axes; the "tiles" were row strips) affects the accuracy/reason-size numbers and all tile-derived grounding. The protocol descriptions remain accurate. See [`RESULTS.md`](RESULTS.md) §1 and [`REVIEW_VALIDATION_ROADMAP.md`](REVIEW_VALIDATION_ROADMAP.md).
+> **Status (2026-11-02): regenerated with corrected pooling and upgraded to the official train/test split.** The 2026-10-27 results below were in-cache (fit and evaluated on the same ~100 images) and used a buggy pooling (`mean` over the wrong axes — the "tiles" were row strips). Regenerated headline numbers are in [`RESULTS.md`](RESULTS.md) §1 — notably **test accuracy 56.8%** for the 4-species protocol (the old "95.0%" was train-side) with the verified rate still 100% on held-out images. This page's protocol descriptions remain accurate; the quoted example numbers are from the regenerated 100-image in-cache rerun (same images, fixed pooling).
 
 **Date:** 2026-10-27  
 **Dataset:** 100 cached real CUB-200-2011 training images  
@@ -10,11 +10,11 @@
 
 The activation tree predicts from pooled activation features. For each image, the explainer stores a minimal sufficient set of tree literals, and the independent tree verifier confirms that every compatible tree leaf has the same prediction.
 
-| Metric | Result |
-| --- | ---: |
-| In-cache tree accuracy | 95.0% |
-| Verified sufficient-reason rate | 100.0% |
-| Mean sufficient-reason size | 3.8 conditions |
+| Metric | In-cache rerun (100 images, fixed pooling) | Official split, 4-species subset |
+| --- | ---: | ---: |
+| Tree accuracy | 95.0% (train-side by construction) | 95.0% train / **56.8% held-out test** |
+| Verified sufficient-reason rate | 100.0% | 100.0% (118/118 test samples) |
+| Mean sufficient-reason size | 3.69 conditions | 3.79 conditions (test) |
 
 ## Grounding protocol
 
@@ -24,15 +24,15 @@ This establishes spatial/part grounding. It does not yet establish that a channe
 
 ## Abductive explanation
 
-For sample 2, the model predicts class 0 because the following conditions are sufficient:
+For sample 2, the model predicts class 0 because the following conditions are sufficient (regenerated tree, fixed pooling):
 
-> Activation channel 242 in tile row 4, column 3 is ≤ −0.314; and activation channel 68 in the annotated back, breast, left-wing, tail area is ≤ 8.764.
+> Activation channel 71 in tile row 1, column 1 is > 2.148; and activation channel 39 in the beak, crown, forehead, nape, right eye, throat area is > 1.610; and activation channel 85 in tile row 4, column 2 is ≤ 0.503.
 
 ## Contrastive explanation
 
 For the same sample, the nearest tree contrast is class 2:
 
-> If activation channel 68 in tile row 2, column 2 were > 8.764 (observed: 7.151), the classifier could move toward class 2.
+> If activation channel 71 in tile row 1, column 1 were ≤ 2.148 (observed: 3.066), the classifier could move toward class 2.
 
 The contrast identifies a certified decision boundary condition, not an image-edit intervention. A later causal image intervention should test whether modifying the associated visual region changes this activation as predicted.
 

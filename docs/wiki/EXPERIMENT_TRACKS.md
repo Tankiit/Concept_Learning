@@ -1,6 +1,6 @@
 # Experiment tracks & script catalog
 
-All 30 scripts live in [`grounded_vision/scripts/`](../../grounded_vision/scripts). Paths below abbreviate `RUNS = /Users/cril/tanmoy/research/data/grounded_vision_runs` and `CUB = /Users/cril/tanmoy/research/data/CUB_200_2011/CUB_200_2011` — the development server where the real-data caches live. **None of the real-data caches are committed** (gitignored); see "Where each track can run" per section and [`GROUNDED_VISION_FRAMEWORK.md`](GROUNDED_VISION_FRAMEWORK.md) for the resolved `data/`-package history.
+All 31 scripts live in [`grounded_vision/scripts/`](../../grounded_vision/scripts). Paths below abbreviate `RUNS = /Users/cril/tanmoy/research/data/grounded_vision_runs` and `CUB = /Users/cril/tanmoy/research/data/CUB_200_2011/CUB_200_2011` — the development server where the real-data caches live. Full train/test feature caches also exist locally at `/Users/tanmoy/research/data/grounded_vision_runs/cub_bound_real_full/` (5,994 + 5,794 images, built 2026-11-02). See "Where each track can run" per section and [`GROUNDED_VISION_FRAMEWORK.md`](GROUNDED_VISION_FRAMEWORK.md) for the resolved `data/`-package history.
 
 ---
 
@@ -19,15 +19,17 @@ The six canonical stages, driven by a YAML config (`--config configs/cub_bound.y
 
 Note `evaluate.py` writes under the config's `cache_dir`, **not** the repo `results/` directory.
 
-## Track B — Activation grounding track (real CUB cache; source of the committed results)
+## Track B — Activation grounding track (real CUB cache)
 
-One-off scripts over `{RUNS}/cub_bound_real_full/train_features.npz` (100 real CUB training images, 4 species 30/30/30/10, frozen DINO). These produced the three JSONs now in [`grounded_vision/results/`](../../grounded_vision/results/).
+**Primary script (official train/test split, 2026-11-02):** `run_activation_track_traintest.py` — caches both splits, fits the depth-6 activation tree on train only, evaluates held-out accuracy / verified rate / reason size / grounding selection / TreeSHAP overlap on test, and renders test-image evidence tiles + train→test exemplar retrieval. Writes `activation_track_traintest_results{,_c4}.json` and the `activation_traintest_*.png` assets. **Runnable locally** against `/Users/tanmoy/research/data/grounded_vision_runs/cub_bound_real_full`.
+
+Historical one-off chain over the 100-image in-cache protocol (paths patched from CRIL; pooling fixed 2026-11-01/02):
 
 | Script | What it does | Writes |
 | --- | --- | --- |
-| `run_activation_tree_grounding.py` | Depth-6 CART on 4×4-pooled activations (16 tiles × 384 channels = 6,144 features); certified reasons with spatial tile grounding → **`results/activation_tree_grounded_metrics.json`** | `activation_tree_grounded_explanations.jsonl`, `..._examples.png`, `..._metrics.json` |
-| `select_grounded_reasons.py` | Enumerate all sufficient subsets per decision path; select the one covering most visible CUB part points → **`results/grounding_selected_reasons.json`** | `grounding_selected_reasons.json` |
-| `compare_shap_grounding.py` | TreeSHAP top-|reason| attribution vs verifier-sufficient reasons → **`results/shap_vs_sufficient_results.json`** | `shap_vs_sufficient_results.json` |
+| `run_activation_tree_grounding.py` | Depth-6 CART on 4×4-pooled activations (6,144 features); certified reasons with spatial tile grounding | `activation_tree_grounded_explanations.jsonl`, `..._examples.png`, `..._metrics.json` |
+| `select_grounded_reasons.py` | Enumerate all sufficient subsets per decision path; select the one covering most visible CUB part points | `grounding_selected_reasons.json` |
+| `compare_shap_grounding.py` | TreeSHAP top-|reason| attribution vs verifier-sufficient reasons | `shap_vs_sufficient_results.json` |
 | `make_activation_nlx.py` | Template NLX over certified activation reasons | `activation_grounded_nlx.jsonl` |
 | `ground_tiles_to_cub_parts.py` | Attach validated CUB part-point semantics to evidence tiles | `activation_part_grounded_nlx.jsonl` |
 | `add_exemplar_grounding.py` | Nearest-neighbour exemplar crops per certified tile | `activation_exemplar_grounded_nlx.jsonl`, `activation_exemplar_examples.png` |
@@ -76,7 +78,7 @@ Only blocker off-server: the hard-coded `OUT` directory. **Result:** [`results/c
 | Track | Fresh clone / laptop | Notes |
 | --- | --- | --- |
 | A — core pipeline | ✅ (mock configs) | `pytest tests/`: 16 passed, 1 skipped. Mock-config runs work off-server; the real-data configs point at CRIL absolute paths. |
-| B — activation track | ✗ | Requires `train_features.npz` under `{RUNS}/cub_bound_real_full`. Results are already copied into `grounded_vision/results/`. |
+| B — activation track | ✅ (local caches) | Full train/test caches at `/Users/tanmoy/research/data/grounded_vision_runs/cub_bound_real_full` since 2026-11-02; `run_activation_track_traintest.py` runs locally. Regenerated results are in `grounded_vision/results/`. |
 | C — reviewer analysis | ✗ | Requires CRIL feature caches + fitted checkpoints. Run on the server, then copy the JSONs into `grounded_vision/results/` (see [`RESULTS.md`](RESULTS.md) "pending" list). |
 | D — CLEVR relational | ✅ | Synthetic; adjust `OUT`. |
 | E — Modal | ✗ (needs `modal` + payloads/local data dir) | `run_grounded_vision_modal.py` also expects the CRIL local dir as its `add_local_dir` source. |

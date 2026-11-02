@@ -145,9 +145,7 @@ Current state on a fresh clone at `96e0225`: all subpackages and `pipeline.py` i
 
 ### Other known small issues
 
-- The CRIL-track scripts and `run_clevr_relational.py` hard-code output dirs under `/Users/cril/tanmoy/research/data/grounded_vision_runs/` — adjust `OUT`/`RUN` when running elsewhere.
-- `run_grounded_vision_modal.py`'s `add_local_dir` source (`/Users/cril/...`) and the baked-in `cache/cub_bound` artifacts (mock run) exist only in the Modal image; the current script ignores `cache/` on upload, so future deploys stay lean.
-- `scripts/explain_cached_dino.py` writes a raw numpy dict repr into the summary header (class counts appear as `np.int64(...)` literals in [`cache_only_explainer_summary.md`](cache_only_explainer_summary.md)) — cosmetic.
+- The CRIL-track scripts hard-code output dirs under `/Users/cril/tanmoy/research/data/grounded_vision_runs/` — adjust `OUT`/`RUN` when running elsewhere. (Full train/test feature caches now also exist locally at `/Users/tanmoy/research/data/grounded_vision_runs/cub_bound_real_full/`.)
 - `evaluation/interventions.py` annotates `Optional` without importing it — harmless under `from __future__ import annotations`.
 
 ---

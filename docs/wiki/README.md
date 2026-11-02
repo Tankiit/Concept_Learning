@@ -12,11 +12,11 @@ Welcome to the **Grounded Vision** documentation wiki for certifiable, relationa
    - Setup, testing, and known repository issues (uncommitted `data/` subpackage)
 
 2. [**Experiment Tracks & Script Catalog**](EXPERIMENT_TRACKS.md)
-   - All 30 scripts: purpose, inputs, outputs, and where each track can run
+   - All 31 scripts: purpose, inputs, outputs, and where each track can run
    - Core pipeline · activation grounding · reviewer analysis · CLEVR relational · validation milestone · Modal cloud
 
 3. [**Quantitative Results — Consolidated Index**](RESULTS.md)
-   - Activation-tree grounding on real CUB: invalidated pending regeneration (tile-pooling bug)
+   - Activation track on real CUB, official train/test split: 56.8% held-out accuracy (4-species), 100% verified reasons on test; 200-class run shows certificates hold (4.3% accuracy — the honest trade)
    - CLEVR relational track: 69.8% accuracy, 100% relational + necessary certified reasons
    - Core-pipeline mock smoke benchmark (recovered from the Modal image)
    - Predicate grounding milestone (real CUB): 82.8% agreement; beak/belly grounding validated (7/16 predicates)
@@ -35,9 +35,9 @@ Welcome to the **Grounded Vision** documentation wiki for certifiable, relationa
 
 6. [**Activation Grounding and Contrastive NLX**](ACTIVATION_GROUNDING_WIKI.md)
    - Certified abductive and contrastive reasons on real CUB-200-2011 images
-   - 4×4 spatial pooling over frozen DINO activation maps (6,144 features)
-   - 100% verified sufficient-reason rate (mean size: 3.8 conditions)
-   - Attribution baseline comparison: TreeSHAP vs. Formal Sufficiency (88.6% overlap)
+   - 4×4 spatial pooling over frozen DINO activation maps (6,144 features, corrected axes)
+   - 100% verified sufficient-reason rate on held-out test images (mean 3.79 conditions)
+   - Attribution baseline comparison: TreeSHAP vs. Formal Sufficiency (87.9% overlap on test)
    - Part-only NLX policy and model-level counterfactual sensitivity
 
 7. [**Grounded Natural Language Explanation (NLX) Examples**](NLX_EXAMPLES.md)
@@ -49,13 +49,14 @@ Welcome to the **Grounded Vision** documentation wiki for certifiable, relationa
    - Feature caching and perception checkpoints
 
 9. [**Visual Evidence Gallery**](assets/)
-   - [Activation Tree Grounded Evidence Tiles](assets/activation_tree_grounded_examples.png)
-   - [Activation Exemplar Prototype Matches](assets/activation_exemplar_examples.png)
+   - [Activation Tree Grounded Evidence Tiles (train/test split)](assets/activation_traintest_examples.png)
+   - [Activation Test→Train Exemplar Retrieval](assets/activation_traintest_exemplars.png)
+   - [Activation Tree Grounded Evidence Tiles (historical 100-image rerun)](assets/activation_tree_grounded_examples.png)
+   - [Activation Exemplar Prototype Matches (historical rerun)](assets/activation_exemplar_examples.png)
 
 10. [**Raw Result Files**](../../grounded_vision/results/)
-   - `activation_tree_grounded_metrics.json` (invalidated pending pooling-fix regeneration)
-   - `shap_vs_sufficient_results.json` (invalidated pending pooling-fix regeneration)
-   - `grounding_selected_reasons.json` (invalidated pending pooling-fix regeneration)
+   - `activation_track_traintest_results.json` / `..._c4.json` (official split, primary)
+   - `activation_tree_grounded_metrics.json`, `shap_vs_sufficient_results.json`, `grounding_selected_reasons.json` (historical in-cache protocol, fixed-pooling rerun)
    - `clevr_relational_results.json`
    - `cub_bound_mock_benchmark_results.json`
    - `predicate_grounding_milestone.json`
