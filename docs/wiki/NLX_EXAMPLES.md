@@ -23,3 +23,13 @@ The orange evidence tiles are shown in [activation_tree_grounded_examples.png](a
 ## Scope
 
 These are faithful template NLXs, not attribute-level descriptions. Part names are used only where CUB’s visible part-point annotation lies in the certified tile; tiles without annotations are stated as "an unannotated image region".
+
+**What "faithful" means here:** faithful to the **model's computation** — every clause restates a certified condition over predicted concept values. If a concept reader misreads the image, the sentence is still faithful to the model and wrong about the bird. (The NL audit itself is lexical, not binding-based — roadmap Requirement 3.)
+
+## The full concept→NLX chain, interactively
+
+[`grounded_vision/notebooks/inspect_one_image.ipynb`](../../grounded_vision/notebooks/inspect_one_image.ipynb) walks one image through the complete chain **with stored outputs** (runs anywhere — mock backbone, no data download): perception (15 part regions, 28 bound-attribute readers) → grounded `FactDatabase` (74 facts with provenance) → demonstration tree → machine-checked sufficient reason (4 conditions, status VERIFIED) → evidence cards → the verbalized sentence → faithfulness audit (precision 1.00, recall 1.00, 0 unsupported claims). The rendered example:
+
+> The model classifies this bird as 003.Sooty_Albatross because it observed the following certified sufficient conditions: (1) no dagger bill shape on the beak [confidence: 0.49], (2) no white breast color on the breast [confidence: 0.49], (3) no white crown color on the crown [confidence: 0.50], (4) the breast situated below the throat [confidence: 1.00]. These 4 conditions are mathematically sufficient under the deployed decision rules to guarantee this prediction.
+
+Same caveat as the mock benchmark: mock backbone + untrained readers + a demonstration tree, so the *values* are illustrative of the machinery only (the notebook's intro states this). What it shows that the activation examples above cannot: the part→attribute→value→polarity clauses, the relational template ("the breast situated below the throat"), and the audit pass, all the way from pixels to sentence.

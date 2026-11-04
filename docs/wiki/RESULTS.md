@@ -59,6 +59,8 @@ Fresh end-to-end run of the six core pipeline stages (`cache_features` → `fit_
 | Explanations (120 samples) | **sufficiency rate 100%**, mean sparsity 4.38 ± 0.78 conditions, **NL faithfulness 100%, precision 1.0, recall 1.0, hallucination rate 0%** |
 | Interventions (top-5 tree features) | mean prediction flip rate 43.8% |
 
+Scope of the NL numbers: the audit checks the text against the **certified conditions** — NL faithfulness here means *faithful to the model's computation* over predicted concept values, not to the image. If a concept reader misreads the image, the sentence is still faithful to the model and wrong about the bird (the auditor is also lexical, not binding-based — roadmap Requirement 3).
+
 Result file: [`results/cub_bound_mock_benchmark_results.json`](../../grounded_vision/results/cub_bound_mock_benchmark_results.json).
 
 *Superseded variant:* the Modal image also preserved an earlier mock benchmark from the Oct-27 code state (15 evaluated samples: accuracy 73.3%, sufficiency 46.7%, NL faithfulness 86.7%) — replaced by the run above, which reflects current code.
