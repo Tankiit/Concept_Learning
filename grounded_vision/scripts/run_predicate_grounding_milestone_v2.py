@@ -479,6 +479,7 @@ def main():
             },
             "control_mean_distances": {
                 c: float(np.mean(v)) for c, v in ctrl_distances.items()},
+            "n_in_scope": len(predicates),
             "bootstrap": f"{args.n_bootstrap} resamples, seed 1234",
             "edits": EDITS, "seed": args.seed,
         },

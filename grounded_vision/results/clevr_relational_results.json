@@ -2,6 +2,7 @@
   "source": "clevr_style_synthetic",
   "selected_tree": "leaves_64",
   "test_acc": 0.698,
+  "selection_accuracy": 0.7033333333333334,
   "n_questions": {
     "train": 4000,
     "test": 1000

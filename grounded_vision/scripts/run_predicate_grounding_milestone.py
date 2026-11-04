@@ -346,6 +346,7 @@ def main():
         return float(np.mean(vals)) if vals else None
 
     summary = {
+        "n_in_scope": len(predicates),
         "n_predicates": len(records),
         "mean_accuracy": _mean([r["agreement"]["accuracy"] for r in records]),
         "mean_specificity_ratio": {

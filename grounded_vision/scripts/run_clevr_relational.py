@@ -226,8 +226,10 @@ def main():
     parser.add_argument("--n-test", type=int, default=1000)
     parser.add_argument("--scenes-json", type=str, default=None,
                         help="real CLEVR scenes.json if available")
+    parser.add_argument("--out", type=str, default=OUT,
+                        help="output directory (default: the dev-server runs dir)")
     args = parser.parse_args()
-    os.makedirs(OUT, exist_ok=True)
+    os.makedirs(args.out, exist_ok=True)
 
     rng = np.random.RandomState(42)
     source = "clevr_style_synthetic"
@@ -309,6 +311,7 @@ def main():
 
     report = {
         "source": source, "selected_tree": best[0], "test_acc": test_acc,
+        "selection_accuracy": best_val,
         "n_questions": {"train": len(ytr), "test": len(yte)},
         "positive_rate": float(yte.mean()),
         "reason_mean": float(np.mean(sizes)), "reason_max": int(max(sizes)),
@@ -317,9 +320,9 @@ def main():
         "necessity_rate": necessity(head, Xte, preds, rows),
         "examples": examples,
     }
-    with open(f"{OUT}/clevr_relational_results.json", "w") as f:
+    with open(f"{args.out}/clevr_relational_results.json", "w") as f:
         json.dump(report, f, indent=2, default=str)
-    print(f"saved: {OUT}/clevr_relational_results.json")
+    print(f"saved: {args.out}/clevr_relational_results.json")
     for e in examples[:3]:
         print(" Q:", e["question"]["A"], e["question"]["rel"], e["question"]["B"],
               "| ans", e["question"]["answer"], "pred", e["prediction"])
