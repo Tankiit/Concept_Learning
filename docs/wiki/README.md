@@ -23,8 +23,8 @@ Welcome to the **Grounded Vision** documentation wiki for certifiable, relationa
    - Pending server-side artifacts and the results-refresh protocol
 
 4. [**The Research Story & Talk Track**](THE_STORY.md)
-   - One-liner, 5-minute arc, and the full five-act narrative
-   - The claim ladder (certified / grounded / not yet claimable) and anticipated Q&A
+   - One-liner, 5-minute arc, and the full story: problem → design principle → the adversarial-review stress test → evidence → claim ladder
+   - The claim ladder (proved / measured / sensitivity-not-correction / open) and anticipated Q&A
    - Every number traced to a committed result file
 
 5. [**Review Validation Roadmap**](REVIEW_VALIDATION_ROADMAP.md)
