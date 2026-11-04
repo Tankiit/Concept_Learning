@@ -28,7 +28,10 @@ from grounded_vision.reasoning.features import FeatureCompiler, RepresentationMo
 from grounded_vision.reasoning.tree_head import CertifiableTreeHead
 from grounded_vision.explanations.pyxai_backend import PyXAIBackend
 from grounded_vision.explanations.evidence import EvidenceResolver
-from grounded_vision.language.templates import verbalize_sufficient_explanation
+from grounded_vision.language.templates import (
+    verbalize_sufficient_explanation,
+    ExplanationTemplateGenerator,
+)
 from grounded_vision.language.checks import ExplanationAuditor
 
 
@@ -127,9 +130,18 @@ def main():
         print(f"  [{i+1}] {c.condition_str} (observed: {c.observed_value:.2f})")
     print("-" * 70)
     if contrast_exp is not None:
-        print("CONTRASTIVE CONDITIONS (alter to move away from prediction):")
+        contrast_name = (
+            tree_head.class_names[contrast_exp.contrast_class]
+            if contrast_exp.contrast_class < len(tree_head.class_names)
+            else str(contrast_exp.contrast_class)
+        )
+        contrast_text = ExplanationTemplateGenerator().generate_contrastive_explanation(
+            contrast_exp, contrast_name
+        )
+        print("CONTRASTIVE EXPLANATION (why not the next class):")
         for c in contrast_exp.conditions_to_alter:
-            print(f"  - {c.condition_str}")
+            print(f"  - {c.condition_str} (observed: {c.observed_value:.2f})")
+        print(f"  \"{contrast_text}\"")
         print("-" * 70)
     print("VERBALIZED NATURAL LANGUAGE EXPLANATION:")
     print(f"  \"{nl_text}\"")

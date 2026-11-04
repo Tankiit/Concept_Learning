@@ -81,7 +81,13 @@ class EvidenceResolver:
         crop_img: Optional[Image.Image] = None
         proto_id: Optional[str] = None
         proto_sim: Optional[float] = None
-        conf: float = condition.observed_value
+        # Confidence is ONLY ever the provenance-backed reader probability.
+        # Falling back to condition.observed_value (a binary 0/1 when features
+        # are compiled with use_probabilities=False) would fabricate certainty:
+        # an absence clause on an unobserved region would render
+        # "[confidence: 1.00]" with no reader behind it. No provenance ->
+        # no confidence (None), and the verbalizer omits the tag.
+        conf: Optional[float] = None
         part_name: Optional[str] = None
 
         if matched_fact and matched_fact.provenance:
@@ -119,5 +125,13 @@ class EvidenceResolver:
     def resolve_sufficient_explanation(
         self, explanation: SufficientExplanation
     ) -> List[VisualEvidenceCard]:
-        """Resolves visual evidence for all conditions in a sufficient explanation."""
+        """Resolves visual evidence for all conditions in a sufficient explanation.
+
+        Scope: a card carries bbox/crop/confidence only when the underlying
+        fact has provenance (the part region was observed). Clauses over
+        unobserved regions resolve to a card with no bbox, no crop, and no
+        confidence — for those, the sentence walks back to the fact, not to
+        pixels (three-valued predicates, roadmap Requirement 1, will make
+        this explicit in the text itself).
+        """
         return [self.resolve_condition(c) for c in explanation.conditions]

@@ -152,8 +152,9 @@ class ExplanationTemplateGenerator:
         )
         if verified:
             closing = (
-                f"These {n_conds} conditions are mathematically "
-                f"sufficient under the deployed decision rules to guarantee this prediction."
+                f"These {n_conds} conditions are mathematically sufficient, "
+                f"given the predicted concept values, to guarantee this "
+                f"prediction under the deployed decision rules."
             )
         else:
             status = (
@@ -162,9 +163,10 @@ class ExplanationTemplateGenerator:
                 else "missing"
             )
             closing = (
-                f"These {n_conds} conditions are a candidate sufficient set, but the "
-                f"verification certificate status is '{status}' — mathematical "
-                f"sufficiency is NOT guaranteed for this prediction."
+                f"These {n_conds} conditions are a candidate sufficient set, "
+                f"given the predicted concept values, but the verification "
+                f"certificate status is '{status}' — mathematical sufficiency "
+                f"is NOT guaranteed for this prediction."
             )
 
         if self.style == "scientific":

@@ -181,6 +181,113 @@ def test_contrastive_verbalizes_target_conditions():
     assert "confidence" not in text
 
 
+# ------------------------------------------------- round 2: auditor binding ----
+def test_auditor_catches_polarity_flip():
+    """'a white belly color' is a polarity flip of a certified
+    belly:belly_color=white <= 0.5 — it must fail the audit."""
+    from grounded_vision.language.checks import ExplanationAuditor
+
+    auditor = ExplanationAuditor()
+    conds = [condition("belly:belly_color=white", "<=", obs=0.1)]
+    exp = explanation(conds)
+    gen = ExplanationTemplateGenerator()
+    good = gen.generate_sufficient_explanation(exp, matched(conds))
+    assert auditor.audit(good, exp).is_faithful
+
+    flipped = (
+        "The model classifies this bird as Species X because it observed "
+        "(1) a white belly color. These 1 conditions are mathematically "
+        "sufficient."
+    )
+    report = auditor.audit(flipped, exp)
+    assert not report.is_faithful
+    assert any("polarity-flip" in c for c in report.unsupported_claims)
+    assert report.metadata["audit_mode"] == "claim-binding"
+
+
+def test_auditor_catches_wrong_part():
+    """'a black belly' binds the right value to the wrong part; the bound
+    claim never matches the certified conditions."""
+    from grounded_vision.language.checks import ExplanationAuditor
+
+    auditor = ExplanationAuditor()
+    conds = [
+        condition("belly:belly_color=white", "<=", obs=0.1, idx=0),
+        condition("beak:bill_color=black", ">", obs=0.9, idx=1),
+    ]
+    exp = explanation(conds)
+    text = (
+        "The model classifies this bird as Species X because it observed "
+        "(1) no white belly color, (2) a black belly."
+    )
+    report = auditor.audit(text, exp)
+    assert not report.is_faithful
+    assert "beak:bill_color=black" in report.omitted_conditions
+
+
+def test_auditor_accepts_pipeline_output_in_claim_mode():
+    """The verbalizer's own output (negated attribute, has_part, relational)
+    must audit faithful with the binding-based mode."""
+    from grounded_vision.language.checks import ExplanationAuditor
+
+    auditor = ExplanationAuditor()
+    conds = [
+        condition("belly:belly_color=white", "<=", obs=0.1, idx=0),
+        condition("has_part(crown)", ">", obs=1.0, idx=1),
+        condition("above(crown, beak)", "<=", obs=0.0, idx=2),
+        condition("beak:bill_color=black", ">", obs=0.9, idx=3),
+    ]
+    exp = explanation(conds)
+    gen = ExplanationTemplateGenerator()
+    text = gen.generate_sufficient_explanation(exp, matched(conds))
+    report = auditor.audit(text, exp)
+    assert report.is_faithful, report.audit_summary
+    assert report.metadata["audit_mode"] == "claim-binding"
+
+
+def test_auditor_foreign_text_falls_back_to_lexical_mode():
+    from grounded_vision.language.checks import ExplanationAuditor
+
+    auditor = ExplanationAuditor()
+    conds = [condition("belly:belly_color=white", "<=", obs=0.1)]
+    report = auditor.audit("This bird clearly has a red tail.", explanation(conds))
+    assert report.metadata["audit_mode"] == "lexical"
+    assert not report.is_faithful
+
+
+# --------------------------------------- round 2: absence-clause confidence ----
+def test_resolver_reports_no_fake_confidence_without_provenance():
+    """A fact without provenance (region unobserved) must yield
+    card.confidence None — never the binary observed_value dressed up as
+    reader confidence, which the complement logic would turn into a
+    fabricated '[confidence: 1.00]'."""
+    from grounded_vision.predicates.schema import Fact, FactDatabase, PredicateType
+    from grounded_vision.explanations.evidence import EvidenceResolver
+
+    db = FactDatabase(sample_id=1)
+    db.add_fact(Fact(
+        predicate="has_attribute", subject_id="part_belly_0",
+        attribute="belly_color", value="white",
+        confidence=0.1, truth_value=False,
+        provenance=None, predicate_type=PredicateType.HAS_ATTRIBUTE,
+    ))
+    cond = condition("belly:belly_color=white", "<=", obs=0.0)
+    card = EvidenceResolver(db).resolve_condition(cond)
+
+    assert card.confidence is None
+    assert card.bbox is None
+    gen = ExplanationTemplateGenerator()
+    clause = gen.verbalize_condition(card, cond)
+    assert clause.startswith("no white belly color")
+    assert "confidence" not in clause
+
+
+def test_closing_sentence_states_predicted_concept_values():
+    conds = [condition("beak:bill_color=black", ">", obs=0.9)]
+    text = ExplanationTemplateGenerator().generate_sufficient_explanation(
+        explanation(conds), matched(conds)
+    )
+    assert "given the predicted concept values" in text
 # ----------------------------------------------------- make_activation_nlx ----
 def _load_script():
     path = Path(__file__).resolve().parents[1] / "scripts" / "make_activation_nlx.py"
