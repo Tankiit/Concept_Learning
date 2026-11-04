@@ -120,6 +120,7 @@ class AttributeReader(nn.Module):
         if key not in self.classifiers:
             return 0.5
         head = self.classifiers[key]
+        region_feature = region_feature.to(head.weight.device)
         logit = head(region_feature.unsqueeze(0)).squeeze()
         return float(torch.sigmoid(logit).item())
 
