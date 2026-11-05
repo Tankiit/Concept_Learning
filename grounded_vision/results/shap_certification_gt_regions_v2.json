@@ -1,0 +1,20 @@
+{
+  "config": "configs/cub_bound_full_v2.yaml",
+  "regions": "gt",
+  "n": 1000,
+  "mean_reason_size": 10.413,
+  "certified_reason_sufficient_rate": 1.0,
+  "shap_topk_sufficient_rate": 0.447,
+  "shap_topk_certification_failure_rate": 0.5529999999999999,
+  "shap_topk_failure_rate_ci95": [
+    0.520975,
+    0.5840000000000001
+  ],
+  "mean_topk_overlap_with_certified_reason": 0.9332007215007214,
+  "shap_min_sufficient_k": {
+    "found_within_3x_certified": 1.0,
+    "mean": 11.646,
+    "median": 12.0,
+    "mean_excess_over_certified": 1.233
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "config": "configs/cub_bound_full_v2.yaml",
+  "regions": "gt",
+  "logreg_on_predicted_concepts": {
+    "test_accuracy": 0.3217121159820504
+  },
+  "logreg_on_gt_concepts": {
+    "test_accuracy": 0.2143596824301001
+  },
+  "tree_on_gt_concepts": {
+    "test_accuracy": 0.1555056955471177,
+    "train_accuracy": 0.22706039372706038,
+    "hyperparams": {
+      "max_depth": 12,
+      "min_samples_leaf": 4
+    }
+  }
+}

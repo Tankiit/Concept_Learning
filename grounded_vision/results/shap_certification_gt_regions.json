@@ -1,0 +1,10 @@
+{
+  "config": "configs/cub_bound_full.yaml",
+  "regions": "gt",
+  "n": 1000,
+  "mean_reason_size": 10.541,
+  "certified_reason_sufficient_rate": 1.0,
+  "shap_topk_sufficient_rate": 0.269,
+  "shap_topk_certification_failure_rate": 0.731,
+  "mean_topk_overlap_with_certified_reason": 0.9111076118326118
+}

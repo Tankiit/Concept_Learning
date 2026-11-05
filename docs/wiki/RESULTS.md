@@ -130,7 +130,93 @@ The reviewer-analysis track (Track C in [`EXPERIMENT_TRACKS.md`](EXPERIMENT_TRAC
 | `{RUNS}/matryoshka_sae/msae_results.json` | `run_matryoshka_sae.py` |
 | Core-pipeline benchmark for any config: `{cache_dir}/results/benchmark_results.json` (the mock-CUB variant is already in the repo — section 3; the real-data variants are not) | `evaluate.py` |
 
-## 6. Refresh protocol
+## 6. Absence-clause observability and perception-training defects (2026-11-04) — NEW
+
+Two data-layer defects found while answering the second external review, both now fixed in code but **predating the deployed `cub_bound_full` checkpoint** (its numbers above stand as measured; reader retraining is queued):
+
+1. **CUB `parts.txt` names parts with spaces** ("left wing"); the parser stored them verbatim while the codebase keys underscores — so `left/right wing/eye/leg` (6 of 15 parts) **never matched their annotations**: always template boxes, visibility 0, no provenance, and their attribute readers never trained. Fixed (name normalization at parse, hermetic regression test).
+2. **The train feature cache was built with the train transform's random horizontal flip** while reader training pooled unflipped GT boxes — confirmed by the bimodal cosine check (`scripts/check_train_flip.py`): **40.7%** of 1,000 train samples pool `left_wing` better under the mirrored box (mean cos diff −0.004, bimodal at 0); test-cache control 12.6% (mean +0.094; the floor is genuine wing L/R similarity).
+
+Absence-clause observability over the **full test split** after the parser fix (`scripts/analyze_unobserved_absence.py`; deployed tree + checkpoint, GT regions):
+
+| Metric | GT regions | Predicted regions |
+| --- | ---: | ---: |
+| Samples / conditions / negated conditions | 5,794 / 61,189 / 40,570 | 5,794 / 61,088 / 40,040 |
+| **Absence clauses over unobserved regions** | **7.1%** (2,897) | **3.3%** (1,335) |
+| Positive clauses over unobserved regions | 0 | 0 |
+| Top unobserved parts (absence clauses) | belly 1,213; breast 806; has_part(belly) 354 | belly 679; has_part(belly) 267; breast 265 |
+
+Reading: after the parser fix, "unobserved" means genuine CUB invisibility (belly/breast on head-on birds) — the earlier 34% estimate from 8 samples was inflated by the name-mismatch bug. Predicted regions show fewer unobserved clauses because the detector proposes boxes liberally — more parts read as observed, but with unverified region quality; GT visibility is the honest reference. Per roadmap Requirement 1, an unobserved part should eventually verbalize as "unobserved", not as absence.
+
+Result files: [`results/unobserved_absence_gt_regions.json`](../../grounded_vision/results/unobserved_absence_gt_regions.json), [`results/unobserved_absence_predicted_regions.json`](../../grounded_vision/results/unobserved_absence_predicted_regions.json), [`results/train_flip_check.json`](../../grounded_vision/results/train_flip_check.json) (scripts: `analyze_unobserved_absence.py`, `check_train_flip.py`).
+
+### 6b. The concept-correctness gate (pre-registered, run 2026-11-04)
+
+The CVPR go/no-go gate, with thresholds written down **before** the rerun. Two post-fix retraining attempts are both reported (defaults, then the documented known-good protocol attr-weight 1.0 / 200 epochs — the lesson from the 312 run); no selection between them. GT regions, full test split (n=5,794; SHAP n=1,000).
+
+| Metric | Pre-fix checkpoint | Post-fix (defaults) | Post-fix (known-good) | Pre-registered bar |
+| --- | ---: | ---: | ---: | ---: |
+| Species accuracy | 22.68% | 15.83% | **21.11%** | ≥ 22% |
+| Perception part IoU / attr acc | — | 0.209 / 71.8% | 0.321 / 76.9% | — |
+| Sufficiency / mean reason size | 100% / ~10.7 | 100% / 10.97 | 100% / 10.80 | 100% / ≤ 12 |
+| Clause image-correctness (observed regions) | 77.0% | 69.5% | **74.4%** | ≥ 80% |
+| Predicted-present clause correctness | 46.1% | — | — | — |
+| **P(all clauses correct \| certified reason)** | **7.5%** | 2.5% | **5.2%** | ≥ 60% |
+| Absence clauses over unobserved regions | 7.1% | 10.4% | 9.3% | ≤ 8% |
+| **SHAP top-k certification failure rate** (matched size, 91–93% overlap) | **73.1%** | 74% | **55.3%** | any nonzero |
+| NL faithfulness (binding audit, mode-split) | — | 86.9% | 84.4% | — |
+
+Verdict per the pre-registered bars: **no-go** — accuracy, clause correctness, and reason-level correctness all miss. The striking result is the direction: even after the data-layer fixes and the known-good retraining, only **5.2% of certified sufficient reasons have every clause true of the image**, while 100% of them are verifier-sufficient — the pre-fix 7.5% was flattered by trivially-true absences (the never-observed wings). The SHAP sentence holds post-fix (top-k at matched size fails certification 55.3% of the time despite 93.3% overlap). Also new: the binding audit gives the first non-trivial NL-faithfulness number (84.4% — the old 100% was the token-level audit).
+
+Result files (post-fix = known-good protocol): [`concept_correctness_gt_regions_v2.json`](../../grounded_vision/results/concept_correctness_gt_regions_v2.json), [`shap_certification_gt_regions_v2.json`](../../grounded_vision/results/shap_certification_gt_regions_v2.json), [`unobserved_absence_gt_regions_v2.json`](../../grounded_vision/results/unobserved_absence_gt_regions_v2.json), [`benchmark_results_v2.json`](../../grounded_vision/results/benchmark_results_v2.json); pre-fix versions without the suffix. Scripts: `analyze_concept_correctness.py`, `analyze_shap_certification.py`; config `configs/cub_bound_full_v2.yaml` (eval-transform cache; old run preserved untouched).
+
+### 6c. Corrected headline metrics and the selective-explanations result (2026-11-04, same checkpoint as 6b)
+
+Fourth-round review corrections, all measured on the post-fix known-good checkpoint (GT regions, full test split):
+
+**The 5.2% reason-level number is mostly arithmetic — confirmed.** Clause accuracy 75.0% at a mean 10.8 clauses predicts 0.750^10.8 = **4.48%** under independence; observed **5.21%** (ratio 1.16). The distinctive exhibits are the polarity asymmetry and the selective curve below, not the reason-level rate.
+
+| Metric (post-fix, GT regions) | Value |
+| --- | ---: |
+| Present-clause precision (raw / class-majority-denoised labels) | **41.7% / 37.9%** |
+| Absent-clause accuracy (raw / denoised) vs "always-absent" baseline 86.1% | 91.7% / 94.7% (**lift +5.6 / +8.6 pts**) |
+| Base rate of present among certified clauses | 41.7% |
+| SHAP top-k certification failure at matched size (n=1,000) | **55.3%** [bootstrap CI95 52.1–58.4], overlap 93.3% |
+| SHAP minimal sufficient k (found ≤3× certified for 100%) | mean 11.6 vs certified 10.4 (**excess +1.2**) |
+| Accuracy anchors: logreg on same predicted concepts / tree on GT concepts (test) | **32.2%** / 15.6% (train 22.7%) |
+| Deployed tree on same readers | 21.1% → the interpretable head costs ~11 pts vs linear |
+| NL faithfulness (binding audit, species-name artifact fixed) | **100%** (the 84.4% in §6b was the auditor flagging color words inside CUB species names — `Brown_Booby` — not real failures; fixed + regression test) |
+
+**Selective grounded explanations (the mechanism half):** threshold a certified reason on the minimum reader probability over its present clauses.
+
+| τ | coverage | P(all clauses correct \| kept) | present-clause precision \| kept |
+| ---: | ---: | ---: | ---: |
+| (none) | 100% | 5.2% | 41.7% |
+| 0.6 | 6.0% | 28.5% | 73.8% |
+| 0.7 | 1.9% | 43.1% | 94.6% |
+| ≥ 0.8 | 1.3% | 46.7% | 100% |
+
+AUROC of min-present-confidence for predicting all-clauses-correct: **0.750** (n=5,793 with reader confidence). Reader confidence cleanly predicts which certified explanations are image-correct — an abstention/flagging mechanism exists, at low coverage.
+
+Caveats recorded: (i) the attr-weight/epoch protocol was chosen after the default failed on the *test-side* gate (both attempts reported; future protocol selection moves to a validation split); (ii) present-clause *recall* is not reported — the per-reason dump does not count GT-positive attributes asserted absent (todo); (iii) SHAP-never-claims-sufficiency positioning and the formal-XAI citation for "rankings are not proofs" belong in the paper text.
+
+Result files: [`selective_explanations_gt_regions_v2.json`](../../grounded_vision/results/selective_explanations_gt_regions_v2.json) (+ `_reasons.jsonl` per-reason dump), [`shap_certification_gt_regions_v2.json`](../../grounded_vision/results/shap_certification_gt_regions_v2.json), [`concept_ceilings_gt_regions_v2.json`](../../grounded_vision/results/concept_ceilings_gt_regions_v2.json). Scripts: `analyze_selective_explanations.py`, `analyze_concept_ceilings.py`.
+
+### 6d. Round-5 controls: the selective curve is length-confounded; the reliability lever does not move (2026-11-04, same checkpoint)
+
+**Confound control (the curve's AUROC is mostly reason length).** AUROC for predicting all-clauses-correct: min-present-confidence **0.750**, but present-clause COUNT alone **0.789**, total clause count 0.364. Within present-clause-count strata, confidence's AUROC falls to 0.704 (n=1), 0.622 (n=2), 0.591 (n=3), 0.734 (n>=4). Zero-present-clause reasons: 1/5,794 (excluded from every tau; no vacuous pass). At the tau=0.8 operating point (n_kept=77): P(all correct) 46.7% [Wilson CI95 34.8-56.5]; present precision 1.000 [95.2-100]; absent-clause accuracy among kept 91.9%. **Composition:** 65.1% of certified clauses are absences (mean 7.2 absent vs 3.6 present per reason). Honest statement: confidence carries weak-to-moderate within-stratum signal; the headline AUROC was inflated by reason length.
+
+**Reliability-ordered minimization (preregistered drop-least-reliable-first): no effect — exactly.** Mean size 10.798 vs 10.798, P(all correct) 5.212% vs 5.212% (n=5,794, verified 100%): greedy backward elimination from the decision path is ORDER-INVARIANT on this tree (path order vs reversed order: 150/150 identical) — the path-reachable prime implicant is unique per sample, so drop-order reordering cannot select a different reason. A reliability-aware choice would need to search beyond path-reachable implicants or trade size for reliability with non-minimal sufficient sets.
+
+**Ceilings completed (label-noise control added):** logreg on GT concepts **21.4%** (vs GT-concept tree 15.6%, predicted-concepts logreg 32.2%, deployed tree 21.1%). Both earlier hypotheses contribute: GT per-image label noise caps even a linear GT head at ~21%, and predicted concepts exceeding GT concepts (~11 pts) confirms reader leakage past the fix.
+
+**Reason-length tax (design rule, closed form):** per-clause accuracy needed for P(all correct)=0.5: k=4 -> 0.841, k=8 -> 0.917, k=12 -> 0.944. With present-clause precision at ~0.42, no ordering trick reaches 50% at k~11; readers must improve or reasons must shrink.
+
+**Nov-16 implication (per the pre-agreed rule):** the mechanism experiment did not lift P(all correct) at full coverage (it cannot move), and the selective curve is length-confounded -> aim for a later venue; spend the time on the reader-quality curve, three-valued predicates, and the LLM arm.
+
+Result files: [`reliability_minimization_gt_regions_v2.json`](../../grounded_vision/results/reliability_minimization_gt_regions_v2.json), [`concept_ceilings_gt_regions_v2.json`](../../grounded_vision/results/concept_ceilings_gt_regions_v2.json). Script: `analyze_reliability_minimization.py` (includes all confound controls).
+
+## 7. Refresh protocol
 
 1. Run the experiment on the machine holding the caches (or via Modal for GPU/PyXAI work).
 2. Copy the JSON/PNG artifacts into `grounded_vision/results/` (keep script-defined filenames).

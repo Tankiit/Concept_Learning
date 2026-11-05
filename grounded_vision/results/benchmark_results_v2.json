@@ -1,0 +1,66 @@
+{
+  "experiment_name": "cub_bound_full_v2",
+  "representation": "bound",
+  "region_mode": "gt",
+  "n_test_samples": 5794,
+  "perception": {
+    "mean_part_iou": 0.32063160924509887,
+    "part_localization_accuracy_pck": 0.2916005062708548,
+    "attribute_accuracy": 0.768960501010898,
+    "attribute_precision": 0.4265208630487446,
+    "attribute_recall": 0.6078861604982092,
+    "attribute_f1": 0.5013038850452368,
+    "part_breakdown_iou": {
+      "back": 0.40800442840882,
+      "beak": 0.409419798406064,
+      "belly": 0.4734218018998111,
+      "breast": 0.5000397440128581,
+      "crown": 0.4780887431705335,
+      "forehead": 0.367277576933417,
+      "left_eye": 0.07948688950570817,
+      "left_leg": 0.1848243318827401,
+      "left_wing": 0.30743668039485034,
+      "nape": 0.31407487517226457,
+      "right_eye": 0.08254850542289126,
+      "right_leg": 0.1968743272690777,
+      "right_wing": 0.3142030603992589,
+      "tail": 0.3197139012551714,
+      "throat": 0.37405947454301736
+    }
+  },
+  "classification": {
+    "accuracy": 0.21108042802899551,
+    "macro_f1": 0.19382757443746432,
+    "micro_f1": 0.21108042802899551,
+    "expected_calibration_error": 0.15424128011233512
+  },
+  "explanations": {
+    "num_evaluated_samples": 5794,
+    "sufficiency_rate": 1.0,
+    "mean_sparsity_conditions": 10.797721781152918,
+    "std_sparsity_conditions": 1.6425966969365569,
+    "nl_faithful_rate": 0.8438039351052813,
+    "nl_mean_precision": 0.9862923776066683,
+    "nl_mean_recall": 1.0,
+    "nl_hallucination_rate": 0.15619606489471868,
+    "nl_audit_modes": {
+      "claim-binding": {
+        "n": 5794,
+        "faithful_rate": 0.8438039351052813,
+        "hallucination_rate": 0.15619606489471868
+      }
+    }
+  },
+  "interventions": {
+    "num_samples_evaluated": 5794,
+    "intervened_features_count": 5,
+    "mean_prediction_flip_rate": 0.47583707283396615,
+    "feature_flip_rates": {
+      "beak:bill_color=black": 0.49913703831549877,
+      "beak:bill_color=yellow": 0.9722126337590611,
+      "beak:bill_shape=cone": 0.24145667932343803,
+      "beak:bill_shape=curved": 0.40075940628236106,
+      "beak:bill_shape=dagger": 0.26561960648947186
+    }
+  }
+}

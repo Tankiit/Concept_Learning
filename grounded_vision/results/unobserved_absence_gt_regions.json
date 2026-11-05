@@ -1,0 +1,26 @@
+{
+  "config": "configs/cub_bound_full.yaml",
+  "regions": "gt",
+  "note": "run after the parts.txt underscore fix; deployed tree_head and perception checkpoint predate that fix",
+  "samples": 5794,
+  "conditions": 61189,
+  "negated": 40570,
+  "positive": 20619,
+  "negated_unobserved": 2897,
+  "positive_unobserved": 0,
+  "frac_absence_over_unobserved": 0.07140744392408184,
+  "frac_all_clauses_unobserved": 0.04734511104937162,
+  "unobserved_absence_by_part": {
+    "belly": 1213,
+    "breast": 806,
+    "has_part(belly)": 354,
+    "crown": 175,
+    "has_part(breast)": 85,
+    "tail": 80,
+    "has_part(tail)": 73,
+    "beak": 62,
+    "forehead": 41,
+    "has_part(forehead)": 5,
+    "has_part(crown)": 3
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "config": "configs/cub_bound_full_v2.yaml",
+  "regions": "gt",
+  "policy": "drop-least-reliable-first (preregistered; reliability p / 1-p / 0.5-no-prov)",
+  "selective_confound_controls": {
+    "n_reasons": 5794,
+    "auroc_min_present_conf": 0.7503696104028088,
+    "auroc_n_present_alone": 0.789332346145869,
+    "auroc_n_clauses_alone": 0.3643306579588372,
+    "zero_present_reasons": {
+      "count": 1,
+      "all_correct_rate": 1.0,
+      "note": "min_present_conf is None -> excluded from every tau; no vacuous pass"
+    },
+    "auroc_within_n_present_strata": {
+      "1": {
+        "n": 415,
+        "auroc": 0.7040979414397136
+      },
+      "2": {
+        "n": 1004,
+        "auroc": 0.6224358974358974
+      },
+      "3": {
+        "n": 1271,
+        "auroc": 0.591299619358347
+      },
+      "4-99+": {
+        "n": 3103,
+        "auroc": 0.7343519950510362
+      }
+    },
+    "tau_0.8_operating_point": {
+      "n_kept": 77,
+      "p_all_correct": 0.45454545454545453,
+      "p_all_correct_ci95_wilson": [
+        0.3481397836005049,
+        0.5652711335510607
+      ],
+      "present_precision": 1.0,
+      "present_precision_ci95_wilson": [
+        0.9524799113327793,
+        1.0
+      ],
+      "absent_clause_accuracy": 0.919047619047619
+    },
+    "clause_composition": {
+      "mean_clauses": 10.797721781152918,
+      "mean_present": 3.605799102519848,
+      "mean_absent": 7.191922678633069,
+      "frac_clauses_absent": 0.6513205866545528
+    },
+    "reason_length_tax_per_clause_accuracy_for_p_all_correct_0.5": {
+      "k=2": 0.7071,
+      "k=4": 0.8409,
+      "k=6": 0.8909,
+      "k=8": 0.917,
+      "k=10": 0.933,
+      "k=12": 0.9439,
+      "k=15": 0.9548
+    }
+  },
+  "reliability_ordered_minimization": {
+    "default": {
+      "mean_size": 10.797721781152918,
+      "p_all_correct": 0.05212288574387297,
+      "p_all_correct_denoised": 0.053676216775975144
+    },
+    "reliability_ordered": {
+      "verified_rate": 1.0,
+      "mean_size": 10.797721781152918,
+      "size_growth": 0.0,
+      "p_all_correct": 0.05212288574387297,
+      "p_all_correct_denoised": 0.053676216775975144,
+      "present_precision": 0.4165709362435382
+    }
+  }
+}

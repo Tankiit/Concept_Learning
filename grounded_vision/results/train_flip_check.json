@@ -1,0 +1,23 @@
+{
+  "config": "configs/cub_bound_full.yaml",
+  "part": "left_wing",
+  "n_ref": 500,
+  "train": {
+    "split": "train",
+    "n": 1000,
+    "skipped_no_box_or_cache": 789,
+    "frac_flipped_box_matches_better": 0.407,
+    "mean_cos_diff": -0.004379175436617592,
+    "frac_diff_gt_0.01": 0.373,
+    "frac_diff_lt_-0.01": 0.367
+  },
+  "test_control": {
+    "split": "test",
+    "n": 1000,
+    "skipped_no_box_or_cache": 750,
+    "frac_flipped_box_matches_better": 0.126,
+    "mean_cos_diff": 0.09405289281168634,
+    "frac_diff_gt_0.01": 0.641,
+    "frac_diff_lt_-0.01": 0.071
+  }
+}

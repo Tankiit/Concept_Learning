@@ -1,0 +1,73 @@
+{
+  "config": "configs/cub_bound_full_v2.yaml",
+  "regions": "gt",
+  "n_reasons": 5794,
+  "polarity": {
+    "present_precision_raw": 0.4165709362435382,
+    "present_precision_denoised": 0.37880528431935667,
+    "present_recall_among_certified": 1.0,
+    "absent_accuracy_raw": 0.917350611951044,
+    "absent_accuracy_denoised": 0.9466042716582673,
+    "always_absent_baseline_on_absent_clauses": 0.8608899971228541,
+    "base_rate_present_among_certified_clauses": 0.4165709362435382
+  },
+  "independence_check": {
+    "clause_accuracy": 0.7501198810779707,
+    "mean_clauses_per_reason": 10.797721781152918,
+    "product_of_clause_accuracy": 0.0448431158813467,
+    "observed_p_all_correct": 0.05212288574387297
+  },
+  "selective_curve_min_present_conf": [
+    {
+      "tau": 0.5,
+      "coverage": 0.9998274076630997,
+      "p_all_correct_given_kept": 0.05195926117728293,
+      "p_all_correct_denoised_given_kept": 0.053512860348696706,
+      "present_precision_given_kept": 0.4165709362435382
+    },
+    {
+      "tau": 0.6,
+      "coverage": 0.059889540904383844,
+      "p_all_correct_given_kept": 0.28530259365994237,
+      "p_all_correct_denoised_given_kept": 0.3631123919308357,
+      "present_precision_given_kept": 0.7379767827529021
+    },
+    {
+      "tau": 0.7,
+      "coverage": 0.018812564722126338,
+      "p_all_correct_given_kept": 0.43119266055045874,
+      "p_all_correct_denoised_given_kept": 0.48623853211009177,
+      "present_precision_given_kept": 0.9464285714285714
+    },
+    {
+      "tau": 0.8,
+      "coverage": 0.013289609941318605,
+      "p_all_correct_given_kept": 0.45454545454545453,
+      "p_all_correct_denoised_given_kept": 0.35064935064935066,
+      "present_precision_given_kept": 1.0
+    },
+    {
+      "tau": 0.9,
+      "coverage": 0.012944425267518123,
+      "p_all_correct_given_kept": 0.4666666666666667,
+      "p_all_correct_denoised_given_kept": 0.3333333333333333,
+      "present_precision_given_kept": 1.0
+    },
+    {
+      "tau": 0.95,
+      "coverage": 0.012944425267518123,
+      "p_all_correct_given_kept": 0.4666666666666667,
+      "p_all_correct_denoised_given_kept": 0.3333333333333333,
+      "present_precision_given_kept": 1.0
+    },
+    {
+      "tau": 0.99,
+      "coverage": 0.012944425267518123,
+      "p_all_correct_given_kept": 0.4666666666666667,
+      "p_all_correct_denoised_given_kept": 0.3333333333333333,
+      "present_precision_given_kept": 1.0
+    }
+  ],
+  "auroc_min_present_conf_predicts_all_correct": 0.7503696104028088,
+  "n_with_reader_conf": 5793
+}

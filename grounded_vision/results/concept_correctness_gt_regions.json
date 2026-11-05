@@ -1,0 +1,58 @@
+{
+  "config": "configs/cub_bound_full.yaml",
+  "regions": "gt",
+  "n_reasons": 5794,
+  "clauses": {
+    "total": 61189,
+    "correct": 47556,
+    "present_total": 20619,
+    "present_correct": 9506,
+    "absent_total": 40570,
+    "absent_correct": 38050,
+    "observed_total": 58292,
+    "observed_correct": 44880,
+    "unobserved_total": 2897,
+    "unobserved_correct": 2676
+  },
+  "clause_correctness": {
+    "overall": 0.7771985160731504,
+    "predicted_present": 0.4610310878316116,
+    "predicted_absent": 0.9378851368005916,
+    "observed_regions": 0.7699169697385576,
+    "unobserved_regions": 0.9237141870900932
+  },
+  "p_all_clauses_correct_given_reason": 0.07507766655160511,
+  "p_all_observed_clauses_correct_given_reason": 0.08025543665861236,
+  "clause_correctness_by_part": {
+    "beak": {
+      "correct": 14652,
+      "total": 19446,
+      "rate": 0.7534711508793582
+    },
+    "breast": {
+      "correct": 11201,
+      "total": 14310,
+      "rate": 0.7827393431167016
+    },
+    "belly": {
+      "correct": 10103,
+      "total": 12028,
+      "rate": 0.8399567675424011
+    },
+    "crown": {
+      "correct": 7474,
+      "total": 9716,
+      "rate": 0.7692466035405516
+    },
+    "forehead": {
+      "correct": 2806,
+      "total": 3930,
+      "rate": 0.7139949109414758
+    },
+    "tail": {
+      "correct": 1320,
+      "total": 1759,
+      "rate": 0.7504263786242183
+    }
+  }
+}
