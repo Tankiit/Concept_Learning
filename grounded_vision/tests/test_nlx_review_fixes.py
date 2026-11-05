@@ -250,7 +250,8 @@ def test_auditor_foreign_text_falls_back_to_lexical_mode():
 
     auditor = ExplanationAuditor()
     conds = [condition("belly:belly_color=white", "<=", obs=0.1)]
-    report = auditor.audit("This bird clearly has a red tail.", explanation(conds))
+    # no recognizable value words -> no heuristic claims -> lexical fallback
+    report = auditor.audit("This bird is large and perched.", explanation(conds))
     assert report.metadata["audit_mode"] == "lexical"
     assert not report.is_faithful
 
@@ -319,3 +320,127 @@ def test_activation_nlx_guards_empty_and_missing_grounding():
     # faithfulness/abstention claims are measured by the auditor, not asserted
     assert "faithfulness" not in grounded["nlx"]
     assert "semantic_abstention" not in grounded["nlx"]
+
+
+# --------------------------------------------- round 3: free-text claims -------
+def test_heuristic_claims_extracted_from_free_text():
+    from grounded_vision.language.checks import ExplanationAuditor
+
+    auditor = ExplanationAuditor()
+    claims = auditor.extract_text_claims(
+        "The bird has a black bill, a yellow breast, and no white belly."
+    )
+    got = {(c["part"], c["value"], c["polarity"]) for c in claims}
+    # surface part words ('bill'); beak/bill aliasing happens at match time
+    assert ("bill", "black", "present") in got
+    assert ("breast", "yellow", "present") in got
+    assert ("belly", "white", "absent") in got
+
+
+def test_heuristic_audit_catches_flipped_foreign_text():
+    """LLM arm: 'a white belly' against a certified absence must fail in
+    claim-heuristic mode, not just lexically."""
+    from grounded_vision.language.checks import ExplanationAuditor
+
+    auditor = ExplanationAuditor()
+    conds = [condition("belly:belly_color=white", "<=", obs=0.1)]
+    exp = explanation(conds)
+    report = auditor.audit(
+        "This individual shows a white belly and a stout bill.", exp
+    )
+    assert report.metadata["audit_mode"] == "claim-heuristic"
+    assert not report.is_faithful
+    assert any(c.startswith("claim:") for c in report.unsupported_claims)
+
+
+def test_heuristic_audit_accepts_faithful_foreign_text():
+    from grounded_vision.language.checks import ExplanationAuditor
+
+    auditor = ExplanationAuditor()
+    conds = [
+        condition("beak:bill_color=black", ">", obs=0.9, idx=0),
+        condition("belly:belly_color=white", "<=", obs=0.1, idx=1),
+    ]
+    report = auditor.audit(
+        "The bird has a black bill and no white belly.", explanation(conds)
+    )
+    assert not report.unsupported_claims, report.unsupported_claims
+
+
+def test_audit_mode_split_in_explanation_suite():
+    from grounded_vision.evaluation.explanations import evaluate_explanation_suite
+
+    gen = ExplanationTemplateGenerator()
+    conds = [condition("belly:belly_color=white", "<=", obs=0.1)]
+    exp = explanation(conds)
+    good = gen.generate_sufficient_explanation(exp, matched(conds))
+
+    from grounded_vision.language.checks import ExplanationAuditor
+
+    auditor = ExplanationAuditor()
+    reports = [
+        auditor.audit(good, exp),                              # claim-binding
+        auditor.audit("This bird has a red tail.", exp),       # claim-heuristic
+    ]
+    metrics = evaluate_explanation_suite([exp, exp], reports)
+    modes = metrics["nl_audit_modes"]
+    assert set(modes) == {"claim-binding", "claim-heuristic"}
+    assert modes["claim-binding"] == {"n": 1, "faithful_rate": 1.0, "hallucination_rate": 0.0}
+    assert modes["claim-heuristic"]["n"] == 1
+    assert modes["claim-heuristic"]["faithful_rate"] == 0.0
+
+
+# ------------------------------------------------- round 3: parts.txt fix -----
+def test_cub_part_names_use_underscores(tmp_path):
+    """CUB's parts.txt writes 'left wing' with a space; the parser must
+    normalize to left_wing or the part never matches the vocabulary and
+    reads as unobserved (6 of 15 parts were invisible before this fix).
+    Hermetic: builds a minimal CUB annotation fixture."""
+    from PIL import Image
+    from grounded_vision.data.cub import _parse_cub_annotations_cached, CUB_PARTS
+
+    root = tmp_path / "CUB_200_2011"
+    (root / "images" / "03.Warbler").mkdir(parents=True)
+    Image.new("RGB", (60, 40)).save(root / "images" / "03.Warbler" / "a.jpg")
+
+    (root / "images.txt").write_text("1 03.Warbler/a.jpg\n")
+    (root / "classes.txt").write_text("3 Warbler\n")
+    (root / "image_class_labels.txt").write_text("1 3\n")
+    (root / "train_test_split.txt").write_text("1 0\n")
+    (root / "attributes.txt").write_text("1 has_bill_shape_dagger\n")
+    (root / "attributes").mkdir()
+    (root / "attributes" / "image_attribute_labels.txt").write_text("1 1 0\n")
+    (root / "parts").mkdir()
+    # real CUB names: spaces inside part names
+    (root / "parts" / "parts.txt").write_text(
+        "1 back\n2 beak\n3 belly\n4 breast\n5 crown\n6 forehead\n7 left eye\n"
+        "8 left leg\n9 left wing\n10 nape\n11 right eye\n12 right leg\n"
+        "13 right wing\n14 tail\n15 throat\n"
+    )
+    (root / "parts" / "part_locs.txt").write_text(
+        "1 9 20.0 20.0 1\n1 2 30.0 20.0 1\n1 4 30.0 25.0 0\n"
+    )
+
+    class_names, records = _parse_cub_annotations_cached(str(root))
+    parts = records[1]["parts"]
+    assert set(parts) == {"left_wing", "beak", "breast"}
+    for name in parts:
+        assert name in CUB_PARTS
+    assert parts["left_wing"][2] == 1     # visible left wing survives the parse
+    assert parts["breast"][2] == 0        # invisible part recorded as 0
+
+
+def test_auditor_ignores_color_words_in_species_name():
+    """CUB species names carry color words ('Brown_Booby'); the class name is
+    not a claim about the image and must not fail the lexical scan."""
+    from grounded_vision.language.checks import ExplanationAuditor
+
+    auditor = ExplanationAuditor()
+    conds = [condition("belly:belly_color=white", "<=", obs=0.1)]
+    exp = explanation(conds, target="Brown_Booby")
+    gen = ExplanationTemplateGenerator()
+    text = gen.generate_sufficient_explanation(exp, matched(conds))
+    assert "Brown_Booby" in text
+    report = auditor.audit(text, exp)
+    assert report.is_faithful, report.audit_summary
+    assert report.metadata["audit_mode"] == "claim-binding"

@@ -4,12 +4,17 @@ Explanation Benchmark Suite
 Quantifies explanation quality across:
 1. Formal Sufficiency Rate (% of samples with mathematical sufficiency certificate)
 2. Explanation Complexity / Sparsity (Average number of conditions)
-3. Necessity Rate (% of conditions whose removal falsifies sufficiency)
-4. Natural Language Faithfulness (Precision, Recall, Hallucination Rate)
+3. Natural Language Faithfulness (Precision, Recall, Hallucination Rate),
+   reported overall AND split by audit mode (binding-based audits make a
+   stronger claim than lexical ones — the split keeps them honest)
+
+Necessity (per-condition leave-one-out falsification) is NOT computed here:
+it needs the feature vectors and the head, and is audited per-run with
+``TreeSufficiencyNecessity`` (see e.g. scripts/run_clevr_relational.py).
 """
 
 from __future__ import annotations
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 import numpy as np
 
 from ..explanations.schema import SufficientExplanation, VerificationStatus
@@ -55,5 +60,23 @@ def evaluate_explanation_suite(
             "nl_mean_recall": float(np.mean(recalls)),
             "nl_hallucination_rate": float(hallucination_count / len(audit_reports)),
         })
+
+        # Rates must not silently mix audit modes: binding-based audits make a
+        # stronger claim than lexical ones (foreign/free-form text), so split.
+        by_mode: Dict[str, Dict[str, int]] = {}
+        for a in audit_reports:
+            mode = a.metadata.get("audit_mode", "unrecorded")
+            slot = by_mode.setdefault(mode, {"n": 0, "faithful": 0, "hallucinated": 0})
+            slot["n"] += 1
+            slot["faithful"] += int(a.is_faithful)
+            slot["hallucinated"] += int(len(a.unsupported_claims) > 0)
+        metrics["nl_audit_modes"] = {
+            mode: {
+                "n": s["n"],
+                "faithful_rate": s["faithful"] / s["n"],
+                "hallucination_rate": s["hallucinated"] / s["n"],
+            }
+            for mode, s in by_mode.items()
+        }
 
     return metrics

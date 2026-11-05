@@ -203,11 +203,14 @@ def _parse_cub_annotations(data_dir: str):
     part_id_to_name: Dict[int, str] = {}
     parts_file = os.path.join(data_dir, "parts", "parts.txt")
     if os.path.exists(parts_file):
-        with open(parts_file, "r") as f:
+        with open(parts_file) as f:
             for line in f:
                 parts = line.strip().split(None, 1)
                 if len(parts) == 2:
-                    part_id_to_name[int(parts[0])] = parts[1]
+                    # CUB names parts with spaces ("left wing", "left eye");
+                    # the whole codebase keys parts with underscores — normalize
+                    # here or 6 of 15 parts never match and read as unobserved.
+                    part_id_to_name[int(parts[0])] = parts[1].strip().replace(" ", "_")
 
     # Image sizes for normalizing part points
     id_to_parts: Dict[int, Dict[str, Tuple[float, float, int]]] = {}

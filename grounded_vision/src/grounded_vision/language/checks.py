@@ -13,9 +13,12 @@ template and checks which one the text contains — so "a white belly color"
 FAILS against a certified ``belly:belly_color=white <= 0.5`` even though
 "white" is an allowed token, and "a black belly" fails against
 ``belly:belly_color=white`` + ``beak:bill_color=black`` because the bound
-(part, attribute, value, polarity) claim never appears. Text in which no
-condition's phrasing appears at all (foreign/free-form text) falls back to
-the lexical scan, and the report's metadata names which mode ran.
+(part, attribute, value, polarity) claim never appears. Foreign/free-form text (the LLM-comparison arm) gets a
+heuristic claim extractor — known value words bound to their nearest part
+mention with a negation-cue polarity — cross-checked against the certified
+(part, value, polarity) triples; text with no recognizable template phrasing
+and no extractable claims falls back to the lexical scan. The report's
+metadata names which mode ran: claim-binding | claim-heuristic | lexical.
 """
 
 from __future__ import annotations
@@ -84,6 +87,131 @@ class ExplanationAuditor:
         """Applies text normalization to a feature value token so that e.g.
         'curved_(up_or_down)' matches its own verbalization."""
         return value.lower().replace("-", " ").replace("_", " ").replace("(", "").replace(")", "").strip()
+
+    # ------------------------------------------------ free-text claim extraction
+    _NEGATION_CUES = {
+        "no", "not", "without", "lacks", "lacking", "neither", "never", "absent",
+    }
+
+    def _part_words(self) -> List[str]:
+        """Part lookup words, including compound CUB names, normalized."""
+        words = set(self.known_parts)
+        words |= {"left wing", "right wing", "left eye", "right eye",
+                  "left leg", "right leg"}
+        return sorted(words)
+
+    def _certified_claims(
+        self, sufficient_explanation: SufficientExplanation
+    ) -> Set[Tuple[str, str, str]]:
+        """(part, value, polarity) triples certified by the conditions.
+        has_part / relational conditions carry no attribute value and are
+        skipped for claim matching."""
+        claims: Set[Tuple[str, str, str]] = set()
+        for cond in sufficient_explanation.conditions:
+            f_name = cond.feature_name
+            polarity = "absent" if cond.operator == "<=" else "present"
+            if ":" in f_name and "=" in f_name:
+                part, attr_val = f_name.split(":", 1)
+                val = attr_val.split("=", 1)[1]
+                claims.add((part.replace("_", " "), self._normalize_value(val), polarity))
+            elif "=" in f_name:
+                val = f_name.split("=", 1)[1]
+                claims.add(("", self._normalize_value(val), polarity))
+        return claims
+
+    @staticmethod
+    def _parts_match(claim_part: str, certified_part: str) -> bool:
+        """beak/bill are aliases; a generic mention ('wing') covers the
+        laterality variants ('left wing') and vice versa."""
+        alias = {"bill": "beak"}
+        cp = alias.get(claim_part, claim_part)
+        tp = alias.get(certified_part, certified_part)
+        return cp == tp or cp in tp or tp in cp
+
+    def extract_text_claims(self, text: str) -> List[Dict[str, str]]:
+        """Heuristic (part, value, polarity) extraction from FREE text, for
+        auditing foreign explanations (the LLM/VLM comparison arm).
+
+        A claim = a known attribute-value word, the nearest part word within
+        a +/-6 token window, and a polarity from negation cues within 3
+        tokens before the value. This is a heuristic — the deterministic
+        round-trip check remains the audit for template-family text.
+        """
+        norm = (
+            text.lower().replace("-", " ").replace("_", " ")
+            .replace("(", " ").replace(")", " ").replace(",", " ")
+            .replace(".", " ").replace(";", " ")
+        )
+        tokens = norm.split()
+        parts = self._part_words()
+        value_words = {self._normalize_value(v): v for vocab in
+                       (self.known_colors, self.known_shapes) for v in vocab}
+
+        claims: List[Dict[str, str]] = []
+        i = 0
+        while i < len(tokens):
+            matched_len = 0
+            for span in (3, 2, 1):
+                gram = " ".join(tokens[i:i + span])
+                if gram in value_words:
+                    matched_len = span
+                    break
+            if not matched_len:
+                i += 1
+                continue
+            gram = " ".join(tokens[i:i + matched_len])
+
+            part = ""
+            # nearest part mention wins: scan outward from the value so the
+            # adjacent part word beats a distant 'bird'/'belly' from another
+            # clause
+            for d in range(1, 7):
+                for j in (i - d, i + d):
+                    if j < 0 or j >= len(tokens):
+                        continue
+                    for p in parts:
+                        pw = p.split()
+                        if tokens[j:j + len(pw)] == pw:
+                            part = p
+                            break
+                    if part:
+                        break
+                if part:
+                    break
+
+            polarity = "present"
+            for cue in self._NEGATION_CUES:
+                cw = cue.split()
+                for j in range(max(0, i - len(cw) - 2), i):
+                    if tokens[j:j + len(cw)] == cw:
+                        polarity = "absent"
+                        break
+                if polarity == "absent":
+                    break
+
+            claims.append({"part": part, "value": gram, "polarity": polarity})
+            i += matched_len
+        return claims
+
+    def _heuristic_unsupported(
+        self, text: str, sufficient_explanation: SufficientExplanation
+    ) -> List[str]:
+        """Crosses heuristically extracted free-text claims against the
+        certified (part, value, polarity) triples."""
+        certified = self._certified_claims(sufficient_explanation)
+        unsupported: List[str] = []
+        for claim in self.extract_text_claims(text):
+            ok = any(
+                self._parts_match(claim["part"], cp)
+                and claim["value"] == cv
+                and claim["polarity"] == pol
+                for cp, cv, pol in certified
+            )
+            if not ok:
+                unsupported.append(
+                    f"claim:{claim['part'] or '?'}:{claim['value']}:{claim['polarity']}"
+                )
+        return unsupported
 
     def _condition_phrasings(self, cond: ExplanationCondition) -> Tuple[str, str]:
         """Renders both polarity phrasings of a condition with the deterministic
@@ -161,6 +289,14 @@ class ExplanationAuditor:
         Runs an audit of explanation_text against certified conditions.
         """
         norm_text = self._normalize_text(explanation_text)
+        # The target class name is not a claim about the image: CUB species
+        # names carry color words ("Brown_Booby", "Red_headed_Woodpecker")
+        # that the lexical scan would otherwise flag as unsupported claims.
+        class_span = self._normalize_text(
+            sufficient_explanation.target_class_name or "")
+        scannable_text = (
+            norm_text.replace(class_span, " ") if class_span else norm_text
+        )
 
         # ---- claim mode: match each condition's bound phrasing by polarity ---
         covered, flips, omissions_claim = 0, [], []
@@ -185,14 +321,20 @@ class ExplanationAuditor:
             # Template-family text: bound claims found — combine the binding
             # result with the lexical scan for any extra value words.
             omitted = omissions_claim
-            unsupported += self._lexical_unsupported(norm_text, sufficient_explanation)
+            unsupported += self._lexical_unsupported(scannable_text, sufficient_explanation)
             mode = "claim-binding"
         else:
-            # Foreign/free-form text: no condition phrasing appears; fall back
-            # to the lexical audit (no polarity or binding guarantees).
+            # Foreign/free-form text (e.g. an LLM explainer in the comparison
+            # arm): no template phrasing appears. Extract claims heuristically
+            # and cross them against the certified triples; keep the lexical
+            # checks as the omission net.
             omitted = self._lexical_omissions(norm_text, sufficient_explanation)
-            unsupported += self._lexical_unsupported(norm_text, sufficient_explanation)
-            mode = "lexical"
+            heuristic = self._heuristic_unsupported(
+                explanation_text, sufficient_explanation
+            )
+            unsupported += heuristic
+            unsupported += self._lexical_unsupported(scannable_text, sufficient_explanation)
+            mode = "claim-heuristic" if heuristic or not omitted else "lexical"
 
         total_conds = len(sufficient_explanation.conditions)
         covered_conds = total_conds - len(omitted)
