@@ -14,6 +14,7 @@ import torch
 from tqdm import tqdm
 
 from grounded_vision.pipeline import build_dataset
+from grounded_vision.data.cub import get_cub_transforms
 from grounded_vision.perception.backbone import FrozenDINOBackbone, extract_backbone_features
 
 
@@ -23,6 +24,12 @@ def main():
     parser.add_argument("--split", type=str, default="train", choices=["train", "test", "all"])
     parser.add_argument("--batch-size", type=int, default=32)
     parser.add_argument("--limit", type=int, default=0, help="Max samples to cache (0 = entire split)")
+    parser.add_argument("--eval-transform", action="store_true",
+                        help="Cache BOTH splits with the eval transform (no random "
+                             "horizontal flip). Required when the cache feeds region "
+                             "pooling: flipped maps + unflipped boxes pool the wrong "
+                             "half of the image (confirmed: 40.7% of the old train "
+                             "cache, see scripts/check_train_flip.py).")
     args = parser.parse_args()
 
     with open(args.config, "r") as f:
@@ -44,6 +51,10 @@ def main():
     for sp in splits:
         print(f"--> Caching features for split: {sp}")
         dataset = build_dataset(cfg, sp, args.limit or None)
+        if args.eval_transform:
+            dataset.transform = get_cub_transforms(
+                cfg["data"]["image_size"], is_train=False)
+            print(f"    eval transform applied to split '{sp}' (no random flip)")
 
         n = len(dataset) if args.limit <= 0 else min(len(dataset), args.limit)
         cls_tokens = []
