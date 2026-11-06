@@ -107,12 +107,12 @@ def run_comparison(payload: dict) -> dict:
             # literals). Degrade gracefully; plain sufficient_reason() is unaffected.
             try:
                 minimum = flatten_reason(explainer.minimal_sufficient_reason())
-            except (TypeError, IndexError):
+            except (TypeError, IndexError, AttributeError):
                 minimum = None
                 rec["minimum_error"] = (
                     "pyxai-2.0.1 minimal_sufficient_reason crash "
-                    "(preferred-reason path; unmapped literals on partially-"
-                    "used binary feature set)")
+                    "(preferred-reason path; unmapped literals / PrimeImplicantCNF "
+                    "AttributeError on partially-used binary feature sets)")
             irreducible = flatten_reason(explainer.sufficient_reason())
             rec["minimum_size"] = len(minimum) if minimum is not None else None
             rec["minimum_literals"] = (
@@ -169,10 +169,16 @@ def run_comparison(payload: dict) -> dict:
                 rec["minimum_subset_of_native"] = (
                     set(rec["minimum_feature_ids"]) <= set(native_ids)
                     if minimum is not None else None)
-                rec["native_is_sufficient_per_pyxai"] = bool(
-                    explainer.is_sufficient_reason(
-                        tuple(int(l) for l in inst["native_reason_literals"]))
-                )
+                rec["native_is_sufficient_per_pyxai"] = None
+                try:
+                    rec["native_is_sufficient_per_pyxai"] = bool(
+                        explainer.is_sufficient_reason(
+                            tuple(int(l) for l in inst["native_reason_literals"]))
+                    )
+                except AttributeError:
+                    # pyxai 2.0.1: PrimeImplicantCNF crash on some instances;
+                    # the audit is optional - exclusion stats must survive it
+                    rec["native_audit_error"] = "PrimeImplicantCNF AttributeError"
 
             # ---- per-instance excluded features (grounding-driven abstention):
             # reason must never use the excluded (untrusted) concepts. In pyxai
@@ -184,23 +190,31 @@ def run_comparison(payload: dict) -> dict:
             if excluded:
                 explainer.set_excluded_features(
                     [f"f{i + 1}" for i in excluded])
-                raw_excl = explainer.sufficient_reason(n=1)
                 rec["excluded_n"] = len(excluded)
-                abstained = raw_excl is None or (
-                    isinstance(raw_excl, list) and len(raw_excl) == 0)
-                if abstained:
-                    rec["abstained"] = True
-                    rec["excluded_size"] = None
+                try:
+                    raw_excl = explainer.sufficient_reason(n=1)
+                except AttributeError:
+                    # pyxai 2.0.1: PrimeImplicantCNF crashes on some excluded
+                    # queries; count separately, never as coverage or abstention
+                    rec["excluded_error"] = (
+                        "PrimeImplicantCNF AttributeError under exclusions")
+                    raw_excl = "__error__"
+                if raw_excl == "__error__":
+                    pass
                 else:
-                    excl_reason = flatten_reason(raw_excl)
-                    rec["abstained"] = False
-                    rec["excluded_size"] = len(excl_reason)
-                    rec["excluded_literals"] = [int(l) for l in excl_reason]
-                    if not numeric:
-                        # literal k == feature k: the reason must not touch any
-                        # excluded feature (verification, not trust)
-                        used = {abs(int(l)) - 1 for l in excl_reason}
-                        rec["excluded_leak"] = sorted(used & set(excluded))
+                    abstained = raw_excl is None or (
+                        isinstance(raw_excl, list) and len(raw_excl) == 0)
+                    if abstained:
+                        rec["abstained"] = True
+                        rec["excluded_size"] = None
+                    else:
+                        excl_reason = flatten_reason(raw_excl)
+                        rec["abstained"] = False
+                        rec["excluded_size"] = len(excl_reason)
+                        rec["excluded_literals"] = [int(l) for l in excl_reason]
+                        if not numeric:
+                            used = {abs(int(l)) - 1 for l in excl_reason}
+                            rec["excluded_leak"] = sorted(used & set(excluded))
             rec["elapsed_s"] = round(time.time() - t0, 3)
             rec["status"] = "ok"
         except Exception as exc:  # keep going; record the failure
@@ -248,8 +262,10 @@ def main(data: str):
     if excl:
         covered = [r for r in excl if not r["abstained"]]
         leaks = [r for r in covered if r.get("excluded_leak")]
+        crashed = sum(1 for r in ok if r.get("excluded_error"))
         print(f"exclusion arm: covered (non-empty reason) {len(covered)}/{len(excl)}; "
-              f"abstained {len(excl) - len(covered)}; excluded-feature leaks: {len(leaks)}")
+              f"abstained {len(excl) - len(covered)}; excluded-feature leaks: {len(leaks)}"
+              + (f"; query crashes: {crashed}" if crashed else ""))
         if covered:
             import statistics as st
             print(f"excluded-reason size: mean "
