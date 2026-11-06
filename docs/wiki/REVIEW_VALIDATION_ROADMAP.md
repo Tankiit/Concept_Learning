@@ -124,6 +124,8 @@ Conversion gotcha documented for future payloads: sklearn node ids are **not** p
 
 Net: the reviewer's mapping is real — excluded-features reasons, abstention semantics, and uniqueness counting are standard PyXAI 2.0.1 calls (modulo the two bugs), and our contribution stays where they placed it: deriving the excluded set from grounding evidence (the milestone v2 per-image reliability records are the input) and measuring the coverage–guarantee trade-off (arm B above is the first point on that curve).
 
+**Follow-up (same day): the CUB trusted-only table and E1 — executed.** Exclusions from *independent* evidence (per-concept validation agreement, trust set chosen pre-test), δ ∈ {0.60…0.75}, 500 held-out test images, 36-concept/200-class tree — full table and verdict in [`RESULTS.md`](RESULTS.md) §7. Outcome per the pre-agreed rule: trusted-only coverage collapses (28.8% → 0%) and conditional clause-correctness does **not** beat the default (1.2% vs 2.4%, against a 7.5% independence prediction — errors are positively correlated), so sentence 3 stays a lemma at this scale and the paper's contribution is the measured gap. E1: output-match 2.6% vs certificate-event 2.4% — the reason is nearly tight against the output. This also closes the reviewer's "which can you run first" question: both ran, E1 first (fully local), the trusted-only sweep second (reuses the substrate + one Modal job per δ).
+
 ---
 
 ## Related pages

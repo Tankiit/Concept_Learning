@@ -216,7 +216,27 @@ Result files: [`selective_explanations_gt_regions_v2.json`](../../grounded_visio
 
 Result files: [`reliability_minimization_gt_regions_v2.json`](../../grounded_vision/results/reliability_minimization_gt_regions_v2.json), [`concept_ceilings_gt_regions_v2.json`](../../grounded_vision/results/concept_ceilings_gt_regions_v2.json). Script: `analyze_reliability_minimization.py` (includes all confound controls).
 
-## 7. Refresh protocol
+## 7. Trusted-only reasons and E1 on real CUB (2026-11-06) — NEW
+
+The experiment that decides whether "trusted-only reasons give a guarantee" (review sentence 3) is a *result* or stays a *lemma*: exclusions derived from **independent evidence** (per-concept agreement on a held-out 15% validation sub-split; trust set chosen before any test contact), evaluated on 500 held-out test images. Substrate: eval-transform caches (no flip), `AttributeReader` heads trained per the `fit_perception` protocol on the other 85% of train, CART (depth 12, leaf 4, 200 classes) on predicted 36-concept BOUND vectors; PyXAI exclusion via the Modal job. Scripts: `run_trusted_reasons_cub.py` (build/evaluate) + `run_pyxai_modal.py`; artifacts: [`results/trusted_reasons_cub_summary.json`](../../grounded_vision/results/trusted_reasons_cub_summary.json) + per-arm files.
+
+**The deciding table** (GT = annotated concept vector):
+
+| Row | Coverage | P(all clauses GT-correct \| covered) | Independence prediction | Mean reason size |
+| --- | ---: | ---: | ---: | ---: |
+| Default reason | 100% | **2.4%** | 3.5% | 10.80 |
+| Trusted-only δ=0.60 (33/36 trusted) | 28.8% (82/285) | **1.2%** | 7.5% | 9.95 |
+| Trusted-only δ=0.65 (27/36) | 4.1% (19/468) | 0.0% | 14.4% | 8.26 |
+| Trusted-only δ=0.70 (21/36) | 0.6% (3/494) | 0.0% | 28.5% | 5.67 |
+| Trusted-only δ=0.75 (17/36) | 0.0% (0/500) | — | — | — |
+
+**Verdict, by the pre-agreed rule:** the trusted-only row is *not* far above the default at useful coverage — it is **below** it (1.2% vs 2.4%) while sacrificing 71% of coverage, and observed correctness sits far *under* the independence prediction at the same composition (1.2% vs 7.5%): concept errors are positively correlated, so reliability weighting cannot rescue clause correctness at this vocabulary scale. Sentence 3 stays a lemma for the 36-concept/200-class setting; the paper's honest contribution is the measurement (the gap), exactly as the reviewer framed the fallback. Zero excluded-feature leaks in every arm (the guarantee machinery is sound: reasons never use excluded concepts; abstention when impossible), and PyXAI's independent audit re-verified native reasons 499/499–500/500 per arm.
+
+**E1** (same run): P(tree(predicted concepts) = tree(GT concepts)) = **2.6%** vs P(all clauses of the default reason GT-correct) = **2.4%** — the certificate event is nearly tight against the output event: the *reason* captures almost everything the output-match condition requires at this scale.
+
+Caveats: pyxai 2.0.1 exclusion-query crashes (`PrimeImplicantCNF` AttributeError) on 214/30/4/0 instances at δ=0.60/0.65/0.70/0.75 — coverage is computed over completed queries and could be biased at δ=0.60; readers trained reader-only on the 85% sub-split (full-cache training may shift absolute numbers, not the qualitative verdict); concept labels are noisy and the vocabulary is 36 concepts; reason size 10.8 at 200 classes makes the all-clauses event intrinsically unlikely — consistent with §6d's reason-length tax.
+
+## 8. Refresh protocol
 
 1. Run the experiment on the machine holding the caches (or via Modal for GPU/PyXAI work).
 2. Copy the JSON/PNG artifacts into `grounded_vision/results/` (keep script-defined filenames).
