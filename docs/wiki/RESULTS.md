@@ -230,13 +230,34 @@ The experiment that decides whether "trusted-only reasons give a guarantee" (rev
 | Trusted-only δ=0.70 (21/36) | 0.6% (3/494) | 0.0% | 28.5% | 5.67 |
 | Trusted-only δ=0.75 (17/36) | 0.0% (0/500) | — | — | — |
 
-**Verdict, by the pre-agreed rule:** the trusted-only row is *not* far above the default at useful coverage — it is **below** it (1.2% vs 2.4%) while sacrificing 71% of coverage, and observed correctness sits far *under* the independence prediction at the same composition (1.2% vs 7.5%): concept errors are positively correlated, so reliability weighting cannot rescue clause correctness at this vocabulary scale. Sentence 3 stays a lemma for the 36-concept/200-class setting; the paper's honest contribution is the measurement (the gap), exactly as the reviewer framed the fallback. Zero excluded-feature leaks in every arm (the guarantee machinery is sound: reasons never use excluded concepts; abstention when impossible), and PyXAI's independent audit re-verified native reasons 499/499–500/500 per arm.
+**Verdict, by the pre-agreed rule — held, with the reading corrected (2026-11-06, follow-up review):** the δ=0.60 comparison (1.2% of 82 covered, ~2 events) is **statistically indistinguishable** from the default (Wilson 1.4–4.1% at n=500), so "below the default" is not supported; what *is* supported: coverage collapses with δ (28.8% → 0%) while conditional correctness never exceeds the default, and the crash-bias at δ=0.60 (214/500 queries) means the only useful-coverage row comes from a selected subset. The error-correlation claim is no longer inferred from two events — it is measured directly in §8 (variance of per-reason wrong-clause counts vs binomial). Sentence 3 stays a lemma for the 36-concept/200-class setting; §8 shows where the boundary actually sits. Zero excluded-feature leaks in every arm (the guarantee machinery is sound), and PyXAI's independent audit re-verified native reasons 499/499–500/500 per arm.
 
 **E1** (same run): P(tree(predicted concepts) = tree(GT concepts)) = **2.6%** vs P(all clauses of the default reason GT-correct) = **2.4%** — the certificate event is nearly tight against the output event: the *reason* captures almost everything the output-match condition requires at this scale.
 
 Caveats: pyxai 2.0.1 exclusion-query crashes (`PrimeImplicantCNF` AttributeError) on 214/30/4/0 instances at δ=0.60/0.65/0.70/0.75 — coverage is computed over completed queries and could be biased at δ=0.60; readers trained reader-only on the 85% sub-split (full-cache training may shift absolute numbers, not the qualitative verdict); concept labels are noisy and the vocabulary is 36 concepts; reason size 10.8 at 200 classes makes the all-clauses event intrinsically unlikely — consistent with §6d's reason-length tax.
 
-## 8. Refresh protocol
+## 8. Guarantee scaling with reason length (2026-11-06) — NEW
+
+The experiment the follow-up review pointed to: reason length k is what limits the guarantee (P(all clauses correct) ≈ p^k), so sweep the class count K with capped-depth trees (CART depth 12 / leaf 4) and measure where the guarantee becomes useful. Same substrate as §7 (eval-transform caches, readers on the 85% sub-split, per-concept validation reliability + isotonic calibrators on the 15%); **native** trusted-coverage test (exact reachable-leaf DFS — no PyXAI, no crashes) on **all** test images of each class subset; Wilson intervals; direct correlation test (variance of per-reason wrong-clause counts vs the binomial prediction at the reason's own per-concept rates). Script: `run_guarantee_scaling_cub.py`; artifacts: [`results/guarantee_scaling_cub.json`](../../grounded_vision/results/guarantee_scaling_cub.json), [`assets/guarantee_scaling.png`](assets/guarantee_scaling.png).
+
+| K classes | Test n | Tree acc | Mean k | P(all clauses correct) [Wilson 95%] | Present / absent clause precision | Correlation var-ratio |
+| ---: | ---: | ---: | ---: | --- | --- | ---: |
+| 4 | 118 | 60.2% | 3.61 | **25.4%** [18.4, 34.0] | 15.4% / 87.1% | 5.30 |
+| 10 | 243 | 44.4% | 5.88 | 11.5% [8.1, 16.1] | 22.7% / 91.4% | 3.06 |
+| 20 | 515 | 41.6% | 7.14 | 7.0% [5.1, 9.5] | 32.8% / 91.6% | 1.64 |
+| 50 | 1,389 | 30.3% | 8.56 | 3.5% [2.3, 5.3] | 35.4% / 90.1% | 1.03 |
+| 100 | 2,864 | 24.5% | 9.67 | 3.0% [1.9, 4.7] | 34.7% / 91.0% | 1.25 |
+| 200 | 5,794 | 19.3% | 10.76 | 1.7% [0.9, 3.0] | 32.8% / 89.5% | 0.96 |
+
+**Reading 1 — the scaling law is monotone and measured**: the guarantee is useful exactly where reasons are short (25% at k≈3.6 — the 4-species regime of the activation track, consistent with its 3.79-condition reasons) and collapses to 1.7% at k≈10.8 on all 5,794 test images. The K=200 full-split estimate (1.7% [0.9, 3.0]) supersedes §7's n=500 subsample value and contains it.
+
+**Reading 2 — clause errors are correlated precisely where it matters**: the direct variance test gives var-ratio 5.3 at K=4 and 3.1 at K=10 (strong positive correlation of wrong clauses), converging to binomial (~1.0) at K≥50. So independence *understates* the damage for short reasons — errors cluster — while the p^k arithmetic is roughly right at long ones.
+
+**Reading 3 — neither trust rule rescues the guarantee, anywhere**: per-instance calibrated literal trust (isotonic, per-concept, unobserved→0) covers 25.4% at K=4 but only **7–13%** of covered instances have all kept literals GT-true (kept sets ≈ 22–27 literals); at K≥10 coverage is ≤6.2% and falls to ~0. The global reliability rule covers 25.4% at K=4 (P(kept true | covered) = 10%) and **0% at every K ≥ 10**. Trust-based restriction cannot manufacture a usable guarantee at this vocabulary scale — sentence 3's lemma status is now established crash-free, full-split, under both trust rules.
+
+E1 confirmation (follow-up question): one and the same fitted tree evaluated on predicted vs GT concept vectors (no second tree is trained) — the tightness reading stands.
+
+## 9. Refresh protocol
 
 1. Run the experiment on the machine holding the caches (or via Modal for GPU/PyXAI work).
 2. Copy the JSON/PNG artifacts into `grounded_vision/results/` (keep script-defined filenames).
