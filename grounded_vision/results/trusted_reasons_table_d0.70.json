@@ -1,0 +1,22 @@
+{
+  "table": {
+    "default_reason": {
+      "coverage": 1.0,
+      "p_all_clauses_correct": 0.024,
+      "independence_prediction": 0.03527489345082816,
+      "mean_reason_size": 10.8
+    },
+    "trusted_only": {
+      "coverage": 0.006072874493927126,
+      "n": 494,
+      "p_all_clauses_correct_given_covered": 0.0,
+      "independence_prediction_given_covered": 0.2848143646229122,
+      "mean_reason_size": 5.666666666666667
+    }
+  },
+  "e1_output_match": 0.026,
+  "abstained": 491,
+  "leaks": 0,
+  "audit_native_is_sufficient": 498,
+  "n_ok": 498
+}
