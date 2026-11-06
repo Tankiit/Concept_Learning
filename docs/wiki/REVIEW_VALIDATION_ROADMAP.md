@@ -102,6 +102,28 @@ Immediate refinements queued: non-adjacent distance-matched control regions; rer
 2. **Does region geometry explain the crown/breast failure?** Largely yes: with farthest controls, crown probes recover to 2.69–4.35 (4/4 pass) and breast to 1.51–2.76 (5/5) — the v1 failure was mostly adjacent-control contamination; distance-matched controls (same distance, off-part) split the effect into content and distance components.
 3. New bottleneck: **reader head quality** — deployed readers agree at 0.691 vs 0.824 for probes; next work is reader training (perception), per the decision rule.
 
+## PyXAI engine verification (2026-11-06) — executed
+
+Question (external review): *does `PyXAIBackend.explain_sufficient` call PyXAI's `sufficient_reason`, or our own solver with PyXAI only as an audit?* **Answer from the code:** it never calls PyXAI — it delegates to the native exact backward elimination over the decision path, certified by the independent exhaustive `TreeSufficiencyVerifier` (`explanations/pyxai_backend.py`, `solver = "native_tree_verifier"`). Real PyXAI calls live only in `scripts/run_pyxai_modal.py` on Linux/Modal, where PyXAI is both engine (`minimal_sufficient_reason`, `sufficient_reason`) and auditor (`is_sufficient_reason` on our native literals).
+
+**API verification (pyxai 2.0.1, introspected on the installed package):** `set_excluded_features`, `preferred_sufficient_reason(method, n, weights, features_partition)` (DT only), `set_features_type`/`activate_theory`, `is_sufficient_reason`, `n_sufficient_reasons` (DT only), `rectify`, and forest explainers all exist as documented — with three caveats found by execution: (i) abstention under exclusions returns an **empty list `[]`**, not the documented `None` (a genuine empty-sufficient reason returns the empty *tuple*); (ii) `minimal_sufficient_reason` crashes (TypeError/IndexError) on trees using a subset of declared binary features — 99/100 instances in our check; (iii) `n_sufficient_reasons` crashes on some instances (enumeration fallback added). `preferred_sufficient_reason` (the weights=-log(reliability) agenda) routes through the same crashing path — blocked on this tree shape in 2.0.1.
+
+**Executed check** (CLEVR relational track, exactly reproduced tree — test acc 69.8%; 100 test instances; [`results/pyxai_exclusion_check_clevr_armA.json`](../../grounded_vision/results/pyxai_exclusion_check_clevr_armA.json), [`..._armB.json`](../../grounded_vision/results/pyxai_exclusion_check_clevr_armB.json)):
+
+| Measurement | Result |
+| --- | --- |
+| Prediction agreement, converted tree vs sklearn | **100/100** |
+| PyXAI audit of native path-restricted reasons (`is_sufficient_reason`) | **100/100 verified** |
+| E0 uniqueness (`n_sufficient_reasons`) | **0/51 instances have a unique sufficient reason**; median count 36–95, max 480 — reasons are highly non-unique, so weighted preferred reasons are meaningful and the path-restricted native reason is one of many |
+| Global minimum ⊆ native path-restricted reason | 1/100 — the path-restriction gap is real and quantified |
+| Arm A: exclude ALL 333 relational features | coverage 0/65 (uniform abstention), 0 leaks |
+| Arm B: exclude the ~4.6 relational literals in each instance's own reason | **coverage 35%, abstention 65%, zero excluded-feature leaks**; alternative reasons mean 7.11 literals vs native 5.01 — the coverage–guarantee trade-off, measured |
+| Excluded-feature leak check | 0 across both arms — the exclusion guarantee holds as advertised |
+
+Conversion gotcha documented for future payloads: sklearn node ids are **not** preorder positions — payload node lists must be allocated by nid (the repo's `export_pyxai_comparison.py` does this correctly; an append-in-recursion-order export silently scrambles the tree and corrupts predictions).
+
+Net: the reviewer's mapping is real — excluded-features reasons, abstention semantics, and uniqueness counting are standard PyXAI 2.0.1 calls (modulo the two bugs), and our contribution stays where they placed it: deriving the excluded set from grounding evidence (the milestone v2 per-image reliability records are the input) and measuring the coverage–guarantee trade-off (arm B above is the first point on that curve).
+
 ---
 
 ## Related pages
