@@ -23,7 +23,7 @@
 
 ## Requirement 1 — define exactly what each symbol means
 
-**Status: open (design + implementation).**
+**Status: IMPLEMENTED in code (2026-11-06) — grounding + classifier inputs; tristate-aware explanation wording still open.** `grounding.py` no longer emits attribute facts for unobserved parts (unknown ≠ absent — the review's core demand); `features.py` compiles present/absent/unknown to +1/−1/0 with tristate-OR aggregation, so tree thresholds at ±0.5 separate the states (regression tests: `tests/test_three_valued_predicates.py`, suite 45 passed). Note for downstream artifacts: results produced before 2026-11-06 (milestones, trusted-reasons, scaling) compiled binary {0,1} with unknown→0-absent semantics and are documented as such; reruns under the tristate encoding may shift absolute numbers, not the qualitative verdicts.
 
 Adopt three-valued predicates:
 

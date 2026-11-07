@@ -52,12 +52,12 @@ Result file: [`results/clevr_relational_results.json`](../../grounded_vision/res
 
 ## 3. Core-pipeline smoke benchmark, synthetic mock CUB (2026-11-01)
 
-Fresh end-to-end run of the six core pipeline stages (`cache_features` → `fit_perception` → `export_predicates` → `train_head` → `evaluate`) with `configs/cub_bound.yaml` on a fresh clone, at commit `96e0225`, on macOS (real DINOv2 ViT-S/14 weights on MPS over the 120+120 synthetic mock images, GT regions). **This is the synthetic smoke path — not a real-data result.** It verifies the full machinery (perception → grounding → certified trees → explanations → audit → interventions) end-to-end; classification numbers are meaningless by construction because the mock labels are not learnable from 120 samples.| Metric group | Values |
+Fresh end-to-end run of the six core pipeline stages (`cache_features` → `fit_perception` → `export_predicates` → `train_head` → `evaluate`) with `configs/cub_bound.yaml` on a fresh clone, on macOS (real DINOv2 ViT-S/14 weights on MPS over the 120+120 synthetic mock images, GT regions). Refreshed 2026-11-06 under the **three-valued concept encoding** (present +1 / absent −1 / unknown 0 — unobserved parts emit no facts and compile to 0). **This is the synthetic smoke path — not a real-data result.** It verifies the full machinery (perception → grounding → certified trees → explanations → audit → interventions) end-to-end; classification numbers are meaningless by construction because the mock labels are not learnable from 120 samples.| Metric group | Values |
 | --- | --- |
 | Perception | mean part IoU 0.757, PCK 0.943, attribute accuracy 0.858, precision 0.504 / recall 0.488 / F1 0.496 |
 | Classification (120 test samples) | accuracy 2.5%, macro-F1 0.021, ECE 0.249 — mock labels, not informative |
 | Explanations (120 samples) | **sufficiency rate 100%**, mean sparsity 4.38 ± 0.78 conditions, **NL faithfulness 100%, precision 1.0, recall 1.0, hallucination rate 0%** |
-| Interventions (top-5 tree features) | mean prediction flip rate 43.8% |
+| Interventions (top-5 tree features) | mean prediction flip rate 31.3% |
 
 Scope of the NL numbers: the audit checks the text against the **certified conditions** — NL faithfulness here means *faithful to the model's computation* over predicted concept values, not to the image. If a concept reader misreads the image, the sentence is still faithful to the model and wrong about the bird (the auditor is also lexical, not binding-based — roadmap Requirement 3).
 
