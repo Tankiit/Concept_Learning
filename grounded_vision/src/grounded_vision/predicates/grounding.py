@@ -83,8 +83,18 @@ def ground_perception_output(
         )
         db.add_fact(has_part_fact)
 
-    # 3. Instantiate bound attribute facts
+    # 3. Instantiate bound attribute facts (three-valued semantics, review
+    # requirement 1): attributes of an OBSERVED part get a positive or
+    # negative fact; attributes of an unobserved part get NO fact at all -
+    # "unknown", never a silently negative attribute.
     for attr_id, part_name, attr_name, val in attributes:
+        part_observed = (part_name == "bird") or (
+            part_name in region_by_part
+            and perception.part_visibilities.get(part_name, 0.0) >= probability_threshold
+        )
+        if not part_observed:
+            continue
+
         prob = perception.attribute_probabilities.get(attr_id, 0.0)
         truth = prob >= probability_threshold
 

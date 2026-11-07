@@ -293,7 +293,7 @@ class ExplanationAuditor:
         # names carry color words ("Brown_Booby", "Red_headed_Woodpecker")
         # that the lexical scan would otherwise flag as unsupported claims.
         class_span = self._normalize_text(
-            sufficient_explanation.target_class_name or "")
+            str(sufficient_explanation.target_class_name or ""))
         scannable_text = (
             norm_text.replace(class_span, " ") if class_span else norm_text
         )

@@ -30,30 +30,37 @@
   },
   "classification": {
     "accuracy": 0.025,
-    "macro_f1": 0.021452702702702702,
+    "macro_f1": 0.008831908831908831,
     "micro_f1": 0.025,
-    "expected_calibration_error": 0.2493452380952381
+    "expected_calibration_error": 0.23333333333333328
   },
   "explanations": {
     "num_evaluated_samples": 120,
     "sufficiency_rate": 1.0,
-    "mean_sparsity_conditions": 4.383333333333334,
-    "std_sparsity_conditions": 0.7765665171481163,
+    "mean_sparsity_conditions": 4.55,
+    "std_sparsity_conditions": 1.2305147974188146,
     "nl_faithful_rate": 1.0,
     "nl_mean_precision": 1.0,
     "nl_mean_recall": 1.0,
-    "nl_hallucination_rate": 0.0
+    "nl_hallucination_rate": 0.0,
+    "nl_audit_modes": {
+      "claim-binding": {
+        "n": 120,
+        "faithful_rate": 1.0,
+        "hallucination_rate": 0.0
+      }
+    }
   },
   "interventions": {
     "num_samples_evaluated": 120,
     "intervened_features_count": 5,
-    "mean_prediction_flip_rate": 0.4383333333333333,
+    "mean_prediction_flip_rate": 0.3133333333333333,
     "feature_flip_rates": {
       "beak:bill_color=black": 0.425,
-      "beak:bill_shape=cone": 0.38333333333333336,
-      "beak:bill_shape=curved": 0.25,
-      "belly:belly_color=yellow": 0.18333333333333332,
-      "breast:breast_color=yellow": 0.95
+      "beak:bill_color=yellow": 0.4,
+      "beak:bill_shape=cone": 0.15,
+      "beak:bill_shape=curved": 0.11666666666666667,
+      "belly:belly_color=yellow": 0.475
     }
   }
 }
