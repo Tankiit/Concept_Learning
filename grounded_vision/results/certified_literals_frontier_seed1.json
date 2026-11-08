@@ -1,0 +1,1957 @@
+{
+  "protocol": {
+    "question": "Certified-literal operating frontier: coverage vs P(all clauses correct | covered) over tau and K, with Bonferroni correction, majority-baseline lift, class-leakage NMI, and exclusion-semantics fix (B v2)",
+    "predictions_pre_registered": [
+      "PF1 K=4: coverage 30-60% at tau=0.5, P|cov >= 80% to tau=0.6",
+      "PF2 K=10: tau=0.5 coverage 5-20% P|cov >= 50%; ~0 at tau>=0.8",
+      "PF3 K=20: coverage <= 5% at every tau",
+      "PF4 Bonferroni removes no literal used by K=4 tau=0.9 mechanism",
+      "PF5 every tau=0.8-certified negative literal has lift > 0",
+      "PF6 bill_color=yellow|pos tops class-leakage NMI",
+      "PF7 B v2 coverage >= A coverage at every (K, tau)"
+    ],
+    "splits": "calibration = 15% validation sub-split of train; test = official held-out split (disjoint); trees fit on the 85% train sub-split only",
+    "multiplicity": "Bonferroni alpha=0.05/64 (z=3.359)",
+    "tree": "CART depth 12, leaf 4, seed 42, full 36 concepts",
+    "seed": 1,
+    "explicit_classes": null,
+    "cache": "eval-transform (flip-free)"
+  },
+  "literal_certification": {
+    "beak:bill_color=black|neg": {
+      "n_val": 458,
+      "rate": 0.6855895196506551,
+      "wilson_lo": 0.6416746539043808,
+      "wilson_lo_bonferroni": 0.6089907381122523,
+      "baseline_majority": 0.5429208472686733,
+      "lift": 0.14266867238198178,
+      "certified_at": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "beak:bill_color=black|pos": {
+      "n_val": 439,
+      "rate": 0.6059225512528473,
+      "wilson_lo": 0.559482718750666,
+      "wilson_lo_bonferroni": 0.5258632688624264,
+      "baseline_majority": 0.45707915273132665,
+      "lift": 0.14884339852152068,
+      "certified_at": {
+        "0.5": true,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": true,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "beak:bill_color=yellow|neg": {
+      "n_val": 671,
+      "rate": 0.9582712369597616,
+      "wilson_lo": 0.940351496395622,
+      "wilson_lo_bonferroni": 0.9238796153767673,
+      "baseline_majority": 0.9241917502787068,
+      "lift": 0.03407948668105476,
+      "certified_at": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": true,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": true,
+        "0.95": false
+      }
+    },
+    "beak:bill_color=yellow|pos": {
+      "n_val": 226,
+      "rate": 0.17699115044247787,
+      "wilson_lo": 0.13275384928479148,
+      "wilson_lo_bonferroni": 0.10771404783654395,
+      "baseline_majority": 0.0758082497212932,
+      "lift": 0.10118290072118467,
+      "certified_at": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "beak:bill_shape=cone|neg": {
+      "n_val": 396,
+      "rate": 0.9292929292929293,
+      "wilson_lo": 0.8997069102909583,
+      "wilson_lo_bonferroni": 0.8731017116653268,
+      "baseline_majority": 0.7335562987736901,
+      "lift": 0.19573663051923917,
+      "certified_at": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "beak:bill_shape=cone|pos": {
+      "n_val": 501,
+      "rate": 0.42115768463073855,
+      "wilson_lo": 0.37868361363254616,
+      "wilson_lo_bonferroni": 0.3495910998642458,
+      "baseline_majority": 0.26644370122630995,
+      "lift": 0.1547139834044286,
+      "certified_at": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "beak:bill_shape=curved|neg": {
+      "n_val": 679,
+      "rate": 0.9896907216494846,
+      "wilson_lo": 0.978874346095068,
+      "wilson_lo_bonferroni": 0.9664895787939667,
+      "baseline_majority": 0.9843924191750278,
+      "lift": 0.005298302474456729,
+      "certified_at": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": true,
+        "0.95": true
+      },
+      "certified_at_bonferroni": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": true,
+        "0.95": true
+      }
+    },
+    "beak:bill_shape=curved|pos": {
+      "n_val": 218,
+      "rate": 0.03211009174311927,
+      "wilson_lo": 0.01563952089808224,
+      "wilson_lo_bonferroni": 0.009751720615421296,
+      "baseline_majority": 0.01560758082497213,
+      "lift": 0.01650251091814714,
+      "certified_at": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "beak:bill_shape=dagger|neg": {
+      "n_val": 584,
+      "rate": 0.9297945205479452,
+      "wilson_lo": 0.9061421217187362,
+      "wilson_lo_bonferroni": 0.8855372268103385,
+      "baseline_majority": 0.8651059085841695,
+      "lift": 0.06468861196377573,
+      "certified_at": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": true,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "beak:bill_shape=dagger|pos": {
+      "n_val": 313,
+      "rate": 0.25559105431309903,
+      "wilson_lo": 0.2104337597043928,
+      "wilson_lo_bonferroni": 0.18228205553112276,
+      "baseline_majority": 0.13489409141583056,
+      "lift": 0.12069696289726847,
+      "certified_at": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "beak:bill_shape=hooked|neg": {
+      "n_val": 882,
+      "rate": 0.9852607709750567,
+      "wilson_lo": 0.9749465042469594,
+      "wilson_lo_bonferroni": 0.9642626598858003,
+      "baseline_majority": 0.9855072463768116,
+      "lift": -0.0002464754017549309,
+      "certified_at": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": true,
+        "0.95": true
+      },
+      "certified_at_bonferroni": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": true,
+        "0.95": true
+      }
+    },
+    "beak:bill_shape=hooked|pos": {
+      "n_val": 15,
+      "rate": 0.0,
+      "wilson_lo": 0.0,
+      "wilson_lo_bonferroni": 2.7755575615628914e-17,
+      "baseline_majority": 0.014492753623188406,
+      "lift": -0.014492753623188406,
+      "certified_at": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "beak:bill_shape=needle|neg": {
+      "n_val": 802,
+      "rate": 0.9975062344139651,
+      "wilson_lo": 0.9909533759100635,
+      "wilson_lo_bonferroni": 0.9815377072925598,
+      "baseline_majority": 0.9810479375696767,
+      "lift": 0.016458296844288456,
+      "certified_at": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": true,
+        "0.95": true
+      },
+      "certified_at_bonferroni": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": true,
+        "0.95": true
+      }
+    },
+    "beak:bill_shape=needle|pos": {
+      "n_val": 95,
+      "rate": 0.15789473684210525,
+      "wilson_lo": 0.09808516240311123,
+      "wilson_lo_bonferroni": 0.06997163006947442,
+      "baseline_majority": 0.0189520624303233,
+      "lift": 0.13894267441178196,
+      "certified_at": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "belly:belly_color=black|neg": {
+      "n_val": 585,
+      "rate": 0.9316239316239316,
+      "wilson_lo": 0.9082290734569914,
+      "wilson_lo_bonferroni": 0.8877853410577681,
+      "baseline_majority": 0.8498727735368956,
+      "lift": 0.08175115808703604,
+      "certified_at": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": true,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "belly:belly_color=black|pos": {
+      "n_val": 201,
+      "rate": 0.3880597014925373,
+      "wilson_lo": 0.3233925889806825,
+      "wilson_lo_bonferroni": 0.281496194241963,
+      "baseline_majority": 0.15012722646310434,
+      "lift": 0.237932475029433,
+      "certified_at": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "belly:belly_color=white|neg": {
+      "n_val": 456,
+      "rate": 0.7719298245614035,
+      "wilson_lo": 0.7312407735494056,
+      "wilson_lo_bonferroni": 0.6998266088314845,
+      "baseline_majority": 0.5954198473282443,
+      "lift": 0.1765099772331592,
+      "certified_at": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "belly:belly_color=white|pos": {
+      "n_val": 330,
+      "rate": 0.6484848484848484,
+      "wilson_lo": 0.5955324446837659,
+      "wilson_lo_bonferroni": 0.5566163580733638,
+      "baseline_majority": 0.40458015267175573,
+      "lift": 0.2439046958130927,
+      "certified_at": {
+        "0.5": true,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": true,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "belly:belly_color=yellow|neg": {
+      "n_val": 400,
+      "rate": 0.995,
+      "wilson_lo": 0.9819550815474561,
+      "wilson_lo_bonferroni": 0.9635015531250725,
+      "baseline_majority": 0.8473282442748091,
+      "lift": 0.14767175572519087,
+      "certified_at": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": true,
+        "0.95": true
+      },
+      "certified_at_bonferroni": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": true,
+        "0.95": true
+      }
+    },
+    "belly:belly_color=yellow|pos": {
+      "n_val": 386,
+      "rate": 0.30569948186528495,
+      "wilson_lo": 0.26184151455860516,
+      "wilson_lo_bonferroni": 0.23337569074908054,
+      "baseline_majority": 0.15267175572519084,
+      "lift": 0.1530277261400941,
+      "certified_at": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "breast:breast_color=black|neg": {
+      "n_val": 577,
+      "rate": 0.901213171577123,
+      "wilson_lo": 0.8741499255499088,
+      "wilson_lo_bonferroni": 0.8514798182555098,
+      "baseline_majority": 0.7810650887573964,
+      "lift": 0.12014808281972655,
+      "certified_at": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "breast:breast_color=black|pos": {
+      "n_val": 268,
+      "rate": 0.47761194029850745,
+      "wilson_lo": 0.4185496206400626,
+      "wilson_lo_bonferroni": 0.3781050637465675,
+      "baseline_majority": 0.21893491124260356,
+      "lift": 0.2586770290559039,
+      "certified_at": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "breast:breast_color=red|neg": {
+      "n_val": 612,
+      "rate": 0.9934640522875817,
+      "wilson_lo": 0.9833164557153913,
+      "wilson_lo_bonferroni": 0.9704795839958782,
+      "baseline_majority": 0.9585798816568047,
+      "lift": 0.03488417063077698,
+      "certified_at": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": true,
+        "0.95": true
+      },
+      "certified_at_bonferroni": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": true,
+        "0.95": true
+      }
+    },
+    "breast:breast_color=red|pos": {
+      "n_val": 233,
+      "rate": 0.13304721030042918,
+      "wilson_lo": 0.09533808218906253,
+      "wilson_lo_bonferroni": 0.07505934777865995,
+      "baseline_majority": 0.04142011834319527,
+      "lift": 0.09162709195723391,
+      "certified_at": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "breast:breast_color=white|neg": {
+      "n_val": 492,
+      "rate": 0.8170731707317073,
+      "wilson_lo": 0.7804994049723457,
+      "wilson_lo_bonferroni": 0.7516365323981732,
+      "baseline_majority": 0.6378698224852071,
+      "lift": 0.1792033482465002,
+      "certified_at": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "breast:breast_color=white|pos": {
+      "n_val": 353,
+      "rate": 0.6118980169971672,
+      "wilson_lo": 0.5601172259378677,
+      "wilson_lo_bonferroni": 0.5225891213002796,
+      "baseline_majority": 0.3621301775147929,
+      "lift": 0.2497678394823743,
+      "certified_at": {
+        "0.5": true,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": true,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "breast:breast_color=yellow|neg": {
+      "n_val": 410,
+      "rate": 0.9951219512195122,
+      "wilson_lo": 0.9823907798791085,
+      "wilson_lo_bonferroni": 0.9643674692554893,
+      "baseline_majority": 0.855621301775148,
+      "lift": 0.13950064944436424,
+      "certified_at": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": true,
+        "0.95": true
+      },
+      "certified_at_bonferroni": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": true,
+        "0.95": true
+      }
+    },
+    "breast:breast_color=yellow|pos": {
+      "n_val": 435,
+      "rate": 0.27586206896551724,
+      "wilson_lo": 0.2359612769099813,
+      "wilson_lo_bonferroni": 0.2102309935935211,
+      "baseline_majority": 0.14437869822485208,
+      "lift": 0.13148337074066516,
+      "certified_at": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "breast:breast_pattern=striped|neg": {
+      "n_val": 565,
+      "rate": 0.9610619469026549,
+      "wilson_lo": 0.9417492844891489,
+      "wilson_lo_bonferroni": 0.9234963627454484,
+      "baseline_majority": 0.8840236686390532,
+      "lift": 0.07703827826360166,
+      "certified_at": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": true,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": true,
+        "0.95": false
+      }
+    },
+    "breast:breast_pattern=striped|pos": {
+      "n_val": 280,
+      "rate": 0.2714285714285714,
+      "wilson_lo": 0.22269585353211313,
+      "wilson_lo_bonferroni": 0.19230660306174058,
+      "baseline_majority": 0.11597633136094675,
+      "lift": 0.15545224006762465,
+      "certified_at": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "crown:crown_color=black|neg": {
+      "n_val": 526,
+      "rate": 0.8288973384030418,
+      "wilson_lo": 0.7943575546532711,
+      "wilson_lo_bonferroni": 0.7669738411159057,
+      "baseline_majority": 0.6689342403628118,
+      "lift": 0.15996309804023,
+      "certified_at": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "crown:crown_color=black|pos": {
+      "n_val": 356,
+      "rate": 0.5674157303370787,
+      "wilson_lo": 0.5155017569035545,
+      "wilson_lo_bonferroni": 0.4784755618902729,
+      "baseline_majority": 0.3310657596371882,
+      "lift": 0.2363499706998905,
+      "certified_at": {
+        "0.5": true,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "crown:crown_color=red|neg": {
+      "n_val": 666,
+      "rate": 0.990990990990991,
+      "wilson_lo": 0.9804856996451883,
+      "wilson_lo_bonferroni": 0.9681234355701838,
+      "baseline_majority": 0.9489795918367347,
+      "lift": 0.042011399154256224,
+      "certified_at": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": true,
+        "0.95": true
+      },
+      "certified_at_bonferroni": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": true,
+        "0.95": true
+      }
+    },
+    "crown:crown_color=red|pos": {
+      "n_val": 216,
+      "rate": 0.18055555555555555,
+      "wilson_lo": 0.13498578368413458,
+      "wilson_lo_bonferroni": 0.10925074938017114,
+      "baseline_majority": 0.05102040816326531,
+      "lift": 0.12953514739229025,
+      "certified_at": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "crown:crown_color=white|neg": {
+      "n_val": 659,
+      "rate": 0.9347496206373292,
+      "wilson_lo": 0.9132609160409821,
+      "wilson_lo_bonferroni": 0.8945592706739802,
+      "baseline_majority": 0.8798185941043084,
+      "lift": 0.054931026533020844,
+      "certified_at": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": true,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "crown:crown_color=white|pos": {
+      "n_val": 223,
+      "rate": 0.2825112107623318,
+      "wilson_lo": 0.227490148572791,
+      "wilson_lo_bonferroni": 0.19362183640992098,
+      "baseline_majority": 0.12018140589569161,
+      "lift": 0.16232980486664023,
+      "certified_at": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "crown:crown_color=yellow|neg": {
+      "n_val": 487,
+      "rate": 0.9815195071868583,
+      "wilson_lo": 0.9652545216869388,
+      "wilson_lo_bonferroni": 0.9475977623539776,
+      "baseline_majority": 0.909297052154195,
+      "lift": 0.07222245503266334,
+      "certified_at": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": true,
+        "0.95": true
+      },
+      "certified_at_bonferroni": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": true,
+        "0.95": false
+      }
+    },
+    "crown:crown_color=yellow|pos": {
+      "n_val": 395,
+      "rate": 0.17974683544303796,
+      "wilson_lo": 0.1450217263873838,
+      "wilson_lo_bonferroni": 0.12403228736223353,
+      "baseline_majority": 0.09070294784580499,
+      "lift": 0.08904388759723297,
+      "certified_at": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "forehead:forehead_color=black|neg": {
+      "n_val": 530,
+      "rate": 0.839622641509434,
+      "wilson_lo": 0.8059546607682038,
+      "wilson_lo_bonferroni": 0.7790854132894661,
+      "baseline_majority": 0.6832579185520362,
+      "lift": 0.15636472295739778,
+      "certified_at": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "forehead:forehead_color=black|pos": {
+      "n_val": 354,
+      "rate": 0.5508474576271186,
+      "wilson_lo": 0.4987621619622025,
+      "wilson_lo_bonferroni": 0.46183409875958015,
+      "baseline_majority": 0.3167420814479638,
+      "lift": 0.23410537617915483,
+      "certified_at": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "forehead:forehead_color=yellow|neg": {
+      "n_val": 514,
+      "rate": 0.9844357976653697,
+      "wilson_lo": 0.969591554789292,
+      "wilson_lo_bonferroni": 0.9531117265078767,
+      "baseline_majority": 0.9038461538461539,
+      "lift": 0.08058964381921585,
+      "certified_at": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": true,
+        "0.95": true
+      },
+      "certified_at_bonferroni": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": true,
+        "0.95": true
+      }
+    },
+    "forehead:forehead_color=yellow|pos": {
+      "n_val": 370,
+      "rate": 0.20810810810810812,
+      "wilson_lo": 0.16984718624555706,
+      "wilson_lo_bonferroni": 0.14637454673317457,
+      "baseline_majority": 0.09615384615384616,
+      "lift": 0.11195426195426196,
+      "certified_at": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "has_part(beak)|pos": {
+      "n_val": 899,
+      "rate": 0.9977753058954394,
+      "wilson_lo": 0.991924992548446,
+      "wilson_lo_bonferroni": 0.983504596808364,
+      "baseline_majority": null,
+      "lift": null,
+      "certified_at": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": true,
+        "0.95": true
+      },
+      "certified_at_bonferroni": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": true,
+        "0.95": true
+      }
+    },
+    "has_part(belly)|pos": {
+      "n_val": 899,
+      "rate": 0.8743047830923248,
+      "wilson_lo": 0.851029745256761,
+      "wilson_lo_bonferroni": 0.8324626209764152,
+      "baseline_majority": null,
+      "lift": null,
+      "certified_at": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "has_part(breast)|pos": {
+      "n_val": 899,
+      "rate": 0.9399332591768632,
+      "wilson_lo": 0.9224496333011589,
+      "wilson_lo_bonferroni": 0.9074663452326859,
+      "baseline_majority": null,
+      "lift": null,
+      "certified_at": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": true,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": true,
+        "0.95": false
+      }
+    },
+    "has_part(crown)|pos": {
+      "n_val": 899,
+      "rate": 0.9810901001112347,
+      "wilson_lo": 0.96992570468964,
+      "wilson_lo_bonferroni": 0.9588293074498414,
+      "baseline_majority": null,
+      "lift": null,
+      "certified_at": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": true,
+        "0.95": true
+      },
+      "certified_at_bonferroni": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": true,
+        "0.95": true
+      }
+    },
+    "has_part(forehead)|pos": {
+      "n_val": 899,
+      "rate": 0.9833147942157954,
+      "wilson_lo": 0.9726538552831808,
+      "wilson_lo_bonferroni": 0.9618533785890148,
+      "baseline_majority": null,
+      "lift": null,
+      "certified_at": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": true,
+        "0.95": true
+      },
+      "certified_at_bonferroni": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": true,
+        "0.95": true
+      }
+    },
+    "has_part(left_wing)|pos": {
+      "n_val": 899,
+      "rate": 0.5494994438264739,
+      "wilson_lo": 0.5168337434731389,
+      "wilson_lo_bonferroni": 0.49348384166906134,
+      "baseline_majority": null,
+      "lift": null,
+      "certified_at": {
+        "0.5": true,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "has_part(right_wing)|pos": {
+      "n_val": 899,
+      "rate": 0.5684093437152391,
+      "wilson_lo": 0.5358090432501025,
+      "wilson_lo_bonferroni": 0.512406231426166,
+      "baseline_majority": null,
+      "lift": null,
+      "certified_at": {
+        "0.5": true,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": true,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "has_part(tail)|pos": {
+      "n_val": 899,
+      "rate": 0.9243604004449388,
+      "wilson_lo": 0.9052126022569591,
+      "wilson_lo_bonferroni": 0.8891913789482945,
+      "baseline_majority": null,
+      "lift": null,
+      "certified_at": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": true,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "left_wing:wing_color=black|neg": {
+      "n_val": 258,
+      "rate": 0.686046511627907,
+      "wilson_lo": 0.6270376068431658,
+      "wilson_lo_bonferroni": 0.5829225314426113,
+      "baseline_majority": 0.5546558704453441,
+      "lift": 0.13139064118256283,
+      "certified_at": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": true,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "left_wing:wing_color=black|pos": {
+      "n_val": 236,
+      "rate": 0.5889830508474576,
+      "wilson_lo": 0.5252732002849465,
+      "wilson_lo_bonferroni": 0.47973523865836304,
+      "baseline_majority": 0.44534412955465585,
+      "lift": 0.14363892129280176,
+      "certified_at": {
+        "0.5": true,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "left_wing:wing_color=brown|neg": {
+      "n_val": 302,
+      "rate": 0.8543046357615894,
+      "wilson_lo": 0.8100655019233632,
+      "wilson_lo_bonferroni": 0.7733763542527872,
+      "baseline_majority": 0.6963562753036437,
+      "lift": 0.1579483604579457,
+      "certified_at": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "left_wing:wing_color=brown|pos": {
+      "n_val": 192,
+      "rate": 0.5520833333333334,
+      "wilson_lo": 0.48140813444042213,
+      "wilson_lo_bonferroni": 0.4319897168413086,
+      "baseline_majority": 0.30364372469635625,
+      "lift": 0.24843960863697712,
+      "certified_at": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "left_wing:wing_pattern=striped|neg": {
+      "n_val": 273,
+      "rate": 0.8864468864468864,
+      "wilson_lo": 0.8433287620030503,
+      "wilson_lo_bonferroni": 0.8060585537844829,
+      "baseline_majority": 0.7935222672064777,
+      "lift": 0.09292461924040873,
+      "certified_at": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "left_wing:wing_pattern=striped|pos": {
+      "n_val": 221,
+      "rate": 0.3212669683257919,
+      "wilson_lo": 0.26320742156208743,
+      "wilson_lo_bonferroni": 0.22665826285374147,
+      "baseline_majority": 0.20647773279352227,
+      "lift": 0.1147892355322696,
+      "certified_at": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "right_wing:wing_color=black|neg": {
+      "n_val": 299,
+      "rate": 0.6989966555183946,
+      "wilson_lo": 0.6447497092101139,
+      "wilson_lo_bonferroni": 0.6039822275522746,
+      "baseline_majority": 0.5675146771037183,
+      "lift": 0.13148197841467635,
+      "certified_at": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "right_wing:wing_color=black|pos": {
+      "n_val": 212,
+      "rate": 0.6179245283018868,
+      "wilson_lo": 0.5509697090645727,
+      "wilson_lo_bonferroni": 0.5025653665375377,
+      "baseline_majority": 0.4324853228962818,
+      "lift": 0.18543920540560505,
+      "certified_at": {
+        "0.5": true,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": true,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "right_wing:wing_color=brown|neg": {
+      "n_val": 285,
+      "rate": 0.8842105263157894,
+      "wilson_lo": 0.8418482193143995,
+      "wilson_lo_bonferroni": 0.8054372288271309,
+      "baseline_majority": 0.7455968688845401,
+      "lift": 0.13861365743124932,
+      "certified_at": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "right_wing:wing_color=brown|pos": {
+      "n_val": 226,
+      "rate": 0.42920353982300885,
+      "wilson_lo": 0.3663867306967984,
+      "wilson_lo_bonferroni": 0.3245755671497629,
+      "baseline_majority": 0.25440313111545987,
+      "lift": 0.17480040870754898,
+      "certified_at": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "tail:tail_color=black|neg": {
+      "n_val": 476,
+      "rate": 0.8067226890756303,
+      "wilson_lo": 0.7688512736962259,
+      "wilson_lo_bonferroni": 0.7391087587505155,
+      "baseline_majority": 0.694344163658243,
+      "lift": 0.11237852541738724,
+      "certified_at": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "tail:tail_color=black|pos": {
+      "n_val": 355,
+      "rate": 0.4563380281690141,
+      "wilson_lo": 0.4052680429581724,
+      "wilson_lo_bonferroni": 0.37024424570945336,
+      "baseline_majority": 0.3056558363417569,
+      "lift": 0.15068219182725717,
+      "certified_at": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      }
+    },
+    "tail:tail_shape=forked|neg": {
+      "n_val": 612,
+      "rate": 0.9869281045751634,
+      "wilson_lo": 0.9744198396708692,
+      "wilson_lo_bonferroni": 0.9604676133076617,
+      "baseline_majority": 0.9675090252707581,
+      "lift": 0.01941907930440534,
+      "certified_at": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": true,
+        "0.95": true
+      },
+      "certified_at_bonferroni": {
+        "0.5": true,
+        "0.6": true,
+        "0.7": true,
+        "0.8": true,
+        "0.9": true,
+        "0.95": true
+      }
+    },
+    "tail:tail_shape=forked|pos": {
+      "n_val": 219,
+      "rate": 0.0867579908675799,
+      "wilson_lo": 0.05624428075995584,
+      "wilson_lo_bonferroni": 0.04148914398805778,
+      "baseline_majority": 0.032490974729241874,
+      "lift": 0.05426701613833803,
+      "certified_at": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      },
+      "certified_at_bonferroni": {
+        "0.5": false,
+        "0.6": false,
+        "0.7": false,
+        "0.8": false,
+        "0.9": false,
+        "0.95": false
+      }
+    }
+  },
+  "results": [
+    {
+      "classes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "n_train": 104,
+      "n_test": 118,
+      "tree_test_acc": 0.576271186440678,
+      "default": {
+        "mean_k": 3.5762711864406778,
+        "p_all": 0.2542372881355932
+      },
+      "frontier": {
+        "0.5": {
+          "A_minimal_reason": {
+            "coverage": 0.2542372881355932,
+            "n_covered": 30,
+            "p_all_given_cov": 1.0,
+            "mean_k": 1.0,
+            "mean_union_bound": 0.9403514963956214
+          },
+          "B_exclusion_v2": {
+            "coverage": 0.2542372881355932,
+            "n_covered": 30,
+            "p_all_given_cov": 1.0,
+            "mean_kept": 1.0,
+            "mean_union_bound": 0.9403514963956214
+          }
+        },
+        "0.6": {
+          "A_minimal_reason": {
+            "coverage": 0.2542372881355932,
+            "n_covered": 30,
+            "p_all_given_cov": 1.0,
+            "mean_k": 1.0,
+            "mean_union_bound": 0.9403514963956214
+          },
+          "B_exclusion_v2": {
+            "coverage": 0.2542372881355932,
+            "n_covered": 30,
+            "p_all_given_cov": 1.0,
+            "mean_kept": 1.0,
+            "mean_union_bound": 0.9403514963956214
+          }
+        },
+        "0.7": {
+          "A_minimal_reason": {
+            "coverage": 0.2542372881355932,
+            "n_covered": 30,
+            "p_all_given_cov": 1.0,
+            "mean_k": 1.0,
+            "mean_union_bound": 0.9403514963956214
+          },
+          "B_exclusion_v2": {
+            "coverage": 0.2542372881355932,
+            "n_covered": 30,
+            "p_all_given_cov": 1.0,
+            "mean_kept": 1.0,
+            "mean_union_bound": 0.9403514963956214
+          }
+        },
+        "0.8": {
+          "A_minimal_reason": {
+            "coverage": 0.2542372881355932,
+            "n_covered": 30,
+            "p_all_given_cov": 1.0,
+            "mean_k": 1.0,
+            "mean_union_bound": 0.9403514963956214
+          },
+          "B_exclusion_v2": {
+            "coverage": 0.2542372881355932,
+            "n_covered": 30,
+            "p_all_given_cov": 1.0,
+            "mean_kept": 1.0,
+            "mean_union_bound": 0.9403514963956214
+          }
+        },
+        "0.9": {
+          "A_minimal_reason": {
+            "coverage": 0.2542372881355932,
+            "n_covered": 30,
+            "p_all_given_cov": 1.0,
+            "mean_k": 1.0,
+            "mean_union_bound": 0.9403514963956214
+          },
+          "B_exclusion_v2": {
+            "coverage": 0.2542372881355932,
+            "n_covered": 30,
+            "p_all_given_cov": 1.0,
+            "mean_kept": 1.0,
+            "mean_union_bound": 0.9403514963956214
+          }
+        },
+        "0.95": {
+          "A_minimal_reason": {
+            "coverage": 0.0,
+            "n_covered": 0,
+            "p_all_given_cov": null,
+            "mean_k": null,
+            "mean_union_bound": null
+          },
+          "B_exclusion_v2": {
+            "coverage": 0.0,
+            "n_covered": 0,
+            "p_all_given_cov": null,
+            "mean_kept": null,
+            "mean_union_bound": null
+          }
+        }
+      },
+      "leakage_nmi_top": {
+        "forehead:forehead_color=yellow|neg": 4.884,
+        "left_wing:wing_pattern=striped|neg": 4.884,
+        "beak:bill_shape=cone|neg": 4.742,
+        "beak:bill_shape=cone|pos": 4.742,
+        "breast:breast_color=yellow|neg": 4.739,
+        "crown:crown_color=yellow|neg": 4.739,
+        "right_wing:wing_color=brown|neg": 4.739,
+        "belly:belly_color=yellow|neg": 4.719,
+        "breast:breast_color=red|neg": 4.717,
+        "breast:breast_color=red|pos": 4.717
+      }
+    },
+    {
+      "classes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "n_train": 253,
+      "n_test": 243,
+      "tree_test_acc": 0.4691358024691358,
+      "default": {
+        "mean_k": 5.465020576131687,
+        "p_all": 0.09053497942386832
+      },
+      "frontier": {
+        "0.5": {
+          "A_minimal_reason": {
+            "coverage": 0.06995884773662552,
+            "n_covered": 17,
+            "p_all_given_cov": 0.35294117647058826,
+            "mean_k": 3.6470588235294117,
+            "mean_union_bound": 0.4482911514242516
+          },
+          "B_exclusion_v2": {
+            "coverage": 0.06995884773662552,
+            "n_covered": 17,
+            "p_all_given_cov": 0.29411764705882354,
+            "mean_kept": 3.6470588235294117,
+            "mean_union_bound": 0.43375513267679605
+          }
+        },
+        "0.6": {
+          "A_minimal_reason": {
+            "coverage": 0.05761316872427984,
+            "n_covered": 14,
+            "p_all_given_cov": 0.35714285714285715,
+            "mean_k": 4.0,
+            "mean_union_bound": 0.4371102433722719
+          },
+          "B_exclusion_v2": {
+            "coverage": 0.05761316872427984,
+            "n_covered": 14,
+            "p_all_given_cov": 0.2857142857142857,
+            "mean_kept": 4.0,
+            "mean_union_bound": 0.4194593634646474
+          }
+        },
+        "0.7": {
+          "A_minimal_reason": {
+            "coverage": 0.024691358024691357,
+            "n_covered": 6,
+            "p_all_given_cov": 0.6666666666666666,
+            "mean_k": 4.0,
+            "mean_union_bound": 0.5783172826332678
+          },
+          "B_exclusion_v2": {
+            "coverage": 0.024691358024691357,
+            "n_covered": 6,
+            "p_all_given_cov": 0.6666666666666666,
+            "mean_kept": 4.0,
+            "mean_union_bound": 0.5783172826332678
+          }
+        },
+        "0.8": {
+          "A_minimal_reason": {
+            "coverage": 0.0,
+            "n_covered": 0,
+            "p_all_given_cov": null,
+            "mean_k": null,
+            "mean_union_bound": null
+          },
+          "B_exclusion_v2": {
+            "coverage": 0.0,
+            "n_covered": 0,
+            "p_all_given_cov": null,
+            "mean_kept": null,
+            "mean_union_bound": null
+          }
+        },
+        "0.9": {
+          "A_minimal_reason": {
+            "coverage": 0.0,
+            "n_covered": 0,
+            "p_all_given_cov": null,
+            "mean_k": null,
+            "mean_union_bound": null
+          },
+          "B_exclusion_v2": {
+            "coverage": 0.0,
+            "n_covered": 0,
+            "p_all_given_cov": null,
+            "mean_kept": null,
+            "mean_union_bound": null
+          }
+        },
+        "0.95": {
+          "A_minimal_reason": {
+            "coverage": 0.0,
+            "n_covered": 0,
+            "p_all_given_cov": null,
+            "mean_k": null,
+            "mean_union_bound": null
+          },
+          "B_exclusion_v2": {
+            "coverage": 0.0,
+            "n_covered": 0,
+            "p_all_given_cov": null,
+            "mean_kept": null,
+            "mean_union_bound": null
+          }
+        }
+      },
+      "leakage_nmi_top": {
+        "forehead:forehead_color=yellow|neg": 2.849,
+        "breast:breast_color=red|neg": 2.768,
+        "breast:breast_color=red|pos": 2.768,
+        "breast:breast_color=yellow|neg": 2.761,
+        "breast:breast_color=yellow|pos": 2.761,
+        "right_wing:wing_color=brown|neg": 2.756,
+        "right_wing:wing_color=brown|pos": 2.756,
+        "belly:belly_color=yellow|neg": 2.753,
+        "belly:belly_color=yellow|pos": 2.753,
+        "left_wing:wing_pattern=striped|neg": 2.745
+      }
+    },
+    {
+      "classes": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "n_train": 506,
+      "n_test": 515,
+      "tree_test_acc": 0.3844660194174757,
+      "default": {
+        "mean_k": 6.924271844660194,
+        "p_all": 0.05825242718446602
+      },
+      "frontier": {
+        "0.5": {
+          "A_minimal_reason": {
+            "coverage": 0.02330097087378641,
+            "n_covered": 12,
+            "p_all_given_cov": 0.25,
+            "mean_k": 7.0,
+            "mean_union_bound": 0.03011717313183926
+          },
+          "B_exclusion_v2": {
+            "coverage": 0.036893203883495145,
+            "n_covered": 19,
+            "p_all_given_cov": 0.3684210526315789,
+            "mean_kept": 7.2105263157894735,
+            "mean_union_bound": 0.07374693290791032
+          }
+        },
+        "0.6": {
+          "A_minimal_reason": {
+            "coverage": 0.015533980582524271,
+            "n_covered": 8,
+            "p_all_given_cov": 0.375,
+            "mean_k": 7.0,
+            "mean_union_bound": 0.04517575969775889
+          },
+          "B_exclusion_v2": {
+            "coverage": 0.027184466019417475,
+            "n_covered": 14,
+            "p_all_given_cov": 0.5,
+            "mean_kept": 7.0,
+            "mean_union_bound": 0.10008512323216401
+          }
+        },
+        "0.7": {
+          "A_minimal_reason": {
+            "coverage": 0.0,
+            "n_covered": 0,
+            "p_all_given_cov": null,
+            "mean_k": null,
+            "mean_union_bound": null
+          },
+          "B_exclusion_v2": {
+            "coverage": 0.0,
+            "n_covered": 0,
+            "p_all_given_cov": null,
+            "mean_kept": null,
+            "mean_union_bound": null
+          }
+        },
+        "0.8": {
+          "A_minimal_reason": {
+            "coverage": 0.0,
+            "n_covered": 0,
+            "p_all_given_cov": null,
+            "mean_k": null,
+            "mean_union_bound": null
+          },
+          "B_exclusion_v2": {
+            "coverage": 0.0,
+            "n_covered": 0,
+            "p_all_given_cov": null,
+            "mean_kept": null,
+            "mean_union_bound": null
+          }
+        },
+        "0.9": {
+          "A_minimal_reason": {
+            "coverage": 0.0,
+            "n_covered": 0,
+            "p_all_given_cov": null,
+            "mean_k": null,
+            "mean_union_bound": null
+          },
+          "B_exclusion_v2": {
+            "coverage": 0.0,
+            "n_covered": 0,
+            "p_all_given_cov": null,
+            "mean_kept": null,
+            "mean_union_bound": null
+          }
+        },
+        "0.95": {
+          "A_minimal_reason": {
+            "coverage": 0.0,
+            "n_covered": 0,
+            "p_all_given_cov": null,
+            "mean_k": null,
+            "mean_union_bound": null
+          },
+          "B_exclusion_v2": {
+            "coverage": 0.0,
+            "n_covered": 0,
+            "p_all_given_cov": null,
+            "mean_kept": null,
+            "mean_union_bound": null
+          }
+        }
+      },
+      "leakage_nmi_top": {
+        "beak:bill_shape=hooked|neg": 2.155,
+        "beak:bill_shape=hooked|pos": 2.155,
+        "beak:bill_color=yellow|neg": 2.152,
+        "beak:bill_color=yellow|pos": 2.152,
+        "breast:breast_color=white|neg": 2.122,
+        "breast:breast_color=white|pos": 2.122,
+        "forehead:forehead_color=yellow|neg": 2.108,
+        "forehead:forehead_color=yellow|pos": 2.108,
+        "breast:breast_color=yellow|neg": 2.101,
+        "breast:breast_color=yellow|pos": 2.101
+      }
+    }
+  ]
+}

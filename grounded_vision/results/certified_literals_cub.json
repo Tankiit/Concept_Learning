@@ -1,0 +1,895 @@
+{
+  "protocol": {
+    "question": "Certified LITERALS (concept, polarity), selected out-of-sample on the validation sub-split, enforced at inference; measured on test at K=4 and K=10",
+    "predictions_pre_registered": [
+      "P1 K=4: 30/118 all-correct minimal reasons concentrate on 1-2 species and one single-clause leaf condition",
+      "P2 (beak:bill_color=yellow, pos) fails certification at every tau; most present-literals fail at 0.8; most absent-literals pass",
+      "P3 K=4 mech A: coverage 10-40%, P(all|cov) 70-100%, union bound <= observed",
+      "P4 K=4 mech B: coverage 30-70%, kept 4-10, P(kept all|cov) 40-80%",
+      "P5 K=10 mech A: coverage < 15%, P(all|cov) >= 70%",
+      "P6 union bound <= observed everywhere"
+    ],
+    "certification_rule": "Wilson-95%-lower >= tau over >= 10 validation assertions of that literal (part visible)",
+    "certification_split": "15% validation sub-split of train (never test)",
+    "enforcement": "inference-time abstention; a training-time per-polarity veto needs a constrained tree learner (GOSDT-style literal whitelist) - future work",
+    "tree": "CART depth 12, leaf 4, seed 42, full 36 concepts",
+    "cache": "eval-transform (flip-free)",
+    "encoding": "binary unknown->0 (pre-tristate, matches committed sweep)"
+  },
+  "literal_certification": {
+    "beak:bill_color=black|neg": {
+      "n_val": 398,
+      "correct": 281,
+      "rate": 0.7060301507537688,
+      "wilson_lo": 0.6594727309131413,
+      "certified_at": {
+        "0.7": false,
+        "0.8": false,
+        "0.9": false
+      }
+    },
+    "beak:bill_color=black|pos": {
+      "n_val": 498,
+      "correct": 271,
+      "rate": 0.5441767068273092,
+      "wilson_lo": 0.5002618627850526,
+      "certified_at": {
+        "0.7": false,
+        "0.8": false,
+        "0.9": false
+      }
+    },
+    "beak:bill_color=yellow|neg": {
+      "n_val": 677,
+      "correct": 658,
+      "rate": 0.9719350073855244,
+      "wilson_lo": 0.9565835187563055,
+      "certified_at": {
+        "0.7": true,
+        "0.8": true,
+        "0.9": true
+      }
+    },
+    "beak:bill_color=yellow|pos": {
+      "n_val": 219,
+      "correct": 24,
+      "rate": 0.1095890410958904,
+      "wilson_lo": 0.07475641034509858,
+      "certified_at": {
+        "0.7": false,
+        "0.8": false,
+        "0.9": false
+      }
+    },
+    "beak:bill_shape=cone|neg": {
+      "n_val": 399,
+      "correct": 366,
+      "rate": 0.9172932330827067,
+      "wilson_lo": 0.8861234411113929,
+      "certified_at": {
+        "0.7": true,
+        "0.8": true,
+        "0.9": false
+      }
+    },
+    "beak:bill_shape=cone|pos": {
+      "n_val": 497,
+      "correct": 210,
+      "rate": 0.4225352112676056,
+      "wilson_lo": 0.3798639570722572,
+      "certified_at": {
+        "0.7": false,
+        "0.8": false,
+        "0.9": false
+      }
+    },
+    "beak:bill_shape=curved|neg": {
+      "n_val": 651,
+      "correct": 641,
+      "rate": 0.9846390168970814,
+      "wilson_lo": 0.9719565131215541,
+      "certified_at": {
+        "0.7": true,
+        "0.8": true,
+        "0.9": true
+      }
+    },
+    "beak:bill_shape=curved|pos": {
+      "n_val": 245,
+      "correct": 13,
+      "rate": 0.053061224489795916,
+      "wilson_lo": 0.031267871988896453,
+      "certified_at": {
+        "0.7": false,
+        "0.8": false,
+        "0.9": false
+      }
+    },
+    "beak:bill_shape=dagger|neg": {
+      "n_val": 599,
+      "correct": 555,
+      "rate": 0.9265442404006677,
+      "wilson_lo": 0.9028237161517365,
+      "certified_at": {
+        "0.7": true,
+        "0.8": true,
+        "0.9": true
+      }
+    },
+    "beak:bill_shape=dagger|pos": {
+      "n_val": 297,
+      "correct": 81,
+      "rate": 0.2727272727272727,
+      "wilson_lo": 0.2252189389687444,
+      "certified_at": {
+        "0.7": false,
+        "0.8": false,
+        "0.9": false
+      }
+    },
+    "beak:bill_shape=hooked|neg": {
+      "n_val": 871,
+      "correct": 859,
+      "rate": 0.9862227324913893,
+      "wilson_lo": 0.9760736579120364,
+      "certified_at": {
+        "0.7": true,
+        "0.8": true,
+        "0.9": true
+      }
+    },
+    "beak:bill_shape=hooked|pos": {
+      "n_val": 25,
+      "correct": 0,
+      "rate": 0.0,
+      "wilson_lo": 0.0,
+      "certified_at": {
+        "0.7": false,
+        "0.8": false,
+        "0.9": false
+      }
+    },
+    "beak:bill_shape=needle|neg": {
+      "n_val": 851,
+      "correct": 846,
+      "rate": 0.9941245593419507,
+      "wilson_lo": 0.9863201282041787,
+      "certified_at": {
+        "0.7": true,
+        "0.8": true,
+        "0.9": true
+      }
+    },
+    "beak:bill_shape=needle|pos": {
+      "n_val": 45,
+      "correct": 13,
+      "rate": 0.28888888888888886,
+      "wilson_lo": 0.1772991803190016,
+      "certified_at": {
+        "0.7": false,
+        "0.8": false,
+        "0.9": false
+      }
+    },
+    "belly:belly_color=black|neg": {
+      "n_val": 574,
+      "correct": 529,
+      "rate": 0.921602787456446,
+      "wilson_lo": 0.8967047551406858,
+      "certified_at": {
+        "0.7": true,
+        "0.8": true,
+        "0.9": false
+      }
+    },
+    "belly:belly_color=black|pos": {
+      "n_val": 201,
+      "correct": 65,
+      "rate": 0.32338308457711445,
+      "wilson_lo": 0.2625512375504697,
+      "certified_at": {
+        "0.7": false,
+        "0.8": false,
+        "0.9": false
+      }
+    },
+    "belly:belly_color=white|neg": {
+      "n_val": 499,
+      "correct": 363,
+      "rate": 0.7274549098196392,
+      "wilson_lo": 0.6867593383329942,
+      "certified_at": {
+        "0.7": false,
+        "0.8": false,
+        "0.9": false
+      }
+    },
+    "belly:belly_color=white|pos": {
+      "n_val": 276,
+      "correct": 178,
+      "rate": 0.644927536231884,
+      "wilson_lo": 0.5868348689815237,
+      "certified_at": {
+        "0.7": false,
+        "0.8": false,
+        "0.9": false
+      }
+    },
+    "belly:belly_color=yellow|neg": {
+      "n_val": 353,
+      "correct": 348,
+      "rate": 0.9858356940509915,
+      "wilson_lo": 0.9672756289249249,
+      "certified_at": {
+        "0.7": true,
+        "0.8": true,
+        "0.9": true
+      }
+    },
+    "belly:belly_color=yellow|pos": {
+      "n_val": 422,
+      "correct": 111,
+      "rate": 0.26303317535545023,
+      "wilson_lo": 0.22329848695388926,
+      "certified_at": {
+        "0.7": false,
+        "0.8": false,
+        "0.9": false
+      }
+    },
+    "breast:breast_color=black|neg": {
+      "n_val": 600,
+      "correct": 528,
+      "rate": 0.88,
+      "wilson_lo": 0.8515504728392347,
+      "certified_at": {
+        "0.7": true,
+        "0.8": true,
+        "0.9": false
+      }
+    },
+    "breast:breast_color=black|pos": {
+      "n_val": 236,
+      "correct": 103,
+      "rate": 0.4364406779661017,
+      "wilson_lo": 0.37468420810792563,
+      "certified_at": {
+        "0.7": false,
+        "0.8": false,
+        "0.9": false
+      }
+    },
+    "breast:breast_color=red|neg": {
+      "n_val": 598,
+      "correct": 592,
+      "rate": 0.9899665551839465,
+      "wilson_lo": 0.9782843638987915,
+      "certified_at": {
+        "0.7": true,
+        "0.8": true,
+        "0.9": true
+      }
+    },
+    "breast:breast_color=red|pos": {
+      "n_val": 238,
+      "correct": 29,
+      "rate": 0.12184873949579832,
+      "wilson_lo": 0.08619290433918782,
+      "certified_at": {
+        "0.7": false,
+        "0.8": false,
+        "0.9": false
+      }
+    },
+    "breast:breast_color=white|neg": {
+      "n_val": 513,
+      "correct": 391,
+      "rate": 0.7621832358674464,
+      "wilson_lo": 0.7234775175030836,
+      "certified_at": {
+        "0.7": true,
+        "0.8": false,
+        "0.9": false
+      }
+    },
+    "breast:breast_color=white|pos": {
+      "n_val": 323,
+      "correct": 192,
+      "rate": 0.5944272445820433,
+      "wilson_lo": 0.5400740060857118,
+      "certified_at": {
+        "0.7": false,
+        "0.8": false,
+        "0.9": false
+      }
+    },
+    "breast:breast_color=yellow|neg": {
+      "n_val": 393,
+      "correct": 390,
+      "rate": 0.9923664122137404,
+      "wilson_lo": 0.9777995702812854,
+      "certified_at": {
+        "0.7": true,
+        "0.8": true,
+        "0.9": true
+      }
+    },
+    "breast:breast_color=yellow|pos": {
+      "n_val": 443,
+      "correct": 119,
+      "rate": 0.2686230248306998,
+      "wilson_lo": 0.22946603421635114,
+      "certified_at": {
+        "0.7": false,
+        "0.8": false,
+        "0.9": false
+      }
+    },
+    "breast:breast_pattern=striped|neg": {
+      "n_val": 579,
+      "correct": 553,
+      "rate": 0.9550949913644214,
+      "wilson_lo": 0.9350166674850233,
+      "certified_at": {
+        "0.7": true,
+        "0.8": true,
+        "0.9": true
+      }
+    },
+    "breast:breast_pattern=striped|pos": {
+      "n_val": 257,
+      "correct": 79,
+      "rate": 0.30739299610894943,
+      "wilson_lo": 0.25416171571767493,
+      "certified_at": {
+        "0.7": false,
+        "0.8": false,
+        "0.9": false
+      }
+    },
+    "crown:crown_color=black|neg": {
+      "n_val": 548,
+      "correct": 430,
+      "rate": 0.7846715328467153,
+      "wilson_lo": 0.7483366041051709,
+      "certified_at": {
+        "0.7": true,
+        "0.8": false,
+        "0.9": false
+      }
+    },
+    "crown:crown_color=black|pos": {
+      "n_val": 331,
+      "correct": 174,
+      "rate": 0.525679758308157,
+      "wilson_lo": 0.4718992244590058,
+      "certified_at": {
+        "0.7": false,
+        "0.8": false,
+        "0.9": false
+      }
+    },
+    "crown:crown_color=red|neg": {
+      "n_val": 651,
+      "correct": 646,
+      "rate": 0.9923195084485407,
+      "wilson_lo": 0.9821476058927777,
+      "certified_at": {
+        "0.7": true,
+        "0.8": true,
+        "0.9": true
+      }
+    },
+    "crown:crown_color=red|pos": {
+      "n_val": 228,
+      "correct": 35,
+      "rate": 0.15350877192982457,
+      "wilson_lo": 0.11249410790269707,
+      "certified_at": {
+        "0.7": false,
+        "0.8": false,
+        "0.9": false
+      }
+    },
+    "crown:crown_color=white|neg": {
+      "n_val": 663,
+      "correct": 625,
+      "rate": 0.942684766214178,
+      "wilson_lo": 0.9223085234638531,
+      "certified_at": {
+        "0.7": true,
+        "0.8": true,
+        "0.9": true
+      }
+    },
+    "crown:crown_color=white|pos": {
+      "n_val": 216,
+      "correct": 73,
+      "rate": 0.33796296296296297,
+      "wilson_lo": 0.2782020555103704,
+      "certified_at": {
+        "0.7": false,
+        "0.8": false,
+        "0.9": false
+      }
+    },
+    "crown:crown_color=yellow|neg": {
+      "n_val": 378,
+      "correct": 376,
+      "rate": 0.9947089947089947,
+      "wilson_lo": 0.9809158910436483,
+      "certified_at": {
+        "0.7": true,
+        "0.8": true,
+        "0.9": true
+      }
+    },
+    "crown:crown_color=yellow|pos": {
+      "n_val": 501,
+      "correct": 58,
+      "rate": 0.1157684630738523,
+      "wilson_lo": 0.09062975363125465,
+      "certified_at": {
+        "0.7": false,
+        "0.8": false,
+        "0.9": false
+      }
+    },
+    "forehead:forehead_color=black|neg": {
+      "n_val": 574,
+      "correct": 462,
+      "rate": 0.8048780487804879,
+      "wilson_lo": 0.7704752117382428,
+      "certified_at": {
+        "0.7": true,
+        "0.8": false,
+        "0.9": false
+      }
+    },
+    "forehead:forehead_color=black|pos": {
+      "n_val": 312,
+      "correct": 183,
+      "rate": 0.5865384615384616,
+      "wilson_lo": 0.5311647638694277,
+      "certified_at": {
+        "0.7": false,
+        "0.8": false,
+        "0.9": false
+      }
+    },
+    "forehead:forehead_color=yellow|neg": {
+      "n_val": 436,
+      "correct": 431,
+      "rate": 0.9885321100917431,
+      "wilson_lo": 0.9734384876132663,
+      "certified_at": {
+        "0.7": true,
+        "0.8": true,
+        "0.9": true
+      }
+    },
+    "forehead:forehead_color=yellow|pos": {
+      "n_val": 450,
+      "correct": 71,
+      "rate": 0.15777777777777777,
+      "wilson_lo": 0.12701145881438133,
+      "certified_at": {
+        "0.7": false,
+        "0.8": false,
+        "0.9": false
+      }
+    },
+    "has_part(beak)|pos": {
+      "n_val": 899,
+      "correct": 896,
+      "rate": 0.996662958843159,
+      "wilson_lo": 0.9902348156064029,
+      "certified_at": {
+        "0.7": true,
+        "0.8": true,
+        "0.9": true
+      }
+    },
+    "has_part(belly)|pos": {
+      "n_val": 899,
+      "correct": 775,
+      "rate": 0.8620689655172413,
+      "wilson_lo": 0.8379824063301579,
+      "certified_at": {
+        "0.7": true,
+        "0.8": true,
+        "0.9": false
+      }
+    },
+    "has_part(breast)|pos": {
+      "n_val": 899,
+      "correct": 836,
+      "rate": 0.9299221357063404,
+      "wilson_lo": 0.9113407240738362,
+      "certified_at": {
+        "0.7": true,
+        "0.8": true,
+        "0.9": true
+      }
+    },
+    "has_part(crown)|pos": {
+      "n_val": 899,
+      "correct": 879,
+      "rate": 0.9777530589543938,
+      "wilson_lo": 0.9658872350235473,
+      "certified_at": {
+        "0.7": true,
+        "0.8": true,
+        "0.9": true
+      }
+    },
+    "has_part(forehead)|pos": {
+      "n_val": 899,
+      "correct": 886,
+      "rate": 0.985539488320356,
+      "wilson_lo": 0.9754169550369917,
+      "certified_at": {
+        "0.7": true,
+        "0.8": true,
+        "0.9": true
+      }
+    },
+    "has_part(left_wing)|pos": {
+      "n_val": 899,
+      "correct": 491,
+      "rate": 0.5461624026696329,
+      "wilson_lo": 0.513489469925009,
+      "certified_at": {
+        "0.7": false,
+        "0.8": false,
+        "0.9": false
+      }
+    },
+    "has_part(right_wing)|pos": {
+      "n_val": 899,
+      "correct": 523,
+      "rate": 0.5817575083426029,
+      "wilson_lo": 0.5492315033986461,
+      "certified_at": {
+        "0.7": false,
+        "0.8": false,
+        "0.9": false
+      }
+    },
+    "has_part(tail)|pos": {
+      "n_val": 899,
+      "correct": 830,
+      "rate": 0.9232480533926585,
+      "wilson_lo": 0.9039898106625032,
+      "certified_at": {
+        "0.7": true,
+        "0.8": true,
+        "0.9": true
+      }
+    },
+    "left_wing:wing_color=black|neg": {
+      "n_val": 290,
+      "correct": 185,
+      "rate": 0.6379310344827587,
+      "wilson_lo": 0.5811463813461739,
+      "certified_at": {
+        "0.7": false,
+        "0.8": false,
+        "0.9": false
+      }
+    },
+    "left_wing:wing_color=black|pos": {
+      "n_val": 201,
+      "correct": 115,
+      "rate": 0.572139303482587,
+      "wilson_lo": 0.5030166912532442,
+      "certified_at": {
+        "0.7": false,
+        "0.8": false,
+        "0.9": false
+      }
+    },
+    "left_wing:wing_color=brown|neg": {
+      "n_val": 258,
+      "correct": 223,
+      "rate": 0.8643410852713178,
+      "wilson_lo": 0.8171760000823587,
+      "certified_at": {
+        "0.7": true,
+        "0.8": true,
+        "0.9": false
+      }
+    },
+    "left_wing:wing_color=brown|pos": {
+      "n_val": 233,
+      "correct": 102,
+      "rate": 0.43776824034334766,
+      "wilson_lo": 0.37558561751398,
+      "certified_at": {
+        "0.7": false,
+        "0.8": false,
+        "0.9": false
+      }
+    },
+    "left_wing:wing_pattern=striped|neg": {
+      "n_val": 254,
+      "correct": 225,
+      "rate": 0.8858267716535433,
+      "wilson_lo": 0.8408367204476711,
+      "certified_at": {
+        "0.7": true,
+        "0.8": true,
+        "0.9": false
+      }
+    },
+    "left_wing:wing_pattern=striped|pos": {
+      "n_val": 237,
+      "correct": 82,
+      "rate": 0.3459915611814346,
+      "wilson_lo": 0.2883200055647259,
+      "certified_at": {
+        "0.7": false,
+        "0.8": false,
+        "0.9": false
+      }
+    },
+    "right_wing:wing_color=black|neg": {
+      "n_val": 326,
+      "correct": 226,
+      "rate": 0.6932515337423313,
+      "wilson_lo": 0.6411830708083994,
+      "certified_at": {
+        "0.7": false,
+        "0.8": false,
+        "0.9": false
+      }
+    },
+    "right_wing:wing_color=black|pos": {
+      "n_val": 197,
+      "correct": 124,
+      "rate": 0.6294416243654822,
+      "wilson_lo": 0.5601261897647921,
+      "certified_at": {
+        "0.7": false,
+        "0.8": false,
+        "0.9": false
+      }
+    },
+    "right_wing:wing_color=brown|neg": {
+      "n_val": 266,
+      "correct": 228,
+      "rate": 0.8571428571428571,
+      "wilson_lo": 0.8099977614939285,
+      "certified_at": {
+        "0.7": true,
+        "0.8": true,
+        "0.9": false
+      }
+    },
+    "right_wing:wing_color=brown|pos": {
+      "n_val": 257,
+      "correct": 101,
+      "rate": 0.39299610894941633,
+      "wilson_lo": 0.3352780036980046,
+      "certified_at": {
+        "0.7": false,
+        "0.8": false,
+        "0.9": false
+      }
+    },
+    "tail:tail_color=black|neg": {
+      "n_val": 491,
+      "correct": 418,
+      "rate": 0.8513238289205702,
+      "wilson_lo": 0.8171313242524573,
+      "certified_at": {
+        "0.7": true,
+        "0.8": true,
+        "0.9": false
+      }
+    },
+    "tail:tail_color=black|pos": {
+      "n_val": 339,
+      "correct": 140,
+      "rate": 0.41297935103244837,
+      "wilson_lo": 0.36182582038246863,
+      "certified_at": {
+        "0.7": false,
+        "0.8": false,
+        "0.9": false
+      }
+    },
+    "tail:tail_shape=forked|neg": {
+      "n_val": 629,
+      "correct": 615,
+      "rate": 0.9777424483306836,
+      "wilson_lo": 0.9629884418303718,
+      "certified_at": {
+        "0.7": true,
+        "0.8": true,
+        "0.9": true
+      }
+    },
+    "tail:tail_shape=forked|pos": {
+      "n_val": 201,
+      "correct": 18,
+      "rate": 0.08955223880597014,
+      "wilson_lo": 0.05739610258448981,
+      "certified_at": {
+        "0.7": false,
+        "0.8": false,
+        "0.9": false
+      }
+    }
+  },
+  "results": [
+    {
+      "K": 4,
+      "n_test": 118,
+      "n_train": 96,
+      "tree_test_acc": 0.6016949152542372,
+      "default": {
+        "mean_k": 3.610169491525424,
+        "p_all": 0.2542372881355932
+      },
+      "mechanisms": {
+        "tau=0.7": {
+          "A_certified_minimal_reason": {
+            "coverage": 0.2542372881355932,
+            "n_covered": 30,
+            "p_all_given_covered": 1.0,
+            "mean_k": 1.0,
+            "mean_union_bound": 0.9565835187563052
+          },
+          "B_certified_forcing_set": {
+            "coverage": 0.2542372881355932,
+            "n_covered": 30,
+            "p_all_given_covered": 1.0,
+            "mean_kept": 1.0,
+            "mean_union_bound": 0.9565835187563052
+          }
+        },
+        "tau=0.8": {
+          "A_certified_minimal_reason": {
+            "coverage": 0.2542372881355932,
+            "n_covered": 30,
+            "p_all_given_covered": 1.0,
+            "mean_k": 1.0,
+            "mean_union_bound": 0.9565835187563052
+          },
+          "B_certified_forcing_set": {
+            "coverage": 0.2542372881355932,
+            "n_covered": 30,
+            "p_all_given_covered": 1.0,
+            "mean_kept": 1.0,
+            "mean_union_bound": 0.9565835187563052
+          }
+        },
+        "tau=0.9": {
+          "A_certified_minimal_reason": {
+            "coverage": 0.2542372881355932,
+            "n_covered": 30,
+            "p_all_given_covered": 1.0,
+            "mean_k": 1.0,
+            "mean_union_bound": 0.9565835187563052
+          },
+          "B_certified_forcing_set": {
+            "coverage": 0.2542372881355932,
+            "n_covered": 30,
+            "p_all_given_covered": 1.0,
+            "mean_kept": 1.0,
+            "mean_union_bound": 0.9565835187563052
+          }
+        }
+      },
+      "per_species": {
+        "Acadian_Flycatcher": {
+          "n": 30,
+          "all_correct": 0,
+          "k_hist": {
+            "5": 13,
+            "2": 5,
+            "3": 1,
+            "7": 4,
+            "6": 6,
+            "4": 1
+          }
+        },
+        "American_Crow": {
+          "n": 30,
+          "all_correct": 0,
+          "k_hist": {
+            "6": 2,
+            "2": 4,
+            "5": 2,
+            "7": 5,
+            "3": 8,
+            "4": 9
+          }
+        },
+        "American_Goldfinch": {
+          "n": 28,
+          "all_correct": 0,
+          "k_hist": {
+            "2": 6,
+            "7": 3,
+            "5": 9,
+            "6": 4,
+            "3": 1,
+            "4": 5
+          }
+        },
+        "American_Pipit": {
+          "n": 30,
+          "all_correct": 30,
+          "k_hist": {
+            "1": 30
+          }
+        }
+      },
+      "k1_correct_clauses": {
+        "beak:bill_color=yellow|neg": 30
+      }
+    },
+    {
+      "K": 10,
+      "n_test": 243,
+      "n_train": 242,
+      "tree_test_acc": 0.4444444444444444,
+      "default": {
+        "mean_k": 5.8806584362139915,
+        "p_all": 0.11522633744855967
+      },
+      "mechanisms": {
+        "tau=0.7": {
+          "A_certified_minimal_reason": {
+            "coverage": 0.0205761316872428,
+            "n_covered": 5,
+            "p_all_given_covered": 0.6,
+            "mean_k": 4.0,
+            "mean_union_bound": 0.5098958729974153
+          },
+          "B_certified_forcing_set": {
+            "coverage": 0.00823045267489712,
+            "n_covered": 2,
+            "p_all_given_covered": 1.0,
+            "mean_kept": 4.0,
+            "mean_union_bound": 0.5098958729974153
+          }
+        },
+        "tau=0.8": {
+          "A_certified_minimal_reason": {
+            "coverage": 0.0,
+            "n_covered": 0,
+            "p_all_given_covered": null,
+            "mean_k": null,
+            "mean_union_bound": null
+          },
+          "B_certified_forcing_set": {
+            "coverage": 0.0,
+            "n_covered": 0,
+            "p_all_given_covered": null,
+            "mean_kept": null,
+            "mean_union_bound": null
+          }
+        },
+        "tau=0.9": {
+          "A_certified_minimal_reason": {
+            "coverage": 0.0,
+            "n_covered": 0,
+            "p_all_given_covered": null,
+            "mean_k": null,
+            "mean_union_bound": null
+          },
+          "B_certified_forcing_set": {
+            "coverage": 0.0,
+            "n_covered": 0,
+            "p_all_given_covered": null,
+            "mean_kept": null,
+            "mean_union_bound": null
+          }
+        }
+      }
+    }
+  ]
+}
