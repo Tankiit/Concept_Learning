@@ -1,0 +1,18 @@
+{
+  "cvpr_logic/README.md": "8d4976e2814d8392d8db0b8636ced4bd025cbfa8428512cff91267c5e36f2c16",
+  "cvpr_logic/VALIDATION.md": "2a6db48986766ed5a1bad22c1b1f608667832cfadf0e0dad19de4fe00e85e652",
+  "cvpr_logic/__init__.py": "2a3d5b3b17493dd5c25459cc0b274e4e0f2b1331d26d735a141e21bfd8b71de8",
+  "cvpr_logic/data.py": "90198ed1dd79f9e8bc03356204ff5d984fbd0fc2c8960f9f4540841c1dd5ab09",
+  "cvpr_logic/infer.py": "32f34b897245ab5bab265373e0fc8d8da5c645f390b82b3e26064dc0890f98e9",
+  "cvpr_logic/model.py": "737791582047cb328a945ffb28a037e1f164e7a230b16774d6eed003efd81c10",
+  "cvpr_logic/requirements-cuda.txt": "6d2d638e13cf37c81d92127e3e506b325f42bd63eb5ff582d6adace451a3ae07",
+  "cvpr_logic/test_core.py": "f8876cbb48a70d907028bfc25ba1e58980a676c29457511577c1080365673494",
+  "cvpr_logic/train.py": "e77b85d724fc7726ef40d936f5fe801347296b7aa0838590f109d4bee287801e",
+  "cvpr_logic/vendor/LICENSE.difflogic": "8a567535a4364ce99751b8977c5a2bd1b7b1cb98023b8e81d2b4fefbb85274f3",
+  "cvpr_logic/vendor/PROVENANCE.md": "0cb82c5879c7e7776c25a442e9e1d357e641388a21ca55113e11ae1b30bfdc5c",
+  "cvpr_logic/vendor/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+  "cvpr_logic/vendor/difflogic_functional.py": "f28a6478d0dcee72e127ab842bbe75df19c89d7fa0f3fbd3450a869356ccb411",
+  "cvpr_logic/verify.py": "a471fa0caa0a80e05f77cdbf81d9f4a6060ddd20928ff5e1e24d417fcd89dd6e",
+  "cvpr_logic_walkthrough.ipynb": "1ca9e10242fe63c4b6ae32fbb041d0ddfb5b79283b2c925a8e49faca2a91c614",
+  "requirements.txt": "95c8d8069eba982b1be695d0524f103ac5831de5ac83a5bf6e0f5582509ce23c"
+}

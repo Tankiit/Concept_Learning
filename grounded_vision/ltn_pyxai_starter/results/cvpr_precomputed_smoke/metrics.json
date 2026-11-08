@@ -1,0 +1,30 @@
+{
+  "test_count": 200,
+  "accepted_count": 192,
+  "matched_count": 192,
+  "task_accuracy": 0.875,
+  "concept_accuracy": 0.9666666666666667,
+  "joint_concept_set_coverage": 0.87,
+  "explanation_coverage": 0.96,
+  "accepted_reason_error": 0.026041666666666668,
+  "false_issued_reason_rate_all_test": 0.025,
+  "matched_repairs": 0,
+  "matched_spoils": 0,
+  "paired_reason_delta": 0.0,
+  "status_counts": {
+    "empty_concept_set": 8,
+    "verified": 192
+  },
+  "initial_gradient_norms": {
+    "reader": null,
+    "gates": 0.006722055841237307
+  },
+  "soft_hard_disagreement": 0.22,
+  "alpha": 0.1,
+  "calibration_threshold": 0.47103774547576904,
+  "export_check_inputs": 8,
+  "export_check_exhaustive": true,
+  "oracle_concepts": false,
+  "dataset": "results/precomputed_smoke.npz",
+  "scope": "exact Boolean head reasons; marginal false-issued-premise bound under joint coverage, not conditional precision or task correctness"
+}

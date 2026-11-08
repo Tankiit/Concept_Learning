@@ -1,0 +1,39 @@
+epoch=0 tune_concept=0.897 tune_task=0.785
+epoch=20 tune_concept=0.953 tune_task=0.948
+epoch=40 tune_concept=0.952 tune_task=0.930
+epoch=60 tune_concept=0.943 tune_task=0.915
+Warning: the --objective option is not a PyXAI option.
+Warning: the --out option is not a PyXAI option.
+
+  [93mWarning: [0mUnknown option: --objective
+
+
+  [93mWarning: [0mUnknown option: --out
+
+{
+  "test_count": 800,
+  "accepted_count": 744,
+  "matched_count": 739,
+  "task_accuracy": 0.9375,
+  "concept_accuracy": 0.94375,
+  "soft_hard_disagreement": 0.0,
+  "joint_concept_coverage": 0.93,
+  "explanation_coverage": 0.93,
+  "ordinary_semantic_correct_all": 0.91,
+  "ordinary_semantic_correct_same_accepted": 0.9354838709677419,
+  "robust_semantic_correct_accepted": 0.9408602150537635,
+  "issued_false_reason_rate_all_test": 0.055,
+  "paired_same_image_same_length_delta": 0.0013531799729364006,
+  "reader_gradient_norm": 0.010681040585041046,
+  "gate_gradient_norm": 0.029756814241409302,
+  "objective": "bce",
+  "seed": 7,
+  "formula": "(red_left AND (green_top OR blue_right))",
+  "alpha": 0.1,
+  "calibration_threshold": 0.6650758981704712,
+  "export_equivalence_worlds_checked": 8,
+  "pyxai_reasons_independently_checked": 10,
+  "target_truth_table_agreement": 1.0,
+  "status": "synthetic integration test only; not evidence of a research advantage"
+}
+Warning: no variables in this model (and so, no generated file)!

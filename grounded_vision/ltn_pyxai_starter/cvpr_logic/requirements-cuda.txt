@@ -1,0 +1,3 @@
+# Optional upstream backend. Install a matching CUDA-enabled PyTorch 2.8.0
+# and CUDA Toolkit (nvcc) first; then use --no-build-isolation.
+difflogic @ git+https://github.com/Felix-Petersen/difflogic.git@469702c01ff0bfac9cdc6a395134252e11a56bd8

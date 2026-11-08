@@ -1,0 +1,90 @@
+{
+  "protocol": "official CUB train/test split; readers+tree fit on train only; hyperparameters selected on a train-carved validation sub-split",
+  "test_count": 5794,
+  "classes": 200,
+  "task_accuracy": 0.021574042112530202,
+  "majority_baseline": 0.0051777701070072485,
+  "concept_accuracy_all": 0.6262328024064303,
+  "concept_accuracy_certainty_ge2": 0.6271585819276545,
+  "reason_mean_length": 11.457714877459441,
+  "reason_empty_count": 0,
+  "issued_literal_count": 66386,
+  "literal_truth_rate": 0.598077907992649,
+  "all_literals_true_rate": 0.004832585433206766,
+  "all_literals_true_rate_parts_visible": 0.01060859854829704,
+  "literal_certainty1_count": 6211,
+  "reader_val_selection": {
+    "grid": [
+      {
+        "max_depth": 4,
+        "min_samples_leaf": 2,
+        "val_accuracy": 0.02224694104560623
+      },
+      {
+        "max_depth": 4,
+        "min_samples_leaf": 4,
+        "val_accuracy": 0.02224694104560623
+      },
+      {
+        "max_depth": 4,
+        "min_samples_leaf": 8,
+        "val_accuracy": 0.02224694104560623
+      },
+      {
+        "max_depth": 6,
+        "min_samples_leaf": 2,
+        "val_accuracy": 0.05005561735261402
+      },
+      {
+        "max_depth": 6,
+        "min_samples_leaf": 4,
+        "val_accuracy": 0.048943270300333706
+      },
+      {
+        "max_depth": 6,
+        "min_samples_leaf": 8,
+        "val_accuracy": 0.04560622914349277
+      },
+      {
+        "max_depth": 8,
+        "min_samples_leaf": 2,
+        "val_accuracy": 0.11012235817575083
+      },
+      {
+        "max_depth": 8,
+        "min_samples_leaf": 4,
+        "val_accuracy": 0.09899888765294772
+      },
+      {
+        "max_depth": 8,
+        "min_samples_leaf": 8,
+        "val_accuracy": 0.09454949944382647
+      },
+      {
+        "max_depth": 12,
+        "min_samples_leaf": 2,
+        "val_accuracy": 0.26585094549499444
+      },
+      {
+        "max_depth": 12,
+        "min_samples_leaf": 4,
+        "val_accuracy": 0.1835372636262514
+      },
+      {
+        "max_depth": 12,
+        "min_samples_leaf": 8,
+        "val_accuracy": 0.1657397107897664
+      }
+    ],
+    "selected": {
+      "max_depth": 12,
+      "min_samples_leaf": 2,
+      "val_accuracy": 0.26585094549499444
+    }
+  },
+  "crop_contract_check": {
+    "images_checked": 8,
+    "max_abs_logit_difference": 2.384185791015625e-07
+  },
+  "scope": "crop readers from scratch are the known bottleneck; no grounding, calibration, or causal claim; reason truth is measured against CUB attribute annotations on the official test split only"
+}

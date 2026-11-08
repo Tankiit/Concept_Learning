@@ -1,0 +1,9 @@
+/workspace/scratch/262d6f00c837/.venv-ltn/lib/python3.12/site-packages/pycsp3/__init__.py:9: ResourceWarning: unclosed file <_io.TextIOWrapper name='/workspace/scratch/262d6f00c837/.venv-ltn/lib/python3.12/site-packages/pycsp3/version.txt' mode='r' encoding='utf-8'>
+  __pycsp3_version__ = open(os.path.join(os.path.dirname(__file__), 'version.txt'), encoding='utf-8').read()
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+...
+----------------------------------------------------------------------
+Ran 3 tests in 1.860s
+
+OK
+Warning: no variables in this model (and so, no generated file)!

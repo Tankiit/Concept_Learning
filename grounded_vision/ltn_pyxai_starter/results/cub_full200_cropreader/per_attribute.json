@@ -1,0 +1,254 @@
+[
+  {
+    "name": "beak:bill_shape=curved",
+    "cub_attribute_id": 1,
+    "cub_name": "has_bill_shape::curved_(up_or_down)",
+    "test_accuracy": 0.3677942699344149,
+    "test_accuracy_certainty_ge2": 0.3671957671957672,
+    "positive_rate": 0.020538488091128754,
+    "n_positive": 119
+  },
+  {
+    "name": "beak:bill_shape=dagger",
+    "cub_attribute_id": 2,
+    "cub_name": "has_bill_shape::dagger",
+    "test_accuracy": 0.576458405246807,
+    "test_accuracy_certainty_ge2": 0.5761904761904761,
+    "positive_rate": 0.13565757680358992,
+    "n_positive": 786
+  },
+  {
+    "name": "beak:bill_shape=hooked",
+    "cub_attribute_id": 3,
+    "cub_name": "has_bill_shape::hooked",
+    "test_accuracy": 0.983603727994477,
+    "test_accuracy_certainty_ge2": 0.9832451499118166,
+    "positive_rate": 0.016396272005522954,
+    "n_positive": 95
+  },
+  {
+    "name": "beak:bill_shape=needle",
+    "cub_attribute_id": 4,
+    "cub_name": "has_bill_shape::needle",
+    "test_accuracy": 0.5495340006903694,
+    "test_accuracy_certainty_ge2": 0.5507936507936508,
+    "positive_rate": 0.025716258198136003,
+    "n_positive": 149
+  },
+  {
+    "name": "beak:bill_shape=cone",
+    "cub_attribute_id": 8,
+    "cub_name": "has_bill_shape::cone",
+    "test_accuracy": 0.5667932343803935,
+    "test_accuracy_certainty_ge2": 0.5661375661375662,
+    "positive_rate": 0.25336555056955473,
+    "n_positive": 1468
+  },
+  {
+    "name": "beak:bill_color=black",
+    "cub_attribute_id": 290,
+    "cub_name": "has_bill_color::black",
+    "test_accuracy": 0.5445288229202624,
+    "test_accuracy_certainty_ge2": 0.5454866008462623,
+    "positive_rate": 0.44442526751812217,
+    "n_positive": 2575
+  },
+  {
+    "name": "beak:bill_color=yellow",
+    "cub_attribute_id": 285,
+    "cub_name": "has_bill_color::yellow",
+    "test_accuracy": 0.5227821884708319,
+    "test_accuracy_certainty_ge2": 0.5204513399153737,
+    "positive_rate": 0.057991025198481184,
+    "n_positive": 336
+  },
+  {
+    "name": "crown:crown_color=black",
+    "cub_attribute_id": 305,
+    "cub_name": "has_crown_color::black",
+    "test_accuracy": 0.6170176044183638,
+    "test_accuracy_certainty_ge2": 0.6189614619142392,
+    "positive_rate": 0.3201587849499482,
+    "n_positive": 1855
+  },
+  {
+    "name": "crown:crown_color=yellow",
+    "cub_attribute_id": 300,
+    "cub_name": "has_crown_color::yellow",
+    "test_accuracy": 0.702795995857784,
+    "test_accuracy_certainty_ge2": 0.7036366925999639,
+    "positive_rate": 0.07024508111839835,
+    "n_positive": 407
+  },
+  {
+    "name": "crown:crown_color=red",
+    "cub_attribute_id": 307,
+    "cub_name": "has_crown_color::red",
+    "test_accuracy": 0.8227476700034518,
+    "test_accuracy_certainty_ge2": 0.8205174597430794,
+    "positive_rate": 0.05125992405937176,
+    "n_positive": 297
+  },
+  {
+    "name": "crown:crown_color=white",
+    "cub_attribute_id": 306,
+    "cub_name": "has_crown_color::white",
+    "test_accuracy": 0.5607525025888851,
+    "test_accuracy_certainty_ge2": 0.5630540980640492,
+    "positive_rate": 0.12288574387297203,
+    "n_positive": 712
+  },
+  {
+    "name": "forehead:forehead_color=black",
+    "cub_attribute_id": 164,
+    "cub_name": "has_forehead_color::black",
+    "test_accuracy": 0.6227131515360718,
+    "test_accuracy_certainty_ge2": 0.6255666364460563,
+    "positive_rate": 0.3217121159820504,
+    "n_positive": 1864
+  },
+  {
+    "name": "forehead:forehead_color=yellow",
+    "cub_attribute_id": 159,
+    "cub_name": "has_forehead_color::yellow",
+    "test_accuracy": 0.6984811874352779,
+    "test_accuracy_certainty_ge2": 0.6990027198549411,
+    "positive_rate": 0.0833620987228167,
+    "n_positive": 483
+  },
+  {
+    "name": "breast:breast_color=yellow",
+    "cub_attribute_id": 112,
+    "cub_name": "has_breast_color::yellow",
+    "test_accuracy": 0.788574387297204,
+    "test_accuracy_certainty_ge2": 0.7904833552755313,
+    "positive_rate": 0.13703831549879186,
+    "n_positive": 794
+  },
+  {
+    "name": "breast:breast_color=white",
+    "cub_attribute_id": 118,
+    "cub_name": "has_breast_color::white",
+    "test_accuracy": 0.6173627890921644,
+    "test_accuracy_certainty_ge2": 0.6300545420349821,
+    "positive_rate": 0.35899206075250256,
+    "n_positive": 2080
+  },
+  {
+    "name": "breast:breast_color=black",
+    "cub_attribute_id": 117,
+    "cub_name": "has_breast_color::black",
+    "test_accuracy": 0.6677597514670348,
+    "test_accuracy_certainty_ge2": 0.6691743464359601,
+    "positive_rate": 0.20296858819468416,
+    "n_positive": 1176
+  },
+  {
+    "name": "breast:breast_color=red",
+    "cub_attribute_id": 119,
+    "cub_name": "has_breast_color::red",
+    "test_accuracy": 0.773558853986883,
+    "test_accuracy_certainty_ge2": 0.7716757570058304,
+    "positive_rate": 0.0402140144977563,
+    "n_positive": 233
+  },
+  {
+    "name": "breast:breast_pattern=striped",
+    "cub_attribute_id": 57,
+    "cub_name": "has_breast_pattern::striped",
+    "test_accuracy": 0.545046599930963,
+    "test_accuracy_certainty_ge2": 0.5451092117758785,
+    "positive_rate": 0.11770797376596479,
+    "n_positive": 682
+  },
+  {
+    "name": "belly:belly_color=yellow",
+    "cub_attribute_id": 204,
+    "cub_name": "has_belly_color::yellow",
+    "test_accuracy": 0.7782188470831896,
+    "test_accuracy_certainty_ge2": 0.7752721617418351,
+    "positive_rate": 0.14566793234380393,
+    "n_positive": 844
+  },
+  {
+    "name": "belly:belly_color=white",
+    "cub_attribute_id": 210,
+    "cub_name": "has_belly_color::white",
+    "test_accuracy": 0.6171901967552641,
+    "test_accuracy_certainty_ge2": 0.6450233281493002,
+    "positive_rate": 0.37400759406282363,
+    "n_positive": 2167
+  },
+  {
+    "name": "belly:belly_color=black",
+    "cub_attribute_id": 209,
+    "cub_name": "has_belly_color::black",
+    "test_accuracy": 0.7109078356920953,
+    "test_accuracy_certainty_ge2": 0.708592534992224,
+    "positive_rate": 0.14704867103900587,
+    "n_positive": 852
+  },
+  {
+    "name": "left_wing:wing_color=black",
+    "cub_attribute_id": 21,
+    "cub_name": "has_wing_color::black",
+    "test_accuracy": 0.5586813945460821,
+    "test_accuracy_certainty_ge2": 0.5498223967096654,
+    "positive_rate": 0.42474974111149466,
+    "n_positive": 2461
+  },
+  {
+    "name": "left_wing:wing_color=brown",
+    "cub_attribute_id": 11,
+    "cub_name": "has_wing_color::brown",
+    "test_accuracy": 0.5629962029685882,
+    "test_accuracy_certainty_ge2": 0.5629089549448495,
+    "positive_rate": 0.2687262685536762,
+    "n_positive": 1557
+  },
+  {
+    "name": "left_wing:wing_pattern=striped",
+    "cub_attribute_id": 311,
+    "cub_name": "has_wing_pattern::striped",
+    "test_accuracy": 0.5238177424922333,
+    "test_accuracy_certainty_ge2": 0.5273429951690821,
+    "positive_rate": 0.22488781498101484,
+    "n_positive": 1303
+  },
+  {
+    "name": "right_wing:wing_color=black",
+    "cub_attribute_id": 21,
+    "cub_name": "has_wing_color::black",
+    "test_accuracy": 0.5693821194338972,
+    "test_accuracy_certainty_ge2": 0.5612263974574687,
+    "positive_rate": 0.42474974111149466,
+    "n_positive": 2461
+  },
+  {
+    "name": "right_wing:wing_color=brown",
+    "cub_attribute_id": 11,
+    "cub_name": "has_wing_color::brown",
+    "test_accuracy": 0.5336555056955471,
+    "test_accuracy_certainty_ge2": 0.5318751168442699,
+    "positive_rate": 0.2687262685536762,
+    "n_positive": 1557
+  },
+  {
+    "name": "tail:tail_shape=forked",
+    "cub_attribute_id": 74,
+    "cub_name": "has_tail_shape::forked_tail",
+    "test_accuracy": 0.5942354159475319,
+    "test_accuracy_certainty_ge2": 0.5915830789358918,
+    "positive_rate": 0.034173282706247844,
+    "n_positive": 198
+  },
+  {
+    "name": "tail:tail_color=black",
+    "cub_attribute_id": 91,
+    "cub_name": "has_upper_tail_color::black",
+    "test_accuracy": 0.55712806351398,
+    "test_accuracy_certainty_ge2": 0.5481193255512322,
+    "positive_rate": 0.2554366586123576,
+    "n_positive": 1480
+  }
+]

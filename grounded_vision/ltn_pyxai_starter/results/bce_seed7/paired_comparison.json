@@ -1,0 +1,13 @@
+{
+  "n": 739,
+  "repairs": 1,
+  "spoils": 0,
+  "difference": 0.0013531799729364006,
+  "paired_image_bootstrap_95_interval": [
+    0.0,
+    0.0040595399188092015
+  ],
+  "bootstrap_replicates": 2000,
+  "bootstrap_seed": 471,
+  "scope": "descriptive within this single trained seed; not across-training uncertainty"
+}

@@ -1,0 +1,14 @@
+{
+  "boolean_cbm/__init__.py": "c92dc41de01811bab2b112ce453d9aa39a03b01a4e716e84d548941e21f45f57",
+  "boolean_cbm/demo.py": "6adb679338adde51e9e6fdc6eeb93f354fe60d4e2f896a447b5b26072de17af8",
+  "boolean_cbm/logic.py": "d0dd9ea4fdf0bb581c067baf35b1862c2edfe528142296ed0ca03b09217961ce",
+  "boolean_cbm/predicates.py": "e03ae6cbd73b6712472bc32e2e549a8425a4f09f9b9f6c37c2c07edcf8acad21",
+  "boolean_cbm/test_boolean.py": "c45defb9ef18be478d06ff426d5b3219dce38a9e6c358dbdbf0ca9746889698c",
+  "boolean_cbm/train_tree.py": "d8b4b32751f33e1d27937f62bc9aacc0eb55db2d86dc0e8a616ff1ef59f23c0c",
+  "boolean_cbm/README.md": "81ed319adb18cfd2d3e8238c37de90ff1d67e2b9b1ab266a56673b3c7185f35a",
+  "boolean_cbm/VALIDATION.md": "4490f20e96ecf957823220b9619108d4b0c26f4a44bdff22f1817abdc6cbd73d",
+  "boolean_cbm_walkthrough.ipynb": "43b38bbeffe2e8040a87edb319b08db33b948102dc7bc72a3a3e65a0955703a2",
+  "README.md": "5c30a1bb63938a839c1d8dffb62e9abc31bd0ec0398b24578a3d3a19aba62229",
+  "cub_crop_pipeline.py": "6928e4ce982a181c9a1327be82422517635d9c0dcef610d410e0e9f33323d169",
+  "CUB_RUNS_NOTE": "cub_crop_pipeline.py and the boolean_cbm changes (pos_weight, CUB README/VALIDATION sections) were added 2026-11-08 for the real-CUB official-split execution"
+}
