@@ -1,0 +1,618 @@
+{
+ "protocol": {
+  "question": "Is P(all premises supported) explained by independent compounding of per-literal marginals (Q2), and do present/absent clause precisions beat predict-the-prior baselines (Q4)?",
+  "observed": "fraction of instances whose reason has all literals annotation-supported (committed per_instance records)",
+  "predicted": "prod of per-literal marginal support rates (estimated over literal occurrences in reasons, same test set)",
+  "bootstrap": "cluster bootstrap over instances, 10000 resamples, marginals re-estimated per resample",
+  "inputs": [
+   "results/cbm_cem_audit.json",
+   "results/cbm_cem_audit_K200.json"
+  ],
+  "note": "ratio > 1 means premise errors cluster (joint support better than independence predicts); ratio < 1 means errors anti-correlate"
+ },
+ "blocks": [
+  {
+   "setting": "T_tree_head",
+   "K": 4,
+   "reader": "linear",
+   "n_instances": 118,
+   "n_literal_occurrences": 426,
+   "observed_joint": 0.2542372881355932,
+   "independence_predicted_joint": 0.2542372881355932,
+   "ratio_obs_over_pred": 1.0,
+   "ratio_boot_median": 1.0,
+   "ratio_boot_pct": [
+    1.0,
+    1.0
+   ],
+   "obs_boot_pct": [
+    0.17796610169491525,
+    0.3305084745762712
+   ],
+   "pred_boot_pct": [
+    0.17796610169491525,
+    0.3305084745762712
+   ],
+   "mean_reason_len": 3.610169491525424,
+   "by_length": {
+    "L1-3": {
+     "n": 55,
+     "observed": 0.5454545454545454,
+     "predicted": 0.5454545454545454,
+     "ratio": 1.0
+    },
+    "L4-6": {
+     "n": 51,
+     "observed": 0.0,
+     "predicted": 0.0,
+     "ratio": null
+    },
+    "L7-7": {
+     "n": 12,
+     "observed": 0.0,
+     "predicted": 0.0,
+     "ratio": null
+    }
+   },
+   "literal_marginal_hist": {
+    "n_distinct_literals": 14,
+    "at_0": 0.07142857142857142,
+    "at_1": 0.14285714285714285,
+    "strictly_between": 0.7857142857142857
+   },
+   "ratio_crossfit": 1.0,
+   "q8_literal_filter": {
+    "0.5": {
+     "coverage": 0.2542372881355932,
+     "p_all_given_covered": 1.0,
+     "n_covered": 30
+    },
+    "0.7": {
+     "coverage": 0.2542372881355932,
+     "p_all_given_covered": 1.0,
+     "n_covered": 30
+    },
+    "0.8": {
+     "coverage": 0.2542372881355932,
+     "p_all_given_covered": 1.0,
+     "n_covered": 30
+    },
+    "0.9": {
+     "coverage": 0.2542372881355932,
+     "p_all_given_covered": 1.0,
+     "n_covered": 30
+    },
+    "0.95": {
+     "coverage": 0.2542372881355932,
+     "p_all_given_covered": 1.0,
+     "n_covered": 30
+    },
+    "1.0": {
+     "coverage": 0.2542372881355932,
+     "p_all_given_covered": 1.0,
+     "n_covered": 30
+    }
+   },
+   "q8_literal_filter_crossfit": {
+    "0.5": {
+     "coverage": 0.2542372881355932,
+     "p_all_given_covered": 1.0,
+     "n_covered": 30
+    },
+    "0.7": {
+     "coverage": 0.2542372881355932,
+     "p_all_given_covered": 1.0,
+     "n_covered": 30
+    },
+    "0.8": {
+     "coverage": 0.2542372881355932,
+     "p_all_given_covered": 1.0,
+     "n_covered": 30
+    },
+    "0.9": {
+     "coverage": 0.2542372881355932,
+     "p_all_given_covered": 1.0,
+     "n_covered": 30
+    },
+    "0.95": {
+     "coverage": 0.2542372881355932,
+     "p_all_given_covered": 1.0,
+     "n_covered": 30
+    },
+    "1.0": {
+     "coverage": 0.2542372881355932,
+     "p_all_given_covered": 1.0,
+     "n_covered": 30
+    }
+   },
+   "q4_baselines": {
+    "n_present_occurrences": 279,
+    "n_absent_occurrences": 147,
+    "present_base_rate": 0.12199173071792543,
+    "absent_base_rate": 0.8097666181653144,
+    "present_precision_observed": 0.1541,
+    "absent_precision_observed": 0.8707
+   }
+  },
+  {
+   "setting": "D_distilled",
+   "K": 4,
+   "reader": "linear",
+   "n_instances": 118,
+   "n_literal_occurrences": 303,
+   "observed_joint": 0.2542372881355932,
+   "independence_predicted_joint": 0.2542372881355932,
+   "ratio_obs_over_pred": 1.0,
+   "ratio_boot_median": 1.0,
+   "ratio_boot_pct": [
+    1.0,
+    1.0
+   ],
+   "obs_boot_pct": [
+    0.17796610169491525,
+    0.3389830508474576
+   ],
+   "pred_boot_pct": [
+    0.17796610169491525,
+    0.3389830508474576
+   ],
+   "mean_reason_len": 2.5677966101694913,
+   "by_length": {
+    "L1-3": {
+     "n": 94,
+     "observed": 0.3191489361702128,
+     "predicted": 0.3191489361702128,
+     "ratio": 1.0
+    },
+    "L4-4": {
+     "n": 24,
+     "observed": 0.0,
+     "predicted": 0.0,
+     "ratio": null
+    }
+   },
+   "literal_marginal_hist": {
+    "n_distinct_literals": 8,
+    "at_0": 0.125,
+    "at_1": 0.25,
+    "strictly_between": 0.625
+   },
+   "ratio_crossfit": 1.0,
+   "q8_literal_filter": {
+    "0.5": {
+     "coverage": 0.2542372881355932,
+     "p_all_given_covered": 1.0,
+     "n_covered": 30
+    },
+    "0.7": {
+     "coverage": 0.2542372881355932,
+     "p_all_given_covered": 1.0,
+     "n_covered": 30
+    },
+    "0.8": {
+     "coverage": 0.2542372881355932,
+     "p_all_given_covered": 1.0,
+     "n_covered": 30
+    },
+    "0.9": {
+     "coverage": 0.2542372881355932,
+     "p_all_given_covered": 1.0,
+     "n_covered": 30
+    },
+    "0.95": {
+     "coverage": 0.2542372881355932,
+     "p_all_given_covered": 1.0,
+     "n_covered": 30
+    },
+    "1.0": {
+     "coverage": 0.2542372881355932,
+     "p_all_given_covered": 1.0,
+     "n_covered": 30
+    }
+   },
+   "q8_literal_filter_crossfit": {
+    "0.5": {
+     "coverage": 0.2542372881355932,
+     "p_all_given_covered": 1.0,
+     "n_covered": 30
+    },
+    "0.7": {
+     "coverage": 0.2542372881355932,
+     "p_all_given_covered": 1.0,
+     "n_covered": 30
+    },
+    "0.8": {
+     "coverage": 0.2542372881355932,
+     "p_all_given_covered": 1.0,
+     "n_covered": 30
+    },
+    "0.9": {
+     "coverage": 0.2542372881355932,
+     "p_all_given_covered": 1.0,
+     "n_covered": 30
+    },
+    "0.95": {
+     "coverage": 0.2542372881355932,
+     "p_all_given_covered": 1.0,
+     "n_covered": 30
+    },
+    "1.0": {
+     "coverage": 0.2542372881355932,
+     "p_all_given_covered": 1.0,
+     "n_covered": 30
+    }
+   },
+   "q4_baselines": {
+    "n_present_occurrences": 210,
+    "n_absent_occurrences": 93,
+    "present_base_rate": 0.0616285908302715,
+    "absent_base_rate": 0.859591441659753,
+    "present_precision_observed": 0.0952,
+    "absent_precision_observed": 0.9355
+   }
+  },
+  {
+   "setting": "T_tree_head",
+   "K": 10,
+   "reader": "linear",
+   "n_instances": 243,
+   "n_literal_occurrences": 1429,
+   "observed_joint": 0.11522633744855967,
+   "independence_predicted_joint": 0.07592217662140016,
+   "ratio_obs_over_pred": 1.517690121335126,
+   "ratio_boot_median": 1.5103057834084344,
+   "ratio_boot_pct": [
+    1.2302305694590707,
+    1.8832708950542574
+   ],
+   "obs_boot_pct": [
+    0.07818930041152264,
+    0.15637860082304528
+   ],
+   "pred_boot_pct": [
+    0.04895094626715881,
+    0.10747360128701688
+   ],
+   "mean_reason_len": 5.8806584362139915,
+   "by_length": {
+    "L1-3": {
+     "n": 5,
+     "observed": 0.2,
+     "predicted": 0.16185751463890696,
+     "ratio": 1.2356547080695408
+    },
+    "L4-6": {
+     "n": 143,
+     "observed": 0.1888111888111888,
+     "predicted": 0.12296960942626753,
+     "ratio": 1.5354296861811196
+    },
+    "L7-9": {
+     "n": 95,
+     "observed": 0.0,
+     "predicted": 0.000580496819467834,
+     "ratio": 0.0
+    }
+   },
+   "literal_marginal_hist": {
+    "n_distinct_literals": 42,
+    "at_0": 0.09523809523809523,
+    "at_1": 0.21428571428571427,
+    "strictly_between": 0.6904761904761905
+   },
+   "ratio_crossfit": 1.4848148022335936,
+   "q8_literal_filter": {
+    "0.5": {
+     "coverage": 0.02880658436213992,
+     "p_all_given_covered": 0.5714285714285714,
+     "n_covered": 7
+    },
+    "0.7": {
+     "coverage": 0.0205761316872428,
+     "p_all_given_covered": 0.6,
+     "n_covered": 5
+    },
+    "0.8": {
+     "coverage": 0.0205761316872428,
+     "p_all_given_covered": 0.6,
+     "n_covered": 5
+    },
+    "0.9": {
+     "coverage": 0.0,
+     "p_all_given_covered": null,
+     "n_covered": 0
+    },
+    "0.95": {
+     "coverage": 0.0,
+     "p_all_given_covered": null,
+     "n_covered": 0
+    },
+    "1.0": {
+     "coverage": 0.0,
+     "p_all_given_covered": null,
+     "n_covered": 0
+    }
+   },
+   "q8_literal_filter_crossfit": {
+    "0.5": {
+     "coverage": 0.09053497942386832,
+     "p_all_given_covered": 0.6363636363636364,
+     "n_covered": 22
+    },
+    "0.7": {
+     "coverage": 0.0205761316872428,
+     "p_all_given_covered": 0.6,
+     "n_covered": 5
+    },
+    "0.8": {
+     "coverage": 0.0205761316872428,
+     "p_all_given_covered": 0.6,
+     "n_covered": 5
+    },
+    "0.9": {
+     "coverage": 0.012345679012345678,
+     "p_all_given_covered": 0.3333333333333333,
+     "n_covered": 3
+    },
+    "0.95": {
+     "coverage": 0.012345679012345678,
+     "p_all_given_covered": 0.3333333333333333,
+     "n_covered": 3
+    },
+    "1.0": {
+     "coverage": 0.012345679012345678,
+     "p_all_given_covered": 0.3333333333333333,
+     "n_covered": 3
+    }
+   },
+   "q4_baselines": {
+    "n_present_occurrences": 719,
+    "n_absent_occurrences": 710,
+    "present_base_rate": 0.1732412248993441,
+    "absent_base_rate": 0.8599442826797582,
+    "present_precision_observed": 0.2267,
+    "absent_precision_observed": 0.9141
+   }
+  },
+  {
+   "setting": "D_distilled",
+   "K": 10,
+   "reader": "linear",
+   "n_instances": 243,
+   "n_literal_occurrences": 897,
+   "observed_joint": 0.12345679012345678,
+   "independence_predicted_joint": 0.11374723763611043,
+   "ratio_obs_over_pred": 1.0853607761307422,
+   "ratio_boot_median": 1.0818475063001938,
+   "ratio_boot_pct": [
+    0.9946267709201133,
+    1.2057129155290414
+   ],
+   "obs_boot_pct": [
+    0.0823045267489712,
+    0.1646090534979424
+   ],
+   "pred_boot_pct": [
+    0.07630147770366165,
+    0.1539117762759216
+   ],
+   "mean_reason_len": 3.691358024691358,
+   "by_length": {
+    "L1-3": {
+     "n": 75,
+     "observed": 0.013333333333333334,
+     "predicted": 0.014391672088484053,
+     "ratio": 0.9264617239300789
+    },
+    "L4-4": {
+     "n": 168,
+     "observed": 0.17261904761904762,
+     "predicted": 0.15810240082701504,
+     "ratio": 1.0918180034970861
+    }
+   },
+   "literal_marginal_hist": {
+    "n_distinct_literals": 22,
+    "at_0": 0.09090909090909091,
+    "at_1": 0.2727272727272727,
+    "strictly_between": 0.6363636363636364
+   },
+   "ratio_crossfit": 1.1886821407667498,
+   "q8_literal_filter": {
+    "0.5": {
+     "coverage": 0.1522633744855967,
+     "p_all_given_covered": 0.7027027027027027,
+     "n_covered": 37
+    },
+    "0.7": {
+     "coverage": 0.12345679012345678,
+     "p_all_given_covered": 0.7333333333333333,
+     "n_covered": 30
+    },
+    "0.8": {
+     "coverage": 0.0,
+     "p_all_given_covered": null,
+     "n_covered": 0
+    },
+    "0.9": {
+     "coverage": 0.0,
+     "p_all_given_covered": null,
+     "n_covered": 0
+    },
+    "0.95": {
+     "coverage": 0.0,
+     "p_all_given_covered": null,
+     "n_covered": 0
+    },
+    "1.0": {
+     "coverage": 0.0,
+     "p_all_given_covered": null,
+     "n_covered": 0
+    }
+   },
+   "q8_literal_filter_crossfit": {
+    "0.5": {
+     "coverage": 0.13580246913580246,
+     "p_all_given_covered": 0.696969696969697,
+     "n_covered": 33
+    },
+    "0.7": {
+     "coverage": 0.06995884773662552,
+     "p_all_given_covered": 0.6470588235294118,
+     "n_covered": 17
+    },
+    "0.8": {
+     "coverage": 0.0,
+     "p_all_given_covered": null,
+     "n_covered": 0
+    },
+    "0.9": {
+     "coverage": 0.0,
+     "p_all_given_covered": null,
+     "n_covered": 0
+    },
+    "0.95": {
+     "coverage": 0.0,
+     "p_all_given_covered": null,
+     "n_covered": 0
+    },
+    "1.0": {
+     "coverage": 0.0,
+     "p_all_given_covered": null,
+     "n_covered": 0
+    }
+   },
+   "q4_baselines": {
+    "n_present_occurrences": 413,
+    "n_absent_occurrences": 484,
+    "present_base_rate": 0.14455241810173985,
+    "absent_base_rate": 0.8919424559421871,
+    "present_precision_observed": 0.1937,
+    "absent_precision_observed": 0.9339
+   }
+  },
+  {
+   "setting": "T_tree_head",
+   "K": 200,
+   "reader": "linear",
+   "n_instances": 600,
+   "n_literal_occurrences": 6455,
+   "observed_joint": 0.016666666666666666,
+   "independence_predicted_joint": 0.013456102649127265,
+   "ratio_obs_over_pred": 1.238595386885491,
+   "ratio_boot_median": 1.2177997916777379,
+   "ratio_boot_pct": [
+    0.5622022916287065,
+    1.9990315555922702
+   ],
+   "obs_boot_pct": [
+    0.006666666666666667,
+    0.02666666666666667
+   ],
+   "pred_boot_pct": [
+    0.01050739186164934,
+    0.016875805977688122
+   ],
+   "mean_reason_len": 10.758333333333333,
+   "by_length": {
+    "L4-6": {
+     "n": 15,
+     "observed": 0.06666666666666667,
+     "predicted": 0.022013532555251236,
+     "ratio": 3.028440187840893
+    },
+    "L7-10": {
+     "n": 186,
+     "observed": 0.005376344086021506,
+     "predicted": 0.010137928441185546,
+     "ratio": 0.5303197904001764
+    },
+    "L11-12": {
+     "n": 399,
+     "observed": 0.020050125313283207,
+     "predicted": 0.014681212809742055,
+     "ratio": 1.3656995217710137
+    }
+   },
+   "literal_marginal_hist": {
+    "n_distinct_literals": 56,
+    "at_0": 0.0,
+    "at_1": 0.05357142857142857,
+    "strictly_between": 0.9464285714285714
+   },
+   "ratio_crossfit": 1.2001641525334314,
+   "q8_literal_filter": {
+    "0.5": {
+     "coverage": 0.008333333333333333,
+     "p_all_given_covered": 0.0,
+     "n_covered": 5
+    },
+    "0.7": {
+     "coverage": 0.0,
+     "p_all_given_covered": null,
+     "n_covered": 0
+    },
+    "0.8": {
+     "coverage": 0.0,
+     "p_all_given_covered": null,
+     "n_covered": 0
+    },
+    "0.9": {
+     "coverage": 0.0,
+     "p_all_given_covered": null,
+     "n_covered": 0
+    },
+    "0.95": {
+     "coverage": 0.0,
+     "p_all_given_covered": null,
+     "n_covered": 0
+    },
+    "1.0": {
+     "coverage": 0.0,
+     "p_all_given_covered": null,
+     "n_covered": 0
+    }
+   },
+   "q8_literal_filter_crossfit": {
+    "0.5": {
+     "coverage": 0.013333333333333334,
+     "p_all_given_covered": 0.125,
+     "n_covered": 8
+    },
+    "0.7": {
+     "coverage": 0.0,
+     "p_all_given_covered": null,
+     "n_covered": 0
+    },
+    "0.8": {
+     "coverage": 0.0,
+     "p_all_given_covered": null,
+     "n_covered": 0
+    },
+    "0.9": {
+     "coverage": 0.0,
+     "p_all_given_covered": null,
+     "n_covered": 0
+    },
+    "0.95": {
+     "coverage": 0.0,
+     "p_all_given_covered": null,
+     "n_covered": 0
+    },
+    "1.0": {
+     "coverage": 0.0,
+     "p_all_given_covered": null,
+     "n_covered": 0
+    }
+   },
+   "q4_baselines": {
+    "n_present_occurrences": 2257,
+    "n_absent_occurrences": 4198,
+    "present_base_rate": 0.19831463745280095,
+    "absent_base_rate": 0.8252968405743144,
+    "present_precision_observed": 0.3279,
+    "absent_precision_observed": 0.8949
+   }
+  }
+ ]
+}

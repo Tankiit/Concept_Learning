@@ -1,0 +1,12 @@
+# Core ML (PyC env: conda torch-multimodal)
+torch
+numpy
+scikit-learn
+
+# PyXAI env (separate venv — ltn_pyxai_starter/.venv)
+#   pyxai 2.0.1 (pip install pyxai==2.0.1)
+#   known 2.0.1 defects: minimal_sufficient_reason crashes on Linux and
+#   deadlocks on arm64 macOS for partially-used feature sets — never called
+pyxai
+
+# analysis/, utils/, tests/ are numpy-only; no extra deps

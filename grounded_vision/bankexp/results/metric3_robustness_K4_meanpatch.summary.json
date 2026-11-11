@@ -1,0 +1,8 @@
+{
+  "n": 118,
+  "frac_tree_necessity_min1": 1.0,
+  "frac_teacher_necessity_min1": 0.2966,
+  "mean_tree_survival_r1": 1.0,
+  "mean_teacher_survival_r1": 0.7125,
+  "draws": 64
+}

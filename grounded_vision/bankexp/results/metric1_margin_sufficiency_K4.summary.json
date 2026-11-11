@@ -1,0 +1,7 @@
+{
+  "method": "pyxai",
+  "n_reasons": 118,
+  "frac_sufficient_exact_teacher": 0.0,
+  "eps": 0.0,
+  "note": "exact box-LP: free coordinates set at the vertex maximizing each competing class's linear margin"
+}
