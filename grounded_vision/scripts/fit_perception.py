@@ -24,6 +24,7 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 
+from grounded_vision.perception.patch_transform import PatchTransform
 from grounded_vision.perception.regions import extract_part_regions, pool_region_features
 from grounded_vision.perception.readers import PartDetector, AttributeReader
 from grounded_vision.perception.prototypes import AttributePrototypeBank
@@ -39,10 +40,26 @@ def main():
     parser.add_argument("--attr-weight", type=float, default=0.1,
                         help="Weight of the attribute loss in the joint objective")
     parser.add_argument("--device", type=str, default="auto", help="auto|cpu|mps|cuda")
+    rot = parser.add_mutually_exclusive_group()
+    rot.add_argument("--rotate", dest="rotate", action="store_true", default=None,
+                     help="Rotate patches into the full-rank train covariance eigenbasis before "
+                          "region pooling (overrides perception.rotate_patches in the config)")
+    rot.add_argument("--no-rotate", dest="rotate", action="store_false")
+    wh = parser.add_mutually_exclusive_group()
+    wh.add_argument("--whiten", dest="whiten", action="store_true", default=None,
+                    help="On top of the rotation, rescale every axis to unit variance "
+                         "(overrides perception.whiten_patches; implies --rotate)")
+    wh.add_argument("--no-whiten", dest="whiten", action="store_false")
     args = parser.parse_args()
 
     with open(args.config) as f:
         cfg = yaml.safe_load(f)
+
+    # Reproducible head initialisation (runs were previously unseeded, so two
+    # identical invocations trained different readers)
+    seed = int(cfg.get("experiment", {}).get("seed", 42))
+    torch.manual_seed(seed)
+    np.random.seed(seed)
 
     cache_dir = cfg["data"]["cache_dir"]
     os.makedirs(cache_dir, exist_ok=True)
@@ -65,6 +82,25 @@ def main():
     cls_tokens = torch.from_numpy(d["cls_tokens"].astype(np.float32)).to(device)
     cache_ids = [int(s) for s in d["sample_ids"]]
     n = len(cache_ids)
+
+    # ---- Optional patch transform: rotate / whiten (fitted on train only) ---
+    # Patches only: the CLS token (-> PartDetector) stays raw.
+    use_rotate = args.rotate
+    if use_rotate is None:
+        use_rotate = bool(cfg["perception"].get("rotate_patches", False))
+    use_whiten = args.whiten
+    if use_whiten is None:
+        use_whiten = bool(cfg["perception"].get("whiten_patches", False))
+    if use_whiten and args.rotate is False:
+        parser.error("--whiten needs the rotation; drop --no-rotate")
+    use_rotate = use_rotate or use_whiten
+    eps_rel = float(cfg["perception"].get("whiten_eps_rel", 1e-5))
+    transform = (PatchTransform(whiten=use_whiten, eps_rel=eps_rel).fit_feature_maps(fmaps)
+                 if use_rotate else None)
+    if transform is not None:
+        extra = f", eps_rel {eps_rel:g}" if transform.whiten else ""
+        print(f"--> Patch transform '{transform.mode}' fitted on {transform.n_patches} train "
+              f"patches (full-rank basis, dim {transform.dim}{extra})")
 
     attributes = active_vocabulary(cfg)
     dataset = build_dataset(cfg, "train", n)
@@ -93,6 +129,8 @@ def main():
         _, boxes, vis, attrs = dataset.meta(id_to_idx[sid])
         attr_labels[row] = attrs
         fmap = torch.from_numpy(fmaps[row].astype(np.float32)).unsqueeze(0)
+        if transform is not None:
+            fmap = transform.transform_feature_map(fmap)
         regions = extract_part_regions(boxes, vis)
         pooled = pool_region_features(fmap, regions)
         by_part = {r.part_name: pooled[r.id].numpy() for r in regions if r.id in pooled}
@@ -221,6 +259,7 @@ def main():
         "attribute_accuracy_train": n_attr_correct / max(1, n_attr_total),
         "attribute_accuracy_by_region": per_region_acc,
         "attributes_with_fitted_prototypes": fitted_attrs,
+        "patch_transform": transform.mode if transform is not None else None,
     }
 
     ckpt_path = os.path.join(cache_dir, "perception_checkpoint.pt")
@@ -234,7 +273,9 @@ def main():
             "attribute_set": cfg["data"].get("attribute_set", "canonical"),
             "part_names": list(part_names),
             "n_attributes": n_attrs,
-            "config_snapshot": {"epochs": args.epochs, "lr": args.lr, "k_prototypes": k_protos},
+            "patch_transform": transform.state_dict() if transform is not None else None,
+            "config_snapshot": {"epochs": args.epochs, "lr": args.lr, "k_prototypes": k_protos,
+                                "patch_transform": transform.mode if transform is not None else None},
         },
         ckpt_path,
     )

@@ -16,7 +16,8 @@ dependencies = [
     "scikit-learn>=1.2.0",
     "pyyaml>=6.0",
     "pillow>=9.0.0",
-    "matplotlib>=3.6.0"
+    "matplotlib>=3.6.0",
+    "tqdm>=4.60.0"
 ]
 
 [project.optional-dependencies]

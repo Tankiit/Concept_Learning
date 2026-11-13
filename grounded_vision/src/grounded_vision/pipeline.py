@@ -22,9 +22,26 @@ from .perception.backbone import FrozenDINOBackbone, extract_backbone_features
 from .perception.regions import Region, extract_part_regions, pool_region_features
 from .perception.readers import PartDetector, AttributeReader, PerceptionOutput
 from .perception.prototypes import AttributePrototypeBank
+from .perception.patch_transform import PatchTransform
 from .predicates.grounding import ground_perception_output
 
 PERCEPTION_CHECKPOINT = "perception_checkpoint.pt"
+
+
+def load_patch_transform(cache_dir: str) -> Optional[PatchTransform]:
+    """
+    Returns the patch transform (rotation, optionally whitened) stored in
+    {cache_dir}/perception_checkpoint.pt by fit_perception.py, or None when the
+    checkpoint is absent or was fitted on raw patches. The checkpoint is the
+    single source of truth, so readers and features can never disagree on the
+    embedding space.
+    """
+    ckpt_path = os.path.join(cache_dir, PERCEPTION_CHECKPOINT)
+    if not os.path.exists(ckpt_path):
+        return None
+    ckpt = torch.load(ckpt_path, map_location="cpu", weights_only=False)
+    state = ckpt.get("patch_transform") or ckpt.get("rotation")
+    return PatchTransform.from_state_dict(state) if state else None
 
 
 def pick_device() -> str:
@@ -106,6 +123,8 @@ def load_perception(
     attr_reader.eval()
     meta["checkpoint_loaded"] = True
     meta["train_metrics"] = ckpt.get("metrics", {})
+    state = ckpt.get("patch_transform") or ckpt.get("rotation")
+    meta["patch_transform"] = ("whiten" if state.get("whiten") else "rotate") if state else None
     return part_detector, attr_reader, bank, meta
 
 
@@ -113,6 +132,11 @@ class FeatureProvider:
     """
     Serves per-sample backbone features from the {split}_features.npz cache,
     computing them with the live backbone only on cache misses.
+
+    If the perception checkpoint carries a patch transform, get() returns the
+    rotated (or whitened) feature map; the CLS token is left untouched (the PartDetector
+    reads it raw). Pass transform=False to always get raw backbone features,
+    or an explicit PatchTransform to override.
     """
 
     def __init__(
@@ -120,10 +144,17 @@ class FeatureProvider:
         cache_dir: str,
         split: str,
         backbone: Optional[FrozenDINOBackbone] = None,
+        transform: Any = None,
     ):
         self.cache_dir = cache_dir
         self.split = split
         self.backbone = backbone
+        if transform is None:
+            transform = load_patch_transform(cache_dir)
+        self.transform: Optional[PatchTransform] = transform or None
+        if self.transform is not None:
+            print(f"--> Patch transform '{self.transform.mode}' active (train mean + full-rank "
+                  f"covariance eigenbasis{', unit variance per axis' if self.transform.whiten else ''})")
         self.index: Dict[int, int] = {}
         path = os.path.join(cache_dir, f"{split}_features.npz")
         self.has_cache = os.path.exists(path)
@@ -143,6 +174,8 @@ class FeatureProvider:
             i = self.index[sample_id]
             cls = torch.from_numpy(np.asarray(self.cls_tokens[i], dtype=np.float32)).unsqueeze(0)
             fmap = torch.from_numpy(np.asarray(self.feature_maps[i], dtype=np.float32)).unsqueeze(0)
+            if self.transform is not None:
+                fmap = self.transform.transform_feature_map(fmap)
             return cls, fmap
         if self.backbone is None:
             raise KeyError(

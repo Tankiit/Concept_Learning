@@ -25,6 +25,7 @@ from grounded_vision.pipeline import (
 )
 from grounded_vision.reasoning.features import FeatureCompiler, RepresentationMode
 from grounded_vision.reasoning.tree_head import CertifiableTreeHead
+from sklearn.ensemble import RandomForestClassifier
 
 
 def main():
@@ -83,10 +84,35 @@ def main():
 
     X_train = compiler.compile_batch(dbs, use_probabilities=False)
     y_train = np.array(labels)
+    X_real = X_train
+    y_real = y_train
+
+    dcfg = cfg["reasoning"].get("distillation", {})
+    if dcfg.get("enabled", False):
+        seed = cfg["experiment"].get("seed", 42)
+        teacher = RandomForestClassifier(
+            n_estimators=dcfg.get("teacher_n_estimators", 100),
+            max_depth=dcfg.get("teacher_max_depth", 12),
+            min_samples_leaf=cfg["reasoning"].get("min_samples_leaf", 4),
+            n_jobs=-1, random_state=seed,
+        ).fit(X_train, y_train)
+        rng = np.random.RandomState(seed)
+        n_aug = dcfg.get("n_augment", 10)
+        max_flips = dcfg.get("max_flips", 3)
+        attr_cols = np.array([j for j, name in enumerate(compiler.feature_names) if not name.startswith("has_part(")])
+        X_aug = np.repeat(X_real, n_aug, axis=0).copy()
+        for i in range(len(X_aug)):
+            k = rng.randint(1,max_flips+1)
+            cols = rng.choice(attr_cols, k,replace = False)
+            X_aug[i,cols] = 1 - X_aug[i,cols]
+        y_aug = teacher.predict(X_aug)
+        X_train = np.vstack([X_real, X_aug])
+        y_train = np.concatenate([y_real,y_aug])
 
     tree_cfg = cfg["reasoning"]
+    distill = dcfg.get("enabled",False)
     tree_head = CertifiableTreeHead(
-        max_depth=tree_cfg.get("max_depth", 10),
+        max_depth=dcfg.get("student_max_depth", 20) if distill else tree_cfg.get("max_depth", 10),
         min_samples_leaf=tree_cfg.get("min_samples_leaf", 3),
         criterion=tree_cfg.get("criterion", "gini"),
         feature_names=compiler.feature_names,
@@ -96,8 +122,14 @@ def main():
     print("--> Fitting CertifiableTreeHead...")
     tree_head.fit(X_train, y_train)
 
-    train_acc = float(np.mean(tree_head.predict(X_train) == y_train))
+    train_acc = float(np.mean(tree_head.predict(X_real) == y_real))
     print(f"--> Training Complete! Train Accuracy: {train_acc * 100:.2f}%")
+    fidelity = None
+    if distill:
+        teacher_acc = float(np.mean(teacher.predict(X_real) == y_real))
+        fidelity = float(np.mean(tree_head.predict(X_real) == teacher.predict(X_real)))
+        print(f"--> Teacher train acc {teacher_acc * 100:.2f}% | "
+            f"student fidelity to teacher {fidelity * 100:.2f}%")
 
     model_path = os.path.join(cache_dir, "tree_head.pkl")
     with open(model_path, "wb") as f:
@@ -108,6 +140,9 @@ def main():
                 "feature_names": compiler.feature_names,
                 "class_names": class_names,
                 "region_mode": args.regions,
+                "distillation": dcfg if distill else None,
+                "fidelity_train": fidelity,
+
             },
             f,
         )

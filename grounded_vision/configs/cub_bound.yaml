@@ -21,6 +21,9 @@ perception:
   part_detection: true
   num_prototypes_per_attribute: 5
   roi_pool_size: 7
+  rotate_patches: true
+  whiten_patches: true
+  whiten_eps_rel: 1.0e-5
 
 predicates:
   representation_mode: "bound"
