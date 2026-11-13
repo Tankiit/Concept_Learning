@@ -1,0 +1,24 @@
+{
+  "config": {
+    "seed": 7,
+    "epochs": 80,
+    "objective": "ltn",
+    "alpha": 0.1,
+    "out": "results/ltn_seed7"
+  },
+  "versions": {
+    "torch": "2.8.0+cpu",
+    "LTNtorch": "1.0.2",
+    "pyxai": "2.0.1",
+    "numpy": "2.3.5"
+  },
+  "split_seeds": {
+    "train": 700,
+    "tune": 701,
+    "calibration": 702,
+    "test": 703
+  },
+  "upstream_ltn_commit_inspected": "d1bd98169cc2121f8cdd25ff99901e4589923c95",
+  "upstream_pyxai_commit_inspected": "2eb18994832e67b7ce082e357f18b5f2d12631a6",
+  "installed_packages": "PyPI releases; not GitHub HEAD builds"
+}

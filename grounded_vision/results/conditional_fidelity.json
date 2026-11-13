@@ -1,0 +1,1081 @@
+{
+  "protocol": {
+    "question": "Conditional fidelity: P(linear-head(x) = c | phi(x) satisfies R) for certified reasons R of the committed trees; reference = multinomial logreg on the same predicted concept bits",
+    "predictions_pre_registered": [
+      "CF1 overall agreement at K=4 in 0.70-0.90",
+      "CF2 {bill_color=yellow=0} pattern fidelity >= 0.90",
+      "CF3 multi-clause patterns lower/more variable than single-clause",
+      "CF4 pipit's dominant logreg coefficient is bill_color=yellow"
+    ],
+    "min_group": 5,
+    "note": "pattern grouping satisfies-literals mask over ALL test images of the K classes; Wilson per group; multiplicity not corrected here (exploratory)"
+  },
+  "results": [
+    {
+      "K": 4,
+      "n_test": 118,
+      "tree_acc": 0.6016949152542372,
+      "logreg_acc": 0.6186440677966102,
+      "overall_agreement": 0.8135593220338984,
+      "pattern_rows": [
+        {
+          "literals": [
+            "beak:bill_color=yellow-"
+          ],
+          "tree_class": 3,
+          "n_satisfying": 30,
+          "conditional_fidelity": 1.0,
+          "wilson95": [
+            0.8864829086095221,
+            1.0
+          ]
+        },
+        {
+          "literals": [
+            "beak:bill_color=yellow+",
+            "beak:bill_shape=curved+",
+            "belly:belly_color=white+",
+            "breast:breast_color=black-"
+          ],
+          "tree_class": 1,
+          "n_satisfying": 21,
+          "conditional_fidelity": 1.0,
+          "wilson95": [
+            0.8453561767357979,
+            0.9999999999999999
+          ]
+        },
+        {
+          "literals": [
+            "beak:bill_color=yellow+",
+            "beak:bill_shape=curved-"
+          ],
+          "tree_class": 2,
+          "n_satisfying": 15,
+          "conditional_fidelity": 0.8666666666666667,
+          "wilson95": [
+            0.6211750079348376,
+            0.9626395301086407
+          ]
+        },
+        {
+          "literals": [
+            "beak:bill_color=black+",
+            "beak:bill_color=yellow+",
+            "belly:belly_color=white+",
+            "breast:breast_color=black+",
+            "right_wing:wing_color=black-",
+            "tail:tail_color=black+"
+          ],
+          "tree_class": 2,
+          "n_satisfying": 13,
+          "conditional_fidelity": 0.7692307692307693,
+          "wilson95": [
+            0.49743126004873084,
+            0.918206209075343
+          ]
+        },
+        {
+          "literals": [
+            "beak:bill_color=black+",
+            "beak:bill_color=yellow+",
+            "beak:bill_shape=curved+",
+            "belly:belly_color=white+",
+            "breast:breast_color=black+",
+            "right_wing:wing_color=black-",
+            "tail:tail_color=black-"
+          ],
+          "tree_class": 0,
+          "n_satisfying": 12,
+          "conditional_fidelity": 0.25,
+          "wilson95": [
+            0.08894003962896138,
+            0.53231033912066
+          ]
+        },
+        {
+          "literals": [
+            "beak:bill_color=black-",
+            "beak:bill_color=yellow+",
+            "beak:bill_shape=curved+",
+            "belly:belly_color=white+"
+          ],
+          "tree_class": 1,
+          "n_satisfying": 12,
+          "conditional_fidelity": 0.9166666666666666,
+          "wilson95": [
+            0.6461140782014047,
+            0.9851352905492264
+          ]
+        },
+        {
+          "literals": [
+            "beak:bill_color=yellow+",
+            "beak:bill_shape=curved+",
+            "belly:belly_color=white-",
+            "right_wing:wing_color=black-",
+            "tail:tail_color=black+"
+          ],
+          "tree_class": 0,
+          "n_satisfying": 11,
+          "conditional_fidelity": 1.0,
+          "wilson95": [
+            0.7411599827511859,
+            1.0
+          ]
+        },
+        {
+          "literals": [
+            "beak:bill_color=black+",
+            "beak:bill_color=yellow+",
+            "beak:bill_shape=curved+",
+            "belly:belly_color=white-",
+            "tail:tail_color=black-"
+          ],
+          "tree_class": 1,
+          "n_satisfying": 10,
+          "conditional_fidelity": 0.6,
+          "wilson95": [
+            0.3126695474501864,
+            0.8318224187964902
+          ]
+        },
+        {
+          "literals": [
+            "beak:bill_color=yellow+",
+            "beak:bill_shape=curved+",
+            "right_wing:wing_color=black+"
+          ],
+          "tree_class": 1,
+          "n_satisfying": 10,
+          "conditional_fidelity": 1.0,
+          "wilson95": [
+            0.7224598312333834,
+            1.0
+          ]
+        },
+        {
+          "literals": [
+            "beak:bill_color=black-",
+            "beak:bill_color=yellow+",
+            "beak:bill_shape=curved+",
+            "belly:belly_color=white-",
+            "right_wing:wing_color=black-"
+          ],
+          "tree_class": 0,
+          "n_satisfying": 7,
+          "conditional_fidelity": 0.5714285714285714,
+          "wilson95": [
+            0.2504542304090258,
+            0.8417830777373732
+          ]
+        }
+      ],
+      "leaf_rows": [
+        {
+          "leaf": 1,
+          "tree_class": 3,
+          "n": 30,
+          "conditional_fidelity": 1.0,
+          "wilson95": [
+            0.8864829086095221,
+            1.0
+          ]
+        },
+        {
+          "leaf": 5,
+          "tree_class": 2,
+          "n": 11,
+          "conditional_fidelity": 0.9090909090909091,
+          "wilson95": [
+            0.6226353745137962,
+            0.9837682477371741
+          ]
+        },
+        {
+          "leaf": 11,
+          "tree_class": 1,
+          "n": 10,
+          "conditional_fidelity": 0.6,
+          "wilson95": [
+            0.3126695474501864,
+            0.8318224187964902
+          ]
+        },
+        {
+          "leaf": 14,
+          "tree_class": 0,
+          "n": 9,
+          "conditional_fidelity": 1.0,
+          "wilson95": [
+            0.7008472464490407,
+            1.0
+          ]
+        },
+        {
+          "leaf": 16,
+          "tree_class": 1,
+          "n": 6,
+          "conditional_fidelity": 0.8333333333333334,
+          "wilson95": [
+            0.43649056343635395,
+            0.9699474141282697
+          ]
+        },
+        {
+          "leaf": 18,
+          "tree_class": 1,
+          "n": 9,
+          "conditional_fidelity": 1.0,
+          "wilson95": [
+            0.7008472464490407,
+            1.0
+          ]
+        },
+        {
+          "leaf": 21,
+          "tree_class": 0,
+          "n": 5,
+          "conditional_fidelity": 0.4,
+          "wilson95": [
+            0.1176182311592533,
+            0.769280067791163
+          ]
+        },
+        {
+          "leaf": 22,
+          "tree_class": 0,
+          "n": 7,
+          "conditional_fidelity": 0.14285714285714285,
+          "wilson95": [
+            0.02567895594897479,
+            0.51313450331903
+          ]
+        },
+        {
+          "leaf": 23,
+          "tree_class": 2,
+          "n": 12,
+          "conditional_fidelity": 0.75,
+          "wilson95": [
+            0.46768966087934005,
+            0.9110599603710386
+          ]
+        },
+        {
+          "leaf": 25,
+          "tree_class": 1,
+          "n": 6,
+          "conditional_fidelity": 1.0,
+          "wilson95": [
+            0.6096569663469354,
+            0.9999999999999999
+          ]
+        }
+      ],
+      "logreg_top_coefs": {
+        "0": [
+          "right_wing:wing_color=black:-1.15",
+          "beak:bill_shape=curved:+1.08",
+          "right_wing:wing_color=brown:+0.65",
+          "crown:crown_color=black:+0.62",
+          "breast:breast_color=black:+0.61"
+        ],
+        "1": [
+          "right_wing:wing_color=black:+1.08",
+          "beak:bill_shape=curved:+0.99",
+          "breast:breast_color=black:-0.86",
+          "beak:bill_shape=needle:-0.83",
+          "tail:tail_color=black:-0.72"
+        ],
+        "2": [
+          "beak:bill_shape=curved:-1.29",
+          "breast:breast_color=white:+0.93",
+          "crown:crown_color=white:+0.63",
+          "beak:bill_color=black:+0.62",
+          "beak:bill_color=yellow:+0.55"
+        ],
+        "3": [
+          "beak:bill_color=yellow:-0.96",
+          "breast:breast_color=white:-0.91",
+          "crown:crown_color=white:-0.84",
+          "beak:bill_shape=curved:-0.78",
+          "tail:tail_shape=forked:-0.65"
+        ]
+      }
+    },
+    {
+      "K": 10,
+      "n_test": 243,
+      "tree_acc": 0.4444444444444444,
+      "logreg_acc": 0.5267489711934157,
+      "overall_agreement": 0.6131687242798354,
+      "pattern_rows": [
+        {
+          "literals": [
+            "beak:bill_color=yellow-",
+            "breast:breast_color=black+",
+            "breast:breast_color=red-",
+            "breast:breast_color=white-"
+          ],
+          "tree_class": 3,
+          "n_satisfying": 30,
+          "conditional_fidelity": 0.8,
+          "wilson95": [
+            0.6269395261897256,
+            0.9049502189759876
+          ]
+        },
+        {
+          "literals": [
+            "beak:bill_color=yellow+",
+            "beak:bill_shape=curved+",
+            "belly:belly_color=white+",
+            "breast:breast_color=black-",
+            "crown:crown_color=white+",
+            "left_wing:wing_color=brown-"
+          ],
+          "tree_class": 1,
+          "n_satisfying": 20,
+          "conditional_fidelity": 1.0,
+          "wilson95": [
+            0.8388698745050667,
+            1.0
+          ]
+        },
+        {
+          "literals": [
+            "beak:bill_color=yellow+",
+            "beak:bill_shape=curved+",
+            "beak:bill_shape=needle-",
+            "belly:belly_color=white+",
+            "breast:breast_color=black+",
+            "crown:crown_color=black+",
+            "crown:crown_color=white+",
+            "right_wing:wing_color=black-",
+            "tail:tail_color=black-"
+          ],
+          "tree_class": 0,
+          "n_satisfying": 14,
+          "conditional_fidelity": 0.21428571428571427,
+          "wilson95": [
+            0.0757124833691637,
+            0.4758972377320828
+          ]
+        },
+        {
+          "literals": [
+            "beak:bill_color=yellow+",
+            "beak:bill_shape=curved-",
+            "beak:bill_shape=dagger+",
+            "beak:bill_shape=hooked-",
+            "belly:belly_color=white+",
+            "breast:breast_color=black+",
+            "breast:breast_pattern=striped-",
+            "tail:tail_shape=forked-"
+          ],
+          "tree_class": 4,
+          "n_satisfying": 14,
+          "conditional_fidelity": 0.35714285714285715,
+          "wilson95": [
+            0.16344490737202735,
+            0.6123599531785959
+          ]
+        },
+        {
+          "literals": [
+            "beak:bill_color=yellow+",
+            "beak:bill_shape=curved-",
+            "belly:belly_color=white+",
+            "breast:breast_color=black-"
+          ],
+          "tree_class": 2,
+          "n_satisfying": 13,
+          "conditional_fidelity": 0.38461538461538464,
+          "wilson95": [
+            0.17709446581236818,
+            0.6447751902773146
+          ]
+        },
+        {
+          "literals": [
+            "beak:bill_color=yellow+",
+            "beak:bill_shape=curved+",
+            "crown:crown_color=white+",
+            "right_wing:wing_color=black+"
+          ],
+          "tree_class": 1,
+          "n_satisfying": 13,
+          "conditional_fidelity": 1.0,
+          "wilson95": [
+            0.7718981569447083,
+            1.0
+          ]
+        },
+        {
+          "literals": [
+            "beak:bill_color=yellow-",
+            "breast:breast_color=red+",
+            "breast:breast_color=white-",
+            "tail:tail_shape=forked+"
+          ],
+          "tree_class": 9,
+          "n_satisfying": 13,
+          "conditional_fidelity": 0.9230769230769231,
+          "wilson95": [
+            0.6668546607175265,
+            0.9862899336203037
+          ]
+        },
+        {
+          "literals": [
+            "beak:bill_color=yellow+",
+            "beak:bill_shape=curved-",
+            "beak:bill_shape=hooked-",
+            "belly:belly_color=white+",
+            "breast:breast_color=black+",
+            "breast:breast_pattern=striped-",
+            "tail:tail_shape=forked+"
+          ],
+          "tree_class": 6,
+          "n_satisfying": 12,
+          "conditional_fidelity": 0.6666666666666666,
+          "wilson95": [
+            0.3906175873976139,
+            0.8618821601026385
+          ]
+        },
+        {
+          "literals": [
+            "beak:bill_color=black-",
+            "beak:bill_color=yellow+",
+            "beak:bill_shape=curved-",
+            "beak:bill_shape=hooked-",
+            "belly:belly_color=black-",
+            "belly:belly_color=white-",
+            "tail:tail_color=black+"
+          ],
+          "tree_class": 7,
+          "n_satisfying": 12,
+          "conditional_fidelity": 0.6666666666666666,
+          "wilson95": [
+            0.3906175873976139,
+            0.8618821601026385
+          ]
+        },
+        {
+          "literals": [
+            "beak:bill_color=yellow+",
+            "beak:bill_shape=curved+",
+            "belly:belly_color=white+",
+            "breast:breast_color=black+",
+            "crown:crown_color=black+",
+            "crown:crown_color=white+",
+            "left_wing:wing_color=brown-",
+            "right_wing:wing_color=black-",
+            "tail:tail_color=black+"
+          ],
+          "tree_class": 2,
+          "n_satisfying": 12,
+          "conditional_fidelity": 0.6666666666666666,
+          "wilson95": [
+            0.3906175873976139,
+            0.8618821601026385
+          ]
+        },
+        {
+          "literals": [
+            "beak:bill_color=yellow-",
+            "breast:breast_color=red+",
+            "breast:breast_color=white-",
+            "breast:breast_color=yellow+"
+          ],
+          "tree_class": 9,
+          "n_satisfying": 12,
+          "conditional_fidelity": 1.0,
+          "wilson95": [
+            0.7574992425007574,
+            1.0
+          ]
+        },
+        {
+          "literals": [
+            "beak:bill_color=yellow+",
+            "beak:bill_shape=curved+",
+            "belly:belly_color=white-",
+            "crown:crown_color=black+",
+            "crown:crown_color=white+",
+            "right_wing:wing_color=black-",
+            "tail:tail_color=black+"
+          ],
+          "tree_class": 0,
+          "n_satisfying": 11,
+          "conditional_fidelity": 0.9090909090909091,
+          "wilson95": [
+            0.6226353745137962,
+            0.9837682477371741
+          ]
+        },
+        {
+          "literals": [
+            "beak:bill_color=black+",
+            "beak:bill_color=yellow+",
+            "beak:bill_shape=curved+",
+            "belly:belly_color=white-",
+            "crown:crown_color=white+",
+            "left_wing:wing_color=brown-",
+            "tail:tail_color=black-"
+          ],
+          "tree_class": 1,
+          "n_satisfying": 9,
+          "conditional_fidelity": 0.5555555555555556,
+          "wilson95": [
+            0.2666473457440297,
+            0.811224570528086
+          ]
+        },
+        {
+          "literals": [
+            "beak:bill_color=yellow-",
+            "beak:bill_shape=dagger-",
+            "breast:breast_color=red+",
+            "breast:breast_color=white-",
+            "breast:breast_color=yellow-",
+            "crown:crown_color=yellow-",
+            "left_wing:wing_color=black+",
+            "tail:tail_shape=forked-"
+          ],
+          "tree_class": 3,
+          "n_satisfying": 9,
+          "conditional_fidelity": 0.1111111111111111,
+          "wilson95": [
+            0.019890371327130535,
+            0.4350062147680601
+          ]
+        },
+        {
+          "literals": [
+            "beak:bill_color=yellow-",
+            "breast:breast_color=red+",
+            "breast:breast_color=white-",
+            "breast:breast_color=yellow-",
+            "crown:crown_color=yellow+",
+            "tail:tail_shape=forked-"
+          ],
+          "tree_class": 8,
+          "n_satisfying": 9,
+          "conditional_fidelity": 0.0,
+          "wilson95": [
+            0.0,
+            0.2991527535509594
+          ]
+        },
+        {
+          "literals": [
+            "beak:bill_color=yellow+",
+            "beak:bill_shape=curved+",
+            "crown:crown_color=black-",
+            "left_wing:wing_color=brown-",
+            "right_wing:wing_color=black-"
+          ],
+          "tree_class": 1,
+          "n_satisfying": 7,
+          "conditional_fidelity": 0.5714285714285714,
+          "wilson95": [
+            0.2504542304090258,
+            0.8417830777373732
+          ]
+        },
+        {
+          "literals": [
+            "beak:bill_color=black-",
+            "beak:bill_color=yellow+",
+            "beak:bill_shape=curved+",
+            "belly:belly_color=white-",
+            "crown:crown_color=black+",
+            "crown:crown_color=white+",
+            "right_wing:wing_color=black-"
+          ],
+          "tree_class": 0,
+          "n_satisfying": 7,
+          "conditional_fidelity": 0.7142857142857143,
+          "wilson95": [
+            0.35892909014821267,
+            0.9177828342909844
+          ]
+        },
+        {
+          "literals": [
+            "beak:bill_color=yellow-",
+            "beak:bill_shape=dagger-",
+            "breast:breast_color=red+",
+            "breast:breast_color=white-",
+            "crown:crown_color=yellow-",
+            "left_wing:wing_color=black-"
+          ],
+          "tree_class": 9,
+          "n_satisfying": 6,
+          "conditional_fidelity": 0.6666666666666666,
+          "wilson95": [
+            0.29998832134152864,
+            0.9032306674407831
+          ]
+        },
+        {
+          "literals": [
+            "beak:bill_color=yellow-",
+            "beak:bill_shape=dagger+",
+            "breast:breast_color=red+",
+            "breast:breast_color=white-",
+            "breast:breast_color=yellow-",
+            "tail:tail_shape=forked-"
+          ],
+          "tree_class": 8,
+          "n_satisfying": 6,
+          "conditional_fidelity": 0.5,
+          "wilson95": [
+            0.18761280689940868,
+            0.8123871931005913
+          ]
+        },
+        {
+          "literals": [
+            "beak:bill_color=yellow+",
+            "beak:bill_shape=curved+",
+            "left_wing:wing_color=brown+",
+            "right_wing:wing_color=black-"
+          ],
+          "tree_class": 0,
+          "n_satisfying": 5,
+          "conditional_fidelity": 0.8,
+          "wilson95": [
+            0.3755282641185388,
+            0.9637768390302125
+          ]
+        },
+        {
+          "literals": [
+            "beak:bill_color=black-",
+            "beak:bill_color=yellow+",
+            "beak:bill_shape=curved-",
+            "beak:bill_shape=dagger+",
+            "beak:bill_shape=hooked-",
+            "belly:belly_color=black-",
+            "belly:belly_color=white-",
+            "tail:tail_color=black-"
+          ],
+          "tree_class": 6,
+          "n_satisfying": 5,
+          "conditional_fidelity": 0.0,
+          "wilson95": [
+            0.0,
+            0.43449149475208104
+          ]
+        },
+        {
+          "literals": [
+            "beak:bill_color=yellow-",
+            "breast:breast_color=black-",
+            "breast:breast_color=red-",
+            "breast:breast_color=white-"
+          ],
+          "tree_class": 8,
+          "n_satisfying": 5,
+          "conditional_fidelity": 0.4,
+          "wilson95": [
+            0.1176182311592533,
+            0.769280067791163
+          ]
+        },
+        {
+          "literals": [
+            "beak:bill_color=yellow+",
+            "beak:bill_shape=curved-",
+            "beak:bill_shape=dagger-",
+            "beak:bill_shape=hooked-",
+            "belly:belly_color=black-",
+            "belly:belly_color=white-"
+          ],
+          "tree_class": 7,
+          "n_satisfying": 5,
+          "conditional_fidelity": 1.0,
+          "wilson95": [
+            0.5655085052479191,
+            1.0
+          ]
+        },
+        {
+          "literals": [
+            "beak:bill_color=yellow+",
+            "beak:bill_shape=curved-",
+            "beak:bill_shape=dagger-",
+            "beak:bill_shape=hooked-",
+            "belly:belly_color=black+",
+            "belly:belly_color=white-"
+          ],
+          "tree_class": 5,
+          "n_satisfying": 5,
+          "conditional_fidelity": 0.0,
+          "wilson95": [
+            0.0,
+            0.43449149475208104
+          ]
+        }
+      ],
+      "leaf_rows": [
+        {
+          "leaf": 4,
+          "tree_class": 8,
+          "n": 5,
+          "conditional_fidelity": 0.4,
+          "wilson95": [
+            0.1176182311592533,
+            0.769280067791163
+          ]
+        },
+        {
+          "leaf": 7,
+          "tree_class": 3,
+          "n": 6,
+          "conditional_fidelity": 1.0,
+          "wilson95": [
+            0.6096569663469354,
+            0.9999999999999999
+          ]
+        },
+        {
+          "leaf": 8,
+          "tree_class": 3,
+          "n": 12,
+          "conditional_fidelity": 0.8333333333333334,
+          "wilson95": [
+            0.5519636426153274,
+            0.9530358523851776
+          ]
+        },
+        {
+          "leaf": 9,
+          "tree_class": 3,
+          "n": 12,
+          "conditional_fidelity": 0.6666666666666666,
+          "wilson95": [
+            0.3906175873976139,
+            0.8618821601026385
+          ]
+        },
+        {
+          "leaf": 17,
+          "tree_class": 3,
+          "n": 6,
+          "conditional_fidelity": 0.0,
+          "wilson95": [
+            0.0,
+            0.3903430336530645
+          ]
+        },
+        {
+          "leaf": 19,
+          "tree_class": 8,
+          "n": 7,
+          "conditional_fidelity": 0.0,
+          "wilson95": [
+            0.0,
+            0.35433884297520657
+          ]
+        },
+        {
+          "leaf": 24,
+          "tree_class": 9,
+          "n": 10,
+          "conditional_fidelity": 0.9,
+          "wilson95": [
+            0.5958436145024278,
+            0.9821242504842788
+          ]
+        },
+        {
+          "leaf": 26,
+          "tree_class": 9,
+          "n": 12,
+          "conditional_fidelity": 1.0,
+          "wilson95": [
+            0.7574992425007574,
+            1.0
+          ]
+        },
+        {
+          "leaf": 35,
+          "tree_class": 7,
+          "n": 5,
+          "conditional_fidelity": 1.0,
+          "wilson95": [
+            0.5655085052479191,
+            1.0
+          ]
+        },
+        {
+          "leaf": 36,
+          "tree_class": 5,
+          "n": 5,
+          "conditional_fidelity": 0.0,
+          "wilson95": [
+            0.0,
+            0.43449149475208104
+          ]
+        },
+        {
+          "leaf": 40,
+          "tree_class": 6,
+          "n": 5,
+          "conditional_fidelity": 0.0,
+          "wilson95": [
+            0.0,
+            0.43449149475208104
+          ]
+        },
+        {
+          "leaf": 41,
+          "tree_class": 7,
+          "n": 8,
+          "conditional_fidelity": 0.5,
+          "wilson95": [
+            0.21521252682444186,
+            0.7847874731755582
+          ]
+        },
+        {
+          "leaf": 45,
+          "tree_class": 2,
+          "n": 11,
+          "conditional_fidelity": 0.2727272727272727,
+          "wilson95": [
+            0.09745880573921467,
+            0.5656502930102463
+          ]
+        },
+        {
+          "leaf": 51,
+          "tree_class": 4,
+          "n": 9,
+          "conditional_fidelity": 0.4444444444444444,
+          "wilson95": [
+            0.188775429471914,
+            0.7333526542559703
+          ]
+        },
+        {
+          "leaf": 52,
+          "tree_class": 4,
+          "n": 5,
+          "conditional_fidelity": 0.2,
+          "wilson95": [
+            0.03622316096978745,
+            0.6244717358814613
+          ]
+        },
+        {
+          "leaf": 54,
+          "tree_class": 6,
+          "n": 9,
+          "conditional_fidelity": 0.7777777777777778,
+          "wilson95": [
+            0.4525833436728054,
+            0.9367762376877727
+          ]
+        },
+        {
+          "leaf": 61,
+          "tree_class": 1,
+          "n": 7,
+          "conditional_fidelity": 0.5714285714285714,
+          "wilson95": [
+            0.2504542304090258,
+            0.8417830777373732
+          ]
+        },
+        {
+          "leaf": 66,
+          "tree_class": 0,
+          "n": 5,
+          "conditional_fidelity": 0.6,
+          "wilson95": [
+            0.23071993220883708,
+            0.8823817688407467
+          ]
+        },
+        {
+          "leaf": 68,
+          "tree_class": 1,
+          "n": 8,
+          "conditional_fidelity": 0.5,
+          "wilson95": [
+            0.21521252682444186,
+            0.7847874731755582
+          ]
+        },
+        {
+          "leaf": 69,
+          "tree_class": 0,
+          "n": 7,
+          "conditional_fidelity": 1.0,
+          "wilson95": [
+            0.6456611570247934,
+            1.0
+          ]
+        },
+        {
+          "leaf": 72,
+          "tree_class": 1,
+          "n": 6,
+          "conditional_fidelity": 1.0,
+          "wilson95": [
+            0.6096569663469354,
+            0.9999999999999999
+          ]
+        },
+        {
+          "leaf": 73,
+          "tree_class": 1,
+          "n": 5,
+          "conditional_fidelity": 1.0,
+          "wilson95": [
+            0.5655085052479191,
+            1.0
+          ]
+        },
+        {
+          "leaf": 77,
+          "tree_class": 0,
+          "n": 5,
+          "conditional_fidelity": 0.4,
+          "wilson95": [
+            0.1176182311592533,
+            0.769280067791163
+          ]
+        },
+        {
+          "leaf": 78,
+          "tree_class": 0,
+          "n": 8,
+          "conditional_fidelity": 0.125,
+          "wilson95": [
+            0.02241690886329617,
+            0.4708948057698615
+          ]
+        },
+        {
+          "leaf": 79,
+          "tree_class": 2,
+          "n": 10,
+          "conditional_fidelity": 0.8,
+          "wilson95": [
+            0.49015684672072335,
+            0.9433190520193067
+          ]
+        },
+        {
+          "leaf": 81,
+          "tree_class": 0,
+          "n": 5,
+          "conditional_fidelity": 0.8,
+          "wilson95": [
+            0.3755282641185388,
+            0.9637768390302125
+          ]
+        },
+        {
+          "leaf": 85,
+          "tree_class": 1,
+          "n": 7,
+          "conditional_fidelity": 1.0,
+          "wilson95": [
+            0.6456611570247934,
+            1.0
+          ]
+        },
+        {
+          "leaf": 86,
+          "tree_class": 1,
+          "n": 6,
+          "conditional_fidelity": 1.0,
+          "wilson95": [
+            0.6096569663469354,
+            0.9999999999999999
+          ]
+        }
+      ],
+      "logreg_top_coefs": {
+        "0": [
+          "beak:bill_shape=curved:+1.85",
+          "right_wing:wing_color=black:-1.45",
+          "crown:crown_color=white:+1.15",
+          "left_wing:wing_color=black:-0.90",
+          "right_wing:wing_color=brown:+0.89"
+        ],
+        "1": [
+          "beak:bill_shape=curved:+1.67",
+          "breast:breast_color=black:-1.16",
+          "beak:bill_shape=dagger:+1.00",
+          "crown:crown_color=white:+0.97",
+          "tail:tail_color=black:-0.96"
+        ],
+        "2": [
+          "crown:crown_color=white:+1.40",
+          "breast:breast_color=white:+1.07",
+          "beak:bill_shape=hooked:+0.98",
+          "right_wing:wing_color=black:-0.73",
+          "breast:breast_color=black:-0.71"
+        ],
+        "3": [
+          "beak:bill_color=yellow:-1.53",
+          "left_wing:wing_color=black:+1.30",
+          "breast:breast_color=white:-1.29",
+          "breast:breast_color=black:+1.08",
+          "beak:bill_shape=dagger:-0.90"
+        ],
+        "4": [
+          "beak:bill_color=yellow:+1.29",
+          "forehead:forehead_color=black:+1.21",
+          "beak:bill_shape=dagger:+1.09",
+          "crown:crown_color=white:-0.91",
+          "belly:belly_color=white:-0.71"
+        ],
+        "5": [
+          "breast:breast_pattern=striped:+1.90",
+          "breast:breast_color=white:+1.08",
+          "beak:bill_color=yellow:-0.92",
+          "belly:belly_color=black:+0.79",
+          "left_wing:wing_color=brown:+0.64"
+        ],
+        "6": [
+          "beak:bill_shape=curved:-1.53",
+          "belly:belly_color=white:+1.47",
+          "belly:belly_color=black:-0.95",
+          "forehead:forehead_color=black:+0.91",
+          "breast:breast_color=white:+0.85"
+        ],
+        "7": [
+          "beak:bill_color=black:-0.84",
+          "beak:bill_color=yellow:+0.81",
+          "belly:belly_color=black:-0.76",
+          "beak:bill_shape=hooked:-0.75",
+          "breast:breast_color=black:+0.71"
+        ],
+        "8": [
+          "breast:breast_color=white:-1.15",
+          "belly:belly_color=black:+1.10",
+          "beak:bill_color=yellow:-0.97",
+          "crown:crown_color=white:-0.92",
+          "belly:belly_color=yellow:-0.87"
+        ],
+        "9": [
+          "breast:breast_color=red:+1.95",
+          "tail:tail_color=black:+1.11",
+          "beak:bill_color=yellow:-0.86",
+          "crown:crown_color=yellow:+0.84",
+          "breast:breast_color=yellow:+0.83"
+        ]
+      }
+    }
+  ]
+}

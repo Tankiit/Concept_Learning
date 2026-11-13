@@ -1,0 +1,9 @@
+red_left,green_top,blue_right,learned_output,target_output
+0,0,0,0,0
+0,0,1,0,0
+0,1,0,0,0
+0,1,1,0,0
+1,0,0,0,0
+1,0,1,1,1
+1,1,0,1,1
+1,1,1,1,1

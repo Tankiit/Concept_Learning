@@ -1,0 +1,430 @@
+{
+  "config": {
+    "cub_dir": "/Users/tanmoy/research/data/CUB_200_2011/CUB_200_2011",
+    "out": "results/cub_full200_cropreader",
+    "classes": 0,
+    "epochs": 40,
+    "lr": 0.001,
+    "batch_size": 128,
+    "crop_size": 48,
+    "val_fraction": 0.15,
+    "min_certainty": 2,
+    "depths": "4,6,8,12",
+    "min_leaves": "2,4,8",
+    "seed": 42
+  },
+  "versions": {
+    "torch": "2.8.0",
+    "numpy": "2.3.5",
+    "pyxai": "2.0.1",
+    "scikit-learn": "1.8.0",
+    "pillow": "13.0.0"
+  },
+  "vocabulary": [
+    {
+      "name": "beak:bill_shape=curved",
+      "cub_attribute_id": 1,
+      "cub_name": "has_bill_shape::curved_(up_or_down)"
+    },
+    {
+      "name": "beak:bill_shape=dagger",
+      "cub_attribute_id": 2,
+      "cub_name": "has_bill_shape::dagger"
+    },
+    {
+      "name": "beak:bill_shape=hooked",
+      "cub_attribute_id": 3,
+      "cub_name": "has_bill_shape::hooked"
+    },
+    {
+      "name": "beak:bill_shape=needle",
+      "cub_attribute_id": 4,
+      "cub_name": "has_bill_shape::needle"
+    },
+    {
+      "name": "beak:bill_shape=cone",
+      "cub_attribute_id": 8,
+      "cub_name": "has_bill_shape::cone"
+    },
+    {
+      "name": "beak:bill_color=black",
+      "cub_attribute_id": 290,
+      "cub_name": "has_bill_color::black"
+    },
+    {
+      "name": "beak:bill_color=yellow",
+      "cub_attribute_id": 285,
+      "cub_name": "has_bill_color::yellow"
+    },
+    {
+      "name": "crown:crown_color=black",
+      "cub_attribute_id": 305,
+      "cub_name": "has_crown_color::black"
+    },
+    {
+      "name": "crown:crown_color=yellow",
+      "cub_attribute_id": 300,
+      "cub_name": "has_crown_color::yellow"
+    },
+    {
+      "name": "crown:crown_color=red",
+      "cub_attribute_id": 307,
+      "cub_name": "has_crown_color::red"
+    },
+    {
+      "name": "crown:crown_color=white",
+      "cub_attribute_id": 306,
+      "cub_name": "has_crown_color::white"
+    },
+    {
+      "name": "forehead:forehead_color=black",
+      "cub_attribute_id": 164,
+      "cub_name": "has_forehead_color::black"
+    },
+    {
+      "name": "forehead:forehead_color=yellow",
+      "cub_attribute_id": 159,
+      "cub_name": "has_forehead_color::yellow"
+    },
+    {
+      "name": "breast:breast_color=yellow",
+      "cub_attribute_id": 112,
+      "cub_name": "has_breast_color::yellow"
+    },
+    {
+      "name": "breast:breast_color=white",
+      "cub_attribute_id": 118,
+      "cub_name": "has_breast_color::white"
+    },
+    {
+      "name": "breast:breast_color=black",
+      "cub_attribute_id": 117,
+      "cub_name": "has_breast_color::black"
+    },
+    {
+      "name": "breast:breast_color=red",
+      "cub_attribute_id": 119,
+      "cub_name": "has_breast_color::red"
+    },
+    {
+      "name": "breast:breast_pattern=striped",
+      "cub_attribute_id": 57,
+      "cub_name": "has_breast_pattern::striped"
+    },
+    {
+      "name": "belly:belly_color=yellow",
+      "cub_attribute_id": 204,
+      "cub_name": "has_belly_color::yellow"
+    },
+    {
+      "name": "belly:belly_color=white",
+      "cub_attribute_id": 210,
+      "cub_name": "has_belly_color::white"
+    },
+    {
+      "name": "belly:belly_color=black",
+      "cub_attribute_id": 209,
+      "cub_name": "has_belly_color::black"
+    },
+    {
+      "name": "left_wing:wing_color=black",
+      "cub_attribute_id": 21,
+      "cub_name": "has_wing_color::black"
+    },
+    {
+      "name": "left_wing:wing_color=brown",
+      "cub_attribute_id": 11,
+      "cub_name": "has_wing_color::brown"
+    },
+    {
+      "name": "left_wing:wing_pattern=striped",
+      "cub_attribute_id": 311,
+      "cub_name": "has_wing_pattern::striped"
+    },
+    {
+      "name": "right_wing:wing_color=black",
+      "cub_attribute_id": 21,
+      "cub_name": "has_wing_color::black"
+    },
+    {
+      "name": "right_wing:wing_color=brown",
+      "cub_attribute_id": 11,
+      "cub_name": "has_wing_color::brown"
+    },
+    {
+      "name": "tail:tail_shape=forked",
+      "cub_attribute_id": 74,
+      "cub_name": "has_tail_shape::forked_tail"
+    },
+    {
+      "name": "tail:tail_color=black",
+      "cub_attribute_id": 91,
+      "cub_name": "has_upper_tail_color::black"
+    }
+  ],
+  "vocabulary_note": "canonical 28 from grounded_vision cub.py; tail:tail_color=black bound to has_upper_tail_color::black (documented substitution; file has no has_tail_color::*)",
+  "data_sha256": {
+    "images.txt": "e1cfc5ed1f4bd1b838040784b6f75c44f7a25d9b31707a3adab49ec694618c1f",
+    "image_class_labels.txt": "e9df8c96d897994a245746fe2c98914b9b31f5342bddc6e8b06bdfbf45e49b02",
+    "train_test_split.txt": "8bbbfcc09b4d3c9c6e3e40c9874bd863eb6658f4f456e472df1b33d3403d2600",
+    "parts/part_locs.txt": "5be41e1e1e9165ff19632da203e30384fe8a359347c545ffc12ab99155b0415f",
+    "attributes.txt": "d5b158c197a8548071114150b2384c55cbd8881b32e57816c6ccc1437e946a1a",
+    "attributes/image_attribute_labels.txt": "5ebb9782d589f41a9c046bc7c5b1365e01839308e7cf88cbe83c0fb6d5362d98"
+  },
+  "template_boxes": {
+    "crown": [
+      0.05,
+      0.35,
+      0.25,
+      0.65
+    ],
+    "forehead": [
+      0.1,
+      0.4,
+      0.25,
+      0.6
+    ],
+    "beak": [
+      0.15,
+      0.55,
+      0.3,
+      0.85
+    ],
+    "left_eye": [
+      0.12,
+      0.42,
+      0.2,
+      0.5
+    ],
+    "right_eye": [
+      0.12,
+      0.5,
+      0.2,
+      0.58
+    ],
+    "throat": [
+      0.22,
+      0.42,
+      0.35,
+      0.65
+    ],
+    "nape": [
+      0.15,
+      0.3,
+      0.3,
+      0.45
+    ],
+    "breast": [
+      0.3,
+      0.35,
+      0.55,
+      0.65
+    ],
+    "back": [
+      0.28,
+      0.2,
+      0.6,
+      0.45
+    ],
+    "belly": [
+      0.5,
+      0.35,
+      0.75,
+      0.65
+    ],
+    "left_wing": [
+      0.35,
+      0.15,
+      0.7,
+      0.45
+    ],
+    "right_wing": [
+      0.35,
+      0.55,
+      0.7,
+      0.85
+    ],
+    "left_leg": [
+      0.72,
+      0.38,
+      0.92,
+      0.48
+    ],
+    "right_leg": [
+      0.72,
+      0.52,
+      0.92,
+      0.62
+    ],
+    "tail": [
+      0.65,
+      0.1,
+      0.95,
+      0.3
+    ]
+  },
+  "training_mask_rule": "certainty >= 2 AND part point visible",
+  "reader_deployment_contract": "score_j = sigmoid(networks[j](resize48(crop(image, box_j))/255)); verified equal to CropPredicateReader.forward on the spot-check sample",
+  "train_history": [
+    {
+      "epoch": 0,
+      "mean_masked_loss": 0.3712518406333158
+    },
+    {
+      "epoch": 1,
+      "mean_masked_loss": 0.36785634100116676
+    },
+    {
+      "epoch": 2,
+      "mean_masked_loss": 0.3659192553009688
+    },
+    {
+      "epoch": 3,
+      "mean_masked_loss": 0.3648276806662779
+    },
+    {
+      "epoch": 4,
+      "mean_masked_loss": 0.3639589563137597
+    },
+    {
+      "epoch": 5,
+      "mean_masked_loss": 0.36331795929858635
+    },
+    {
+      "epoch": 6,
+      "mean_masked_loss": 0.3630177783527057
+    },
+    {
+      "epoch": 7,
+      "mean_masked_loss": 0.36238846691219295
+    },
+    {
+      "epoch": 8,
+      "mean_masked_loss": 0.3621133660501979
+    },
+    {
+      "epoch": 9,
+      "mean_masked_loss": 0.3615675054575979
+    },
+    {
+      "epoch": 10,
+      "mean_masked_loss": 0.36107087134458293
+    },
+    {
+      "epoch": 11,
+      "mean_masked_loss": 0.36044827966562915
+    },
+    {
+      "epoch": 12,
+      "mean_masked_loss": 0.3600126587312765
+    },
+    {
+      "epoch": 13,
+      "mean_masked_loss": 0.3595523332599929
+    },
+    {
+      "epoch": 14,
+      "mean_masked_loss": 0.35889001729998654
+    },
+    {
+      "epoch": 15,
+      "mean_masked_loss": 0.35840535358237985
+    },
+    {
+      "epoch": 16,
+      "mean_masked_loss": 0.35764723616789473
+    },
+    {
+      "epoch": 17,
+      "mean_masked_loss": 0.3571720062998028
+    },
+    {
+      "epoch": 18,
+      "mean_masked_loss": 0.35647639567925954
+    },
+    {
+      "epoch": 19,
+      "mean_masked_loss": 0.35596782073883987
+    },
+    {
+      "epoch": 20,
+      "mean_masked_loss": 0.35548829266957754
+    },
+    {
+      "epoch": 21,
+      "mean_masked_loss": 0.35478143855727307
+    },
+    {
+      "epoch": 22,
+      "mean_masked_loss": 0.35427625069498575
+    },
+    {
+      "epoch": 23,
+      "mean_masked_loss": 0.35382071291272404
+    },
+    {
+      "epoch": 24,
+      "mean_masked_loss": 0.35312187584283156
+    },
+    {
+      "epoch": 25,
+      "mean_masked_loss": 0.35262690619622394
+    },
+    {
+      "epoch": 26,
+      "mean_masked_loss": 0.35192414237531683
+    },
+    {
+      "epoch": 27,
+      "mean_masked_loss": 0.35153858137170646
+    },
+    {
+      "epoch": 28,
+      "mean_masked_loss": 0.35091661501543947
+    },
+    {
+      "epoch": 29,
+      "mean_masked_loss": 0.35043848625596763
+    },
+    {
+      "epoch": 30,
+      "mean_masked_loss": 0.34995971446233454
+    },
+    {
+      "epoch": 31,
+      "mean_masked_loss": 0.34940350248037527
+    },
+    {
+      "epoch": 32,
+      "mean_masked_loss": 0.34897503732137325
+    },
+    {
+      "epoch": 33,
+      "mean_masked_loss": 0.3484084896222001
+    },
+    {
+      "epoch": 34,
+      "mean_masked_loss": 0.3480708050104405
+    },
+    {
+      "epoch": 35,
+      "mean_masked_loss": 0.34734650091828884
+    },
+    {
+      "epoch": 36,
+      "mean_masked_loss": 0.34705904969261303
+    },
+    {
+      "epoch": 37,
+      "mean_masked_loss": 0.3465290594459132
+    },
+    {
+      "epoch": 38,
+      "mean_masked_loss": 0.3460975785616797
+    },
+    {
+      "epoch": 39,
+      "mean_masked_loss": 0.34574215750103127
+    }
+  ]
+}

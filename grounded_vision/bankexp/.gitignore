@@ -1,0 +1,5 @@
+intermediate_results/*
+!intermediate_results/.gitkeep
+__pycache__/
+*.pyc
+.DS_Store

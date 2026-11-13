@@ -1,0 +1,89 @@
+{
+  "schema": 1,
+  "predicate_names": [
+    "beak:bill_shape=curved",
+    "beak:bill_shape=dagger",
+    "beak:bill_shape=hooked",
+    "beak:bill_shape=needle",
+    "beak:bill_shape=cone",
+    "beak:bill_color=black",
+    "beak:bill_color=yellow",
+    "crown:crown_color=black",
+    "crown:crown_color=yellow",
+    "crown:crown_color=red",
+    "crown:crown_color=white",
+    "forehead:forehead_color=black",
+    "forehead:forehead_color=yellow",
+    "breast:breast_color=yellow",
+    "breast:breast_color=white",
+    "breast:breast_color=black",
+    "breast:breast_color=red",
+    "breast:breast_pattern=striped",
+    "belly:belly_color=yellow",
+    "belly:belly_color=white",
+    "belly:belly_color=black",
+    "left_wing:wing_color=black",
+    "left_wing:wing_color=brown",
+    "left_wing:wing_pattern=striped",
+    "right_wing:wing_color=black",
+    "right_wing:wing_color=brown",
+    "tail:tail_shape=forked",
+    "tail:tail_color=black"
+  ],
+  "class_names": [
+    "0",
+    "1",
+    "2",
+    "3"
+  ],
+  "thresholds": 0.5,
+  "root": {
+    "feature": 21,
+    "false": {
+      "feature": 23,
+      "false": {
+        "feature": 26,
+        "false": 0,
+        "true": 1
+      },
+      "true": {
+        "feature": 26,
+        "false": 2,
+        "true": {
+          "feature": 13,
+          "false": 0,
+          "true": 0
+        }
+      }
+    },
+    "true": {
+      "feature": 11,
+      "false": {
+        "feature": 13,
+        "false": {
+          "feature": 23,
+          "false": 2,
+          "true": 2
+        },
+        "true": {
+          "feature": 23,
+          "false": 0,
+          "true": 2
+        }
+      },
+      "true": {
+        "feature": 23,
+        "false": {
+          "feature": 26,
+          "false": 3,
+          "true": 3
+        },
+        "true": {
+          "feature": 13,
+          "false": 3,
+          "true": 3
+        }
+      }
+    }
+  }
+}

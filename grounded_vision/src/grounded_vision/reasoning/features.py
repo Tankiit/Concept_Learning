@@ -106,22 +106,29 @@ class FeatureCompiler:
         """
         Compiles a single FactDatabase into a 1D vector [num_features].
 
+        Three-valued semantics (review requirement 1): a fact with
+        truth_value True compiles to +1.0 (present), False to -1.0
+        (absent), and a feature with NO fact stays 0.0 (unknown /
+        unobserved) - an unobserved region is never compiled as a
+        negative attribute. Tree thresholds at -0.5 / +0.5 therefore
+        separate the three states cleanly.
+
         Args:
             db: Grounded FactDatabase
             use_probabilities: If True, uses continuous confidence in [0, 1];
-                              otherwise uses binary truth value in {0.0, 1.0}.
+                              otherwise the three-valued encoding above.
         """
         vec = np.zeros(self.num_features, dtype=np.float32)
 
         for fact in db.facts.values():
-            val = float(fact.confidence) if use_probabilities else (1.0 if fact.truth_value else 0.0)
+            val = float(fact.confidence) if use_probabilities else (1.0 if fact.truth_value else -1.0)
 
             if self.mode == RepresentationMode.FLAT:
                 if fact.predicate_type == PredicateType.HAS_ATTRIBUTE:
                     feat_key = f"{fact.attribute}={fact.value}"
                     if feat_key in self.feature_to_idx:
                         idx = self.feature_to_idx[feat_key]
-                        vec[idx] = max(vec[idx], val)
+                        vec[idx] = val if (val > vec[idx] or (val < 0 and vec[idx] == 0.0)) else vec[idx]  # tristate OR: +1 > 0(unknown) > -1
 
             elif self.mode == RepresentationMode.BOUND:
                 if fact.predicate_type == PredicateType.HAS_ATTRIBUTE:
@@ -130,13 +137,13 @@ class FeatureCompiler:
                     feat_key = f"{part_name}:{fact.attribute}={fact.value}"
                     if feat_key in self.feature_to_idx:
                         idx = self.feature_to_idx[feat_key]
-                        vec[idx] = max(vec[idx], val)
+                        vec[idx] = val if (val > vec[idx] or (val < 0 and vec[idx] == 0.0)) else vec[idx]  # tristate OR: +1 > 0(unknown) > -1
                 elif fact.predicate_type == PredicateType.HAS_PART:
                     part_name = str(fact.value).replace("part_", "").replace("_0", "")
                     feat_key = f"has_part({part_name})"
                     if feat_key in self.feature_to_idx:
                         idx = self.feature_to_idx[feat_key]
-                        vec[idx] = max(vec[idx], val)
+                        vec[idx] = val if (val > vec[idx] or (val < 0 and vec[idx] == 0.0)) else vec[idx]  # tristate OR: +1 > 0(unknown) > -1
 
             elif self.mode == RepresentationMode.RELATIONAL:
                 if fact.predicate_type == PredicateType.HAS_ATTRIBUTE:
@@ -144,20 +151,20 @@ class FeatureCompiler:
                     feat_key = f"{part_name}:{fact.attribute}={fact.value}"
                     if feat_key in self.feature_to_idx:
                         idx = self.feature_to_idx[feat_key]
-                        vec[idx] = max(vec[idx], val)
+                        vec[idx] = val if (val > vec[idx] or (val < 0 and vec[idx] == 0.0)) else vec[idx]  # tristate OR: +1 > 0(unknown) > -1
                 elif fact.predicate_type == PredicateType.HAS_PART:
                     part_name = str(fact.value).replace("part_", "").replace("_0", "")
                     feat_key = f"has_part({part_name})"
                     if feat_key in self.feature_to_idx:
                         idx = self.feature_to_idx[feat_key]
-                        vec[idx] = max(vec[idx], val)
+                        vec[idx] = val if (val > vec[idx] or (val < 0 and vec[idx] == 0.0)) else vec[idx]  # tristate OR: +1 > 0(unknown) > -1
                 elif fact.predicate_type == PredicateType.SPATIAL:
                     p1 = fact.subject_id.replace("part_", "").replace("_0", "")
                     p2 = str(fact.value).replace("part_", "").replace("_0", "")
                     feat_key = f"{fact.predicate}({p1}, {p2})"
                     if feat_key in self.feature_to_idx:
                         idx = self.feature_to_idx[feat_key]
-                        vec[idx] = max(vec[idx], val)
+                        vec[idx] = val if (val > vec[idx] or (val < 0 and vec[idx] == 0.0)) else vec[idx]  # tristate OR: +1 > 0(unknown) > -1
 
         return vec
 

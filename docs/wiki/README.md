@@ -48,13 +48,30 @@ Welcome to the **Grounded Vision** documentation wiki for certifiable, relationa
    - Full real CUB-200-2011 run configuration (`cub_bound_real_full.yaml`)
    - Feature caching and perception checkpoints
 
-9. [**Visual Evidence Gallery**](assets/)
+9. [**CVPR 2027 Submission Plan — The Eight-Day Cut**](CVPR2027_SUBMISSION_PLAN.md)
+   - Verified calendar (registration Nov 10 / submission Nov 16, 2026 AOE — official pages, no extensions)
+   - Scope cut with execution status per experiment (X1 ceiling and X3 fidelity+interventions already executed at HEAD `d4e66b5`; X2 uncertainty-aware comparison is the only new "must")
+   - Corrections to the source plan: setting T/D and X-numbering rename (A/B and E0/E1 already taken), flip condition not pre-registered (existing pre-regs predict the opposite), related-work citations not in repo
+   - Eight-day schedule, reviewer defences evidence-mapped to committed JSONs, abstract skeleton, verification ledger
+
+10. [**CVPR 2027 Claim Audit — Eight Questions Against the Invariant-Claim Abstract**](CVPR2027_CLAIM_AUDIT.md)
+   - 2026-11-11 external review verdicts: certificate-exactness is by construction (unit test, not a finding); 0/118 teacher-sufficiency is a floor (graded bank metrics separate banks instead)
+   - New artifact `independence_gap_cub.json`: K=4 failure is one literal (bill_color=yellow, 0/88 support, in every failing reason); errors cluster ABOVE independence at K=10 (ratio 1.52 [1.23, 1.89]); present/absent clause precision beats base rates by only +0.03…+0.13 / +0.06
+   - Constructive half alive at K≤10: cross-fitted literal-reliability filter gives 70% joint support at 14% coverage (vs 12% raw) on the distilled arm; dead at K=200; reader confidence does not identify the bad literals (X2 coverage@0.05 = 0)
+   - Filled title + abstract written into the submission plan §9 the same day
+
+11. [**CVPR 2027 Hand-off — The Three Runs (Assignment Brief)**](CVPR2027_HANDOFF_TASKS.md)
+   - Runner-facing assignment as written: Task 1 calibrated abstention at K=20/50 + first-ever calibrated arm at K=200 (due first — decides tradeoff vs collapse), Task 2 five random 4-class draws, Task 3 forcing sweep (explains guarantee_scaling 0.07–0.10)
+   - Ground rules (new files only, per-instance dumps, val-only calibrators, n beside every percentage, send Task 1 numbers immediately) + early-finish job: reasoning-shortcuts / Teso comparison table (citations due Nov 15)
+   - Links to the ready scripts (grounded_vision/scripts/tasks/), the pre-registered cliff criteria, and the division of labour: numbers to the runner, writing and trust-result reconciliation to the lead
+
+12. [**Visual Evidence Gallery**](assets/)
    - [Activation Tree Grounded Evidence Tiles (train/test split)](assets/activation_traintest_examples.png)
    - [Activation Test→Train Exemplar Retrieval](assets/activation_traintest_exemplars.png)
    - [Activation Tree Grounded Evidence Tiles (historical 100-image rerun)](assets/activation_tree_grounded_examples.png)
    - [Activation Exemplar Prototype Matches (historical rerun)](assets/activation_exemplar_examples.png)
 
-10. [**Raw Result Files**](../../grounded_vision/results/)
+13. [**Raw Result Files**](../../grounded_vision/results/)
    - `activation_track_traintest_results.json` / `..._c4.json` (official split, primary)
    - `activation_tree_grounded_metrics.json`, `shap_vs_sufficient_results.json`, `grounding_selected_reasons.json` (historical in-cache protocol, fixed-pooling rerun)
    - `clevr_relational_results.json`

@@ -1,0 +1,39 @@
+{
+  "synthetic_only": true,
+  "formula": "c1 AND (c2 OR NOT c3)",
+  "bits": [
+    1,
+    1,
+    0
+  ],
+  "prediction": 1,
+  "certificates": [
+    {
+      "reason": [
+        1,
+        -3
+      ],
+      "named_literals": [
+        "red_in_patch_1",
+        "NOT blue_in_patch_3"
+      ],
+      "area_fraction": 0.5,
+      "outside_edits_checked": 25
+    },
+    {
+      "reason": [
+        1,
+        2
+      ],
+      "named_literals": [
+        "red_in_patch_1",
+        "green_in_patch_2"
+      ],
+      "area_fraction": 0.5,
+      "outside_edits_checked": 25
+    }
+  ],
+  "boolean_worlds_checked": 8,
+  "reasons_checked": 10,
+  "scope": "fixed boxes and deterministic crop readers; no claim of semantic correctness"
+}

@@ -1,0 +1,22 @@
+{
+  "table": {
+    "default_reason": {
+      "coverage": 1.0,
+      "p_all_clauses_correct": 0.024,
+      "independence_prediction": 0.03527489345082816,
+      "mean_reason_size": 10.8
+    },
+    "trusted_only": {
+      "coverage": 0.0,
+      "n": 500,
+      "p_all_clauses_correct_given_covered": null,
+      "independence_prediction_given_covered": null,
+      "mean_reason_size": null
+    }
+  },
+  "e1_output_match": 0.026,
+  "abstained": 500,
+  "leaks": 0,
+  "audit_native_is_sufficient": 500,
+  "n_ok": 500
+}

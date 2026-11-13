@@ -1,0 +1,510 @@
+{
+  "protocol": {
+    "ladder": "1 operational (bit the tree sees); 2 localized (specificity CI-lower>1 under all 3 control families, milestone v2); 3 aligned (literal certified on calibration split, tau=0.8 Wilson-lower, frontier run); 4 semantic (one-sided excess class information NMI(bit;class)-NMI(annot;class) <= eps on full test)",
+    "predictions_pre_registered": [
+      "PR1 >= 20 predicates reach rung 3 via a negative literal; 0 via positive",
+      "PR2 bill_color=yellow passes one-sided excess despite 0.11 pos precision",
+      "PR3 <= 4 predicates reach full concept status"
+    ],
+    "theta": "0.5 fixed a priori for all readers (not tuned; no split leakage)",
+    "region": "fixed annotated part boxes (GT-region protocol)",
+    "absence_semantics": "binary encoding: absent = reader-below-0.5 OR part-unobserved (unknown->0); tristate rerun pending",
+    "eps": 0.02,
+    "tau": 0.8,
+    "n_test": 5794
+  },
+  "table": [
+    {
+      "predicate": "beak:bill_color=black",
+      "rung_reached": 2,
+      "rung2_localized_reader": false,
+      "rung2_localized_probe": true,
+      "rung3_aligned_literals_tau0.8": [],
+      "rung4_no_excess_leakage": false,
+      "nmi_bit_class": 0.064,
+      "nmi_annotation_class": 0.029,
+      "excess_leakage": 0.034,
+      "concept_status": false
+    },
+    {
+      "predicate": "beak:bill_color=yellow",
+      "rung_reached": 3,
+      "rung2_localized_reader": true,
+      "rung2_localized_probe": true,
+      "rung3_aligned_literals_tau0.8": [
+        "neg"
+      ],
+      "rung4_no_excess_leakage": false,
+      "nmi_bit_class": 0.084,
+      "nmi_annotation_class": 0.017,
+      "excess_leakage": 0.067,
+      "concept_status": false
+    },
+    {
+      "predicate": "beak:bill_shape=cone",
+      "rung_reached": 3,
+      "rung2_localized_reader": false,
+      "rung2_localized_probe": true,
+      "rung3_aligned_literals_tau0.8": [
+        "neg"
+      ],
+      "rung4_no_excess_leakage": false,
+      "nmi_bit_class": 0.083,
+      "nmi_annotation_class": 0.043,
+      "excess_leakage": 0.039,
+      "concept_status": false
+    },
+    {
+      "predicate": "beak:bill_shape=curved",
+      "rung_reached": 3,
+      "rung2_localized_reader": false,
+      "rung2_localized_probe": false,
+      "rung3_aligned_literals_tau0.8": [
+        "neg"
+      ],
+      "rung4_no_excess_leakage": false,
+      "nmi_bit_class": 0.052,
+      "nmi_annotation_class": 0.007,
+      "excess_leakage": 0.045,
+      "concept_status": false
+    },
+    {
+      "predicate": "beak:bill_shape=dagger",
+      "rung_reached": 3,
+      "rung2_localized_reader": true,
+      "rung2_localized_probe": true,
+      "rung3_aligned_literals_tau0.8": [
+        "neg"
+      ],
+      "rung4_no_excess_leakage": false,
+      "nmi_bit_class": 0.076,
+      "nmi_annotation_class": 0.029,
+      "excess_leakage": 0.048,
+      "concept_status": false
+    },
+    {
+      "predicate": "beak:bill_shape=hooked",
+      "rung_reached": 3,
+      "rung2_localized_reader": false,
+      "rung2_localized_probe": false,
+      "rung3_aligned_literals_tau0.8": [
+        "neg"
+      ],
+      "rung4_no_excess_leakage": true,
+      "nmi_bit_class": 0.012,
+      "nmi_annotation_class": 0.005,
+      "excess_leakage": 0.007,
+      "concept_status": false
+    },
+    {
+      "predicate": "beak:bill_shape=needle",
+      "rung_reached": 3,
+      "rung2_localized_reader": false,
+      "rung2_localized_probe": false,
+      "rung3_aligned_literals_tau0.8": [
+        "neg"
+      ],
+      "rung4_no_excess_leakage": true,
+      "nmi_bit_class": 0.022,
+      "nmi_annotation_class": 0.015,
+      "excess_leakage": 0.007,
+      "concept_status": false
+    },
+    {
+      "predicate": "belly:belly_color=black",
+      "rung_reached": 3,
+      "rung2_localized_reader": true,
+      "rung2_localized_probe": true,
+      "rung3_aligned_literals_tau0.8": [
+        "neg"
+      ],
+      "rung4_no_excess_leakage": true,
+      "nmi_bit_class": 0.051,
+      "nmi_annotation_class": 0.033,
+      "excess_leakage": 0.018,
+      "concept_status": true
+    },
+    {
+      "predicate": "belly:belly_color=white",
+      "rung_reached": 2,
+      "rung2_localized_reader": true,
+      "rung2_localized_probe": true,
+      "rung3_aligned_literals_tau0.8": [],
+      "rung4_no_excess_leakage": true,
+      "nmi_bit_class": 0.054,
+      "nmi_annotation_class": 0.043,
+      "excess_leakage": 0.012,
+      "concept_status": []
+    },
+    {
+      "predicate": "belly:belly_color=yellow",
+      "rung_reached": 3,
+      "rung2_localized_reader": false,
+      "rung2_localized_probe": true,
+      "rung3_aligned_literals_tau0.8": [
+        "neg"
+      ],
+      "rung4_no_excess_leakage": false,
+      "nmi_bit_class": 0.074,
+      "nmi_annotation_class": 0.05,
+      "excess_leakage": 0.024,
+      "concept_status": false
+    },
+    {
+      "predicate": "breast:breast_color=black",
+      "rung_reached": 3,
+      "rung2_localized_reader": false,
+      "rung2_localized_probe": false,
+      "rung3_aligned_literals_tau0.8": [
+        "neg"
+      ],
+      "rung4_no_excess_leakage": false,
+      "nmi_bit_class": 0.057,
+      "nmi_annotation_class": 0.035,
+      "excess_leakage": 0.022,
+      "concept_status": false
+    },
+    {
+      "predicate": "breast:breast_color=red",
+      "rung_reached": 3,
+      "rung2_localized_reader": false,
+      "rung2_localized_probe": false,
+      "rung3_aligned_literals_tau0.8": [
+        "neg"
+      ],
+      "rung4_no_excess_leakage": false,
+      "nmi_bit_class": 0.066,
+      "nmi_annotation_class": 0.02,
+      "excess_leakage": 0.046,
+      "concept_status": false
+    },
+    {
+      "predicate": "breast:breast_color=white",
+      "rung_reached": 1,
+      "rung2_localized_reader": false,
+      "rung2_localized_probe": false,
+      "rung3_aligned_literals_tau0.8": [],
+      "rung4_no_excess_leakage": true,
+      "nmi_bit_class": 0.062,
+      "nmi_annotation_class": 0.043,
+      "excess_leakage": 0.019,
+      "concept_status": false
+    },
+    {
+      "predicate": "breast:breast_color=yellow",
+      "rung_reached": 3,
+      "rung2_localized_reader": false,
+      "rung2_localized_probe": false,
+      "rung3_aligned_literals_tau0.8": [
+        "neg"
+      ],
+      "rung4_no_excess_leakage": false,
+      "nmi_bit_class": 0.075,
+      "nmi_annotation_class": 0.049,
+      "excess_leakage": 0.026,
+      "concept_status": false
+    },
+    {
+      "predicate": "breast:breast_pattern=striped",
+      "rung_reached": 3,
+      "rung2_localized_reader": false,
+      "rung2_localized_probe": false,
+      "rung3_aligned_literals_tau0.8": [
+        "neg"
+      ],
+      "rung4_no_excess_leakage": false,
+      "nmi_bit_class": 0.068,
+      "nmi_annotation_class": 0.02,
+      "excess_leakage": 0.049,
+      "concept_status": false
+    },
+    {
+      "predicate": "crown:crown_color=black",
+      "rung_reached": 1,
+      "rung2_localized_reader": false,
+      "rung2_localized_probe": false,
+      "rung3_aligned_literals_tau0.8": [],
+      "rung4_no_excess_leakage": false,
+      "nmi_bit_class": 0.071,
+      "nmi_annotation_class": 0.043,
+      "excess_leakage": 0.028,
+      "concept_status": false
+    },
+    {
+      "predicate": "crown:crown_color=red",
+      "rung_reached": 3,
+      "rung2_localized_reader": false,
+      "rung2_localized_probe": false,
+      "rung3_aligned_literals_tau0.8": [
+        "neg"
+      ],
+      "rung4_no_excess_leakage": false,
+      "nmi_bit_class": 0.054,
+      "nmi_annotation_class": 0.025,
+      "excess_leakage": 0.029,
+      "concept_status": false
+    },
+    {
+      "predicate": "crown:crown_color=white",
+      "rung_reached": 3,
+      "rung2_localized_reader": false,
+      "rung2_localized_probe": false,
+      "rung3_aligned_literals_tau0.8": [
+        "neg"
+      ],
+      "rung4_no_excess_leakage": false,
+      "nmi_bit_class": 0.073,
+      "nmi_annotation_class": 0.031,
+      "excess_leakage": 0.042,
+      "concept_status": false
+    },
+    {
+      "predicate": "crown:crown_color=yellow",
+      "rung_reached": 3,
+      "rung2_localized_reader": false,
+      "rung2_localized_probe": false,
+      "rung3_aligned_literals_tau0.8": [
+        "neg"
+      ],
+      "rung4_no_excess_leakage": false,
+      "nmi_bit_class": 0.075,
+      "nmi_annotation_class": 0.027,
+      "excess_leakage": 0.048,
+      "concept_status": false
+    },
+    {
+      "predicate": "forehead:forehead_color=black",
+      "rung_reached": 1,
+      "rung2_localized_reader": false,
+      "rung2_localized_probe": false,
+      "rung3_aligned_literals_tau0.8": [],
+      "rung4_no_excess_leakage": false,
+      "nmi_bit_class": 0.067,
+      "nmi_annotation_class": 0.04,
+      "excess_leakage": 0.027,
+      "concept_status": false
+    },
+    {
+      "predicate": "forehead:forehead_color=yellow",
+      "rung_reached": 3,
+      "rung2_localized_reader": false,
+      "rung2_localized_probe": false,
+      "rung3_aligned_literals_tau0.8": [
+        "neg"
+      ],
+      "rung4_no_excess_leakage": false,
+      "nmi_bit_class": 0.074,
+      "nmi_annotation_class": 0.033,
+      "excess_leakage": 0.041,
+      "concept_status": false
+    },
+    {
+      "predicate": "has_part(beak)",
+      "rung_reached": 3,
+      "rung2_localized_reader": false,
+      "rung2_localized_probe": false,
+      "rung3_aligned_literals_tau0.8": [
+        "pos"
+      ],
+      "rung4_no_excess_leakage": true,
+      "nmi_bit_class": 0.0,
+      "nmi_annotation_class": 0.002,
+      "excess_leakage": -0.002,
+      "concept_status": false
+    },
+    {
+      "predicate": "has_part(belly)",
+      "rung_reached": 3,
+      "rung2_localized_reader": false,
+      "rung2_localized_probe": false,
+      "rung3_aligned_literals_tau0.8": [
+        "pos"
+      ],
+      "rung4_no_excess_leakage": true,
+      "nmi_bit_class": 0.0,
+      "nmi_annotation_class": 0.027,
+      "excess_leakage": -0.027,
+      "concept_status": false
+    },
+    {
+      "predicate": "has_part(breast)",
+      "rung_reached": 3,
+      "rung2_localized_reader": false,
+      "rung2_localized_probe": false,
+      "rung3_aligned_literals_tau0.8": [
+        "pos"
+      ],
+      "rung4_no_excess_leakage": true,
+      "nmi_bit_class": 0.0,
+      "nmi_annotation_class": 0.011,
+      "excess_leakage": -0.011,
+      "concept_status": false
+    },
+    {
+      "predicate": "has_part(crown)",
+      "rung_reached": 3,
+      "rung2_localized_reader": false,
+      "rung2_localized_probe": false,
+      "rung3_aligned_literals_tau0.8": [
+        "pos"
+      ],
+      "rung4_no_excess_leakage": true,
+      "nmi_bit_class": 0.0,
+      "nmi_annotation_class": 0.004,
+      "excess_leakage": -0.004,
+      "concept_status": false
+    },
+    {
+      "predicate": "has_part(forehead)",
+      "rung_reached": 3,
+      "rung2_localized_reader": false,
+      "rung2_localized_probe": false,
+      "rung3_aligned_literals_tau0.8": [
+        "pos"
+      ],
+      "rung4_no_excess_leakage": true,
+      "nmi_bit_class": 0.0,
+      "nmi_annotation_class": 0.004,
+      "excess_leakage": -0.004,
+      "concept_status": false
+    },
+    {
+      "predicate": "has_part(left_wing)",
+      "rung_reached": 1,
+      "rung2_localized_reader": false,
+      "rung2_localized_probe": false,
+      "rung3_aligned_literals_tau0.8": [],
+      "rung4_no_excess_leakage": true,
+      "nmi_bit_class": 0.0,
+      "nmi_annotation_class": 0.007,
+      "excess_leakage": -0.007,
+      "concept_status": false
+    },
+    {
+      "predicate": "has_part(right_wing)",
+      "rung_reached": 1,
+      "rung2_localized_reader": false,
+      "rung2_localized_probe": false,
+      "rung3_aligned_literals_tau0.8": [],
+      "rung4_no_excess_leakage": true,
+      "nmi_bit_class": 0.0,
+      "nmi_annotation_class": 0.006,
+      "excess_leakage": -0.006,
+      "concept_status": false
+    },
+    {
+      "predicate": "has_part(tail)",
+      "rung_reached": 3,
+      "rung2_localized_reader": false,
+      "rung2_localized_probe": false,
+      "rung3_aligned_literals_tau0.8": [
+        "pos"
+      ],
+      "rung4_no_excess_leakage": true,
+      "nmi_bit_class": 0.0,
+      "nmi_annotation_class": 0.012,
+      "excess_leakage": -0.012,
+      "concept_status": false
+    },
+    {
+      "predicate": "left_wing:wing_color=black",
+      "rung_reached": 1,
+      "rung2_localized_reader": false,
+      "rung2_localized_probe": false,
+      "rung3_aligned_literals_tau0.8": [],
+      "rung4_no_excess_leakage": true,
+      "nmi_bit_class": 0.028,
+      "nmi_annotation_class": 0.028,
+      "excess_leakage": -0.0,
+      "concept_status": false
+    },
+    {
+      "predicate": "left_wing:wing_color=brown",
+      "rung_reached": 3,
+      "rung2_localized_reader": false,
+      "rung2_localized_probe": false,
+      "rung3_aligned_literals_tau0.8": [
+        "neg"
+      ],
+      "rung4_no_excess_leakage": true,
+      "nmi_bit_class": 0.029,
+      "nmi_annotation_class": 0.029,
+      "excess_leakage": -0.0,
+      "concept_status": false
+    },
+    {
+      "predicate": "left_wing:wing_pattern=striped",
+      "rung_reached": 3,
+      "rung2_localized_reader": false,
+      "rung2_localized_probe": false,
+      "rung3_aligned_literals_tau0.8": [
+        "neg"
+      ],
+      "rung4_no_excess_leakage": true,
+      "nmi_bit_class": 0.031,
+      "nmi_annotation_class": 0.018,
+      "excess_leakage": 0.013,
+      "concept_status": false
+    },
+    {
+      "predicate": "right_wing:wing_color=black",
+      "rung_reached": 1,
+      "rung2_localized_reader": false,
+      "rung2_localized_probe": false,
+      "rung3_aligned_literals_tau0.8": [],
+      "rung4_no_excess_leakage": true,
+      "nmi_bit_class": 0.03,
+      "nmi_annotation_class": 0.028,
+      "excess_leakage": 0.002,
+      "concept_status": false
+    },
+    {
+      "predicate": "right_wing:wing_color=brown",
+      "rung_reached": 3,
+      "rung2_localized_reader": false,
+      "rung2_localized_probe": false,
+      "rung3_aligned_literals_tau0.8": [
+        "neg"
+      ],
+      "rung4_no_excess_leakage": true,
+      "nmi_bit_class": 0.029,
+      "nmi_annotation_class": 0.029,
+      "excess_leakage": 0.0,
+      "concept_status": false
+    },
+    {
+      "predicate": "tail:tail_color=black",
+      "rung_reached": 3,
+      "rung2_localized_reader": false,
+      "rung2_localized_probe": false,
+      "rung3_aligned_literals_tau0.8": [
+        "neg"
+      ],
+      "rung4_no_excess_leakage": false,
+      "nmi_bit_class": 0.047,
+      "nmi_annotation_class": 0.021,
+      "excess_leakage": 0.026,
+      "concept_status": false
+    },
+    {
+      "predicate": "tail:tail_shape=forked",
+      "rung_reached": 3,
+      "rung2_localized_reader": false,
+      "rung2_localized_probe": false,
+      "rung3_aligned_literals_tau0.8": [
+        "neg"
+      ],
+      "rung4_no_excess_leakage": false,
+      "nmi_bit_class": 0.06,
+      "nmi_annotation_class": 0.008,
+      "excess_leakage": 0.052,
+      "concept_status": false
+    }
+  ],
+  "counts": {
+    "rung1_only": 7,
+    "rung2": 2,
+    "rung3": 27,
+    "concept": 1
+  }
+}

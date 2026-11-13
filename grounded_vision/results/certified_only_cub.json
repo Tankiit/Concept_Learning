@@ -1,0 +1,458 @@
+{
+  "protocol": {
+    "question": "Does restricting the tree to concepts certified by milestone-v2 specificity (all three control families) raise P(all clauses GT-correct) at K=4?",
+    "baseline": "guarantee_scaling_cub.json K=4: acc 0.6017, k 3.61, P(all) 0.2542 [0.184, 0.340]",
+    "certification_source": "results/predicate_grounding_milestone_v2.json",
+    "certification_rule": "passes_by_control true for adjacent AND farthest AND dist_matched, per instrument",
+    "reader_certified": [
+      "beak:bill_shape=dagger",
+      "beak:bill_color=yellow",
+      "belly:belly_color=white",
+      "belly:belly_color=black"
+    ],
+    "probe_certified": [
+      "beak:bill_shape=dagger",
+      "beak:bill_color=yellow",
+      "belly:belly_color=white",
+      "belly:belly_color=black",
+      "beak:bill_shape=cone",
+      "beak:bill_color=black",
+      "belly:belly_color=yellow"
+    ],
+    "cache": "eval-transform (flip-free)",
+    "tree": "CART depth 12, leaf 4, seed 42",
+    "encoding": "binary unknown->0 (pre-tristate, matches the committed sweep)",
+    "has_part": "excluded from certified arms (predicted bit trivially 1)",
+    "in_sample_caveat": "per-concept rates and bounds are computed on the same test reasons they bound (deciding experiment, not out-of-sample certificate)"
+  },
+  "arms": [
+    {
+      "arm": "full36",
+      "features": [
+        "beak:bill_color=black",
+        "beak:bill_color=yellow",
+        "beak:bill_shape=cone",
+        "beak:bill_shape=curved",
+        "beak:bill_shape=dagger",
+        "beak:bill_shape=hooked",
+        "beak:bill_shape=needle",
+        "belly:belly_color=black",
+        "belly:belly_color=white",
+        "belly:belly_color=yellow",
+        "breast:breast_color=black",
+        "breast:breast_color=red",
+        "breast:breast_color=white",
+        "breast:breast_color=yellow",
+        "breast:breast_pattern=striped",
+        "crown:crown_color=black",
+        "crown:crown_color=red",
+        "crown:crown_color=white",
+        "crown:crown_color=yellow",
+        "forehead:forehead_color=black",
+        "forehead:forehead_color=yellow",
+        "has_part(beak)",
+        "has_part(belly)",
+        "has_part(breast)",
+        "has_part(crown)",
+        "has_part(forehead)",
+        "has_part(left_wing)",
+        "has_part(right_wing)",
+        "has_part(tail)",
+        "left_wing:wing_color=black",
+        "left_wing:wing_color=brown",
+        "left_wing:wing_pattern=striped",
+        "right_wing:wing_color=black",
+        "right_wing:wing_color=brown",
+        "tail:tail_color=black",
+        "tail:tail_shape=forked"
+      ],
+      "n_features": 36,
+      "n_train": 96,
+      "n_test": 118,
+      "n_reasons": 118,
+      "n_zero_condition_reasons": 0,
+      "n_tree_nodes": 27,
+      "test_accuracy": 0.6016949152542372,
+      "mean_reason_size": 3.610169491525424,
+      "p_all_clauses_correct": 0.2542372881355932,
+      "p_all_wilson95": [
+        0.18428115742871232,
+        0.33969095061977017
+      ],
+      "present_clause_precision": 0.15412186379928317,
+      "present_clauses": 279,
+      "absent_clause_precision": 0.8707482993197279,
+      "absent_clauses": 147,
+      "correlation_test": {
+        "observed_var_wrong_clauses": 3.0333955759839126,
+        "binomial_predicted_var": 0.310261630058834,
+        "ratio": 9.776895632916963
+      },
+      "per_k": {
+        "1": {
+          "p_all": 1.0,
+          "n": 30
+        },
+        "2": {
+          "p_all": 0.0,
+          "n": 15
+        },
+        "3": {
+          "p_all": 0.0,
+          "n": 10
+        },
+        "4": {
+          "p_all": 0.0,
+          "n": 15
+        },
+        "5": {
+          "p_all": 0.0,
+          "n": 24
+        },
+        "6": {
+          "p_all": 0.0,
+          "n": 12
+        },
+        "7": {
+          "p_all": 0.0,
+          "n": 12
+        }
+      },
+      "per_concept_polarity": {
+        "beak:bill_color=black|neg": {
+          "correct": 8,
+          "n": 9,
+          "rate": 0.8888888888888888,
+          "wilson95": [
+            0.5649937852319399,
+            0.9801096286728695
+          ]
+        },
+        "beak:bill_color=black|pos": {
+          "correct": 17,
+          "n": 34,
+          "rate": 0.5,
+          "wilson95": [
+            0.34069062628048985,
+            0.6593093737195102
+          ]
+        },
+        "beak:bill_color=yellow|neg": {
+          "correct": 30,
+          "n": 30,
+          "rate": 1.0,
+          "wilson95": [
+            0.8864829086095221,
+            1.0
+          ]
+        },
+        "beak:bill_color=yellow|pos": {
+          "correct": 0,
+          "n": 88,
+          "rate": 0.0,
+          "wilson95": [
+            3.469446951953614e-18,
+            0.04182853957248131
+          ]
+        },
+        "beak:bill_shape=curved|neg": {
+          "correct": 15,
+          "n": 15,
+          "rate": 1.0,
+          "wilson95": [
+            0.7961107336956521,
+            1.0
+          ]
+        },
+        "beak:bill_shape=curved|pos": {
+          "correct": 2,
+          "n": 61,
+          "rate": 0.03278688524590164,
+          "wilson95": [
+            0.009037700815687874,
+            0.11189700776645692
+          ]
+        },
+        "belly:belly_color=white|neg": {
+          "correct": 23,
+          "n": 24,
+          "rate": 0.9583333333333334,
+          "wilson95": [
+            0.7975777375115778,
+            0.992606734645195
+          ]
+        },
+        "belly:belly_color=white|pos": {
+          "correct": 12,
+          "n": 39,
+          "rate": 0.3076923076923077,
+          "wilson95": [
+            0.1856575344598306,
+            0.464215486155646
+          ]
+        },
+        "breast:breast_color=black|neg": {
+          "correct": 8,
+          "n": 9,
+          "rate": 0.8888888888888888,
+          "wilson95": [
+            0.5649937852319399,
+            0.9801096286728695
+          ]
+        },
+        "breast:breast_color=black|pos": {
+          "correct": 4,
+          "n": 24,
+          "rate": 0.16666666666666666,
+          "wilson95": [
+            0.06678568000728924,
+            0.3585347038786943
+          ]
+        },
+        "right_wing:wing_color=black|neg": {
+          "correct": 25,
+          "n": 38,
+          "rate": 0.6578947368421053,
+          "wilson95": [
+            0.49891811629074545,
+            0.7878777997354105
+          ]
+        },
+        "right_wing:wing_color=black|pos": {
+          "correct": 6,
+          "n": 10,
+          "rate": 0.6,
+          "wilson95": [
+            0.3126695474501864,
+            0.8318224187964902
+          ]
+        },
+        "tail:tail_color=black|neg": {
+          "correct": 19,
+          "n": 22,
+          "rate": 0.8636363636363636,
+          "wilson95": [
+            0.6666458812053,
+            0.9525108273576373
+          ]
+        },
+        "tail:tail_color=black|pos": {
+          "correct": 2,
+          "n": 23,
+          "rate": 0.08695652173913043,
+          "wilson95": [
+            0.02417949540723341,
+            0.2679640429809402
+          ]
+        }
+      },
+      "bounds": {
+        "note": "in-sample on this test set; product bound assumes independence and is NOT valid under positive error correlation; union/Boole bound holds under any dependence",
+        "mean_product_bound": 0.2542372881355932,
+        "mean_union_bound": 0.2542372881355932,
+        "mean_union_bound_wilson_lo": 0.22537701066343785,
+        "observed_p_all": 0.2542372881355932,
+        "union_bound_holds": true
+      }
+    },
+    {
+      "arm": "reader_cert4",
+      "features": [
+        "beak:bill_shape=dagger",
+        "beak:bill_color=yellow",
+        "belly:belly_color=white",
+        "belly:belly_color=black"
+      ],
+      "n_features": 4,
+      "n_train": 96,
+      "n_test": 118,
+      "n_reasons": 118,
+      "n_zero_condition_reasons": 0,
+      "n_tree_nodes": 7,
+      "test_accuracy": 0.6186440677966102,
+      "mean_reason_size": 1.7457627118644068,
+      "p_all_clauses_correct": 0.2542372881355932,
+      "p_all_wilson95": [
+        0.18428115742871232,
+        0.33969095061977017
+      ],
+      "present_clause_precision": 0.16216216216216217,
+      "present_clauses": 148,
+      "absent_clause_precision": 0.9655172413793104,
+      "absent_clauses": 58,
+      "correlation_test": {
+        "observed_var_wrong_clauses": 0.5716748060902038,
+        "binomial_predicted_var": 0.10221846055806648,
+        "ratio": 5.592676733430717
+      },
+      "per_k": {
+        "1": {
+          "p_all": 1.0,
+          "n": 30
+        },
+        "2": {
+          "p_all": 0.0,
+          "n": 88
+        }
+      },
+      "per_concept_polarity": {
+        "beak:bill_color=yellow|neg": {
+          "correct": 30,
+          "n": 30,
+          "rate": 1.0,
+          "wilson95": [
+            0.8864829086095221,
+            1.0
+          ]
+        },
+        "beak:bill_color=yellow|pos": {
+          "correct": 0,
+          "n": 88,
+          "rate": 0.0,
+          "wilson95": [
+            3.469446951953614e-18,
+            0.04182853957248131
+          ]
+        },
+        "belly:belly_color=white|neg": {
+          "correct": 26,
+          "n": 28,
+          "rate": 0.9285714285714286,
+          "wilson95": [
+            0.7735426157408214,
+            0.9801883525522292
+          ]
+        },
+        "belly:belly_color=white|pos": {
+          "correct": 24,
+          "n": 60,
+          "rate": 0.4,
+          "wilson95": [
+            0.28569303003765506,
+            0.5263417560579315
+          ]
+        }
+      },
+      "bounds": {
+        "note": "in-sample on this test set; product bound assumes independence and is NOT valid under positive error correlation; union/Boole bound holds under any dependence",
+        "mean_product_bound": 0.2542372881355932,
+        "mean_union_bound": 0.2542372881355932,
+        "mean_union_bound_wilson_lo": 0.22537701066343785,
+        "observed_p_all": 0.2542372881355932,
+        "union_bound_holds": true
+      }
+    },
+    {
+      "arm": "probe_cert7",
+      "features": [
+        "beak:bill_shape=dagger",
+        "beak:bill_color=yellow",
+        "belly:belly_color=white",
+        "belly:belly_color=black",
+        "beak:bill_shape=cone",
+        "beak:bill_color=black",
+        "belly:belly_color=yellow"
+      ],
+      "n_features": 7,
+      "n_train": 96,
+      "n_test": 118,
+      "n_reasons": 118,
+      "n_zero_condition_reasons": 0,
+      "n_tree_nodes": 11,
+      "test_accuracy": 0.6440677966101694,
+      "mean_reason_size": 2.0084745762711864,
+      "p_all_clauses_correct": 0.2542372881355932,
+      "p_all_wilson95": [
+        0.18428115742871232,
+        0.33969095061977017
+      ],
+      "present_clause_precision": 0.24848484848484848,
+      "present_clauses": 165,
+      "absent_clause_precision": 0.9027777777777778,
+      "absent_clauses": 72,
+      "correlation_test": {
+        "observed_var_wrong_clauses": 0.6573542085607582,
+        "binomial_predicted_var": 0.16713778729895687,
+        "ratio": 3.933007724847754
+      },
+      "per_k": {
+        "1": {
+          "p_all": 1.0,
+          "n": 30
+        },
+        "2": {
+          "p_all": 0.0,
+          "n": 57
+        },
+        "3": {
+          "p_all": 0.0,
+          "n": 31
+        }
+      },
+      "per_concept_polarity": {
+        "beak:bill_color=black|neg": {
+          "correct": 26,
+          "n": 31,
+          "rate": 0.8387096774193549,
+          "wilson95": [
+            0.6736529727502113,
+            0.9290748009456006
+          ]
+        },
+        "beak:bill_color=black|pos": {
+          "correct": 29,
+          "n": 57,
+          "rate": 0.5087719298245614,
+          "wilson95": [
+            0.38259680329032353,
+            0.6338393193625982
+          ]
+        },
+        "beak:bill_color=yellow|neg": {
+          "correct": 30,
+          "n": 30,
+          "rate": 1.0,
+          "wilson95": [
+            0.8864829086095221,
+            1.0
+          ]
+        },
+        "beak:bill_color=yellow|pos": {
+          "correct": 0,
+          "n": 88,
+          "rate": 0.0,
+          "wilson95": [
+            3.469446951953614e-18,
+            0.04182853957248131
+          ]
+        },
+        "belly:belly_color=white|neg": {
+          "correct": 9,
+          "n": 11,
+          "rate": 0.8181818181818182,
+          "wilson95": [
+            0.5230138624217553,
+            0.9486333993289995
+          ]
+        },
+        "belly:belly_color=white|pos": {
+          "correct": 12,
+          "n": 20,
+          "rate": 0.6,
+          "wilson95": [
+            0.3865779423152061,
+            0.7811960325858074
+          ]
+        }
+      },
+      "bounds": {
+        "note": "in-sample on this test set; product bound assumes independence and is NOT valid under positive error correlation; union/Boole bound holds under any dependence",
+        "mean_product_bound": 0.2542372881355932,
+        "mean_union_bound": 0.2542372881355932,
+        "mean_union_bound_wilson_lo": 0.22537701066343785,
+        "observed_p_all": 0.2542372881355932,
+        "union_bound_holds": true
+      }
+    }
+  ]
+}

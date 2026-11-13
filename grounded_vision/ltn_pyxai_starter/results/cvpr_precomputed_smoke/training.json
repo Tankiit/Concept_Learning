@@ -1,0 +1,20 @@
+[
+  {
+    "epoch": 0,
+    "loss": 0.8321137607097626,
+    "tune_concept_accuracy": 0.9777777777777777,
+    "tune_hard_task_accuracy": 0.8266666666666667
+  },
+  {
+    "epoch": 1,
+    "loss": 0.8034769654273987,
+    "tune_concept_accuracy": 0.9777777777777777,
+    "tune_hard_task_accuracy": 0.8266666666666667
+  },
+  {
+    "epoch": 2,
+    "loss": 0.788087010383606,
+    "tune_concept_accuracy": 0.9777777777777777,
+    "tune_hard_task_accuracy": 0.8266666666666667
+  }
+]

@@ -1,0 +1,167 @@
+{
+  "protocol": {
+    "question": "Does the certified minimal reason survive small content-preserving shifts/rescales (image AND fixed part-box regions moved together)?",
+    "predictions_pre_registered": [
+      "PS1 pred stability >= 95% @2%, >= 85% @5% and scale",
+      "PS2 k=1 reasons identical >= 95% @2%",
+      "PS3 instability concentrates in multi-clause reasons",
+      "PS4 all-correct within 5 points of 25.4%"
+    ],
+    "substrate": "K=4 committed tree (depth 12 leaf 4 seed 42), readers seed-42 protocol, GT fixed part boxes, dinov2_vits14 224x224 eval transform",
+    "sanity_bit_match_vs_cache": 1.0
+  },
+  "results": {
+    "shift2%_right": {
+      "pred_same": 104,
+      "reason_same": 104,
+      "allc": 30,
+      "n": 118,
+      "k1_reason_same": 30,
+      "n_k1": 30,
+      "kgt_reason_same": 74,
+      "n_kgt": 88
+    },
+    "shift2%_left": {
+      "pred_same": 107,
+      "reason_same": 107,
+      "allc": 30,
+      "n": 118,
+      "k1_reason_same": 30,
+      "n_k1": 30,
+      "kgt_reason_same": 77,
+      "n_kgt": 88
+    },
+    "shift2%_down": {
+      "pred_same": 107,
+      "reason_same": 106,
+      "allc": 30,
+      "n": 118,
+      "k1_reason_same": 30,
+      "n_k1": 30,
+      "kgt_reason_same": 76,
+      "n_kgt": 88
+    },
+    "shift2%_up": {
+      "pred_same": 107,
+      "reason_same": 106,
+      "allc": 29,
+      "n": 118,
+      "k1_reason_same": 29,
+      "n_k1": 30,
+      "kgt_reason_same": 77,
+      "n_kgt": 88
+    },
+    "shift5%_right": {
+      "pred_same": 107,
+      "reason_same": 107,
+      "allc": 30,
+      "n": 118,
+      "k1_reason_same": 30,
+      "n_k1": 30,
+      "kgt_reason_same": 77,
+      "n_kgt": 88
+    },
+    "shift5%_left": {
+      "pred_same": 105,
+      "reason_same": 105,
+      "allc": 29,
+      "n": 118,
+      "k1_reason_same": 29,
+      "n_k1": 30,
+      "kgt_reason_same": 76,
+      "n_kgt": 88
+    },
+    "shift5%_down": {
+      "pred_same": 109,
+      "reason_same": 109,
+      "allc": 29,
+      "n": 118,
+      "k1_reason_same": 29,
+      "n_k1": 30,
+      "kgt_reason_same": 80,
+      "n_kgt": 88
+    },
+    "shift5%_up": {
+      "pred_same": 105,
+      "reason_same": 103,
+      "allc": 30,
+      "n": 118,
+      "k1_reason_same": 30,
+      "n_k1": 30,
+      "kgt_reason_same": 73,
+      "n_kgt": 88
+    },
+    "scale0.95": {
+      "pred_same": 104,
+      "reason_same": 103,
+      "allc": 30,
+      "n": 118,
+      "k1_reason_same": 29,
+      "n_k1": 30,
+      "kgt_reason_same": 74,
+      "n_kgt": 88
+    },
+    "scale1.05": {
+      "pred_same": 113,
+      "reason_same": 112,
+      "allc": 30,
+      "n": 118,
+      "k1_reason_same": 30,
+      "n_k1": 30,
+      "kgt_reason_same": 82,
+      "n_kgt": 88
+    }
+  },
+  "mechanism_yellow_neg": {
+    "shift2%_right": {
+      "still_yellow_neg_k1": 30,
+      "still_true": 30,
+      "n": 30
+    },
+    "shift2%_left": {
+      "still_yellow_neg_k1": 30,
+      "still_true": 30,
+      "n": 30
+    },
+    "shift2%_down": {
+      "still_yellow_neg_k1": 30,
+      "still_true": 30,
+      "n": 30
+    },
+    "shift2%_up": {
+      "still_yellow_neg_k1": 29,
+      "still_true": 29,
+      "n": 30
+    },
+    "shift5%_right": {
+      "still_yellow_neg_k1": 30,
+      "still_true": 30,
+      "n": 30
+    },
+    "shift5%_left": {
+      "still_yellow_neg_k1": 29,
+      "still_true": 29,
+      "n": 30
+    },
+    "shift5%_down": {
+      "still_yellow_neg_k1": 29,
+      "still_true": 29,
+      "n": 30
+    },
+    "shift5%_up": {
+      "still_yellow_neg_k1": 30,
+      "still_true": 30,
+      "n": 30
+    },
+    "scale0.95": {
+      "still_yellow_neg_k1": 29,
+      "still_true": 29,
+      "n": 30
+    },
+    "scale1.05": {
+      "still_yellow_neg_k1": 30,
+      "still_true": 30,
+      "n": 30
+    }
+  }
+}

@@ -23,7 +23,7 @@
 
 ## Requirement 1 — define exactly what each symbol means
 
-**Status: open (design + implementation).**
+**Status: IMPLEMENTED in code (2026-11-06) — grounding + classifier inputs; tristate-aware explanation wording still open.** `grounding.py` no longer emits attribute facts for unobserved parts (unknown ≠ absent — the review's core demand); `features.py` compiles present/absent/unknown to +1/−1/0 with tristate-OR aggregation, so tree thresholds at ±0.5 separate the states (regression tests: `tests/test_three_valued_predicates.py`, suite 45 passed). Note for downstream artifacts: results produced before 2026-11-06 (milestones, trusted-reasons, scaling) compiled binary {0,1} with unknown→0-absent semantics and are documented as such; reruns under the tristate encoding may shift absolute numbers, not the qualitative verdicts.
 
 Adopt three-valued predicates:
 
@@ -101,6 +101,32 @@ Immediate refinements queued: non-adjacent distance-matched control regions; rer
 1. **Does the separation persist under deployed readers?** Yes — same part-family pattern (beak/belly 2.3–4×, crown/breast ~1.3–1.5× under adjacent controls), CIs tight.
 2. **Does region geometry explain the crown/breast failure?** Largely yes: with farthest controls, crown probes recover to 2.69–4.35 (4/4 pass) and breast to 1.51–2.76 (5/5) — the v1 failure was mostly adjacent-control contamination; distance-matched controls (same distance, off-part) split the effect into content and distance components.
 3. New bottleneck: **reader head quality** — deployed readers agree at 0.691 vs 0.824 for probes; next work is reader training (perception), per the decision rule.
+
+## PyXAI engine verification (2026-11-06) — executed
+
+Question (external review): *does `PyXAIBackend.explain_sufficient` call PyXAI's `sufficient_reason`, or our own solver with PyXAI only as an audit?* **Answer from the code:** it never calls PyXAI — it delegates to the native exact backward elimination over the decision path, certified by the independent exhaustive `TreeSufficiencyVerifier` (`explanations/pyxai_backend.py`, `solver = "native_tree_verifier"`). Real PyXAI calls live only in `scripts/run_pyxai_modal.py` on Linux/Modal, where PyXAI is both engine (`minimal_sufficient_reason`, `sufficient_reason`) and auditor (`is_sufficient_reason` on our native literals).
+
+**API verification (pyxai 2.0.1, introspected on the installed package):** `set_excluded_features`, `preferred_sufficient_reason(method, n, weights, features_partition)` (DT only), `set_features_type`/`activate_theory`, `is_sufficient_reason`, `n_sufficient_reasons` (DT only), `rectify`, and forest explainers all exist as documented — with three caveats found by execution: (i) abstention under exclusions returns an **empty list `[]`**, not the documented `None` (a genuine empty-sufficient reason returns the empty *tuple*); (ii) `minimal_sufficient_reason` crashes (TypeError/IndexError) on trees using a subset of declared binary features — 99/100 instances in our check; (iii) `n_sufficient_reasons` crashes on some instances (enumeration fallback added). `preferred_sufficient_reason` (the weights=-log(reliability) agenda) routes through the same crashing path — blocked on this tree shape in 2.0.1.
+
+**Executed check** (CLEVR relational track, exactly reproduced tree — test acc 69.8%; 100 test instances; [`results/pyxai_exclusion_check_clevr_armA.json`](../../grounded_vision/results/pyxai_exclusion_check_clevr_armA.json), [`..._armB.json`](../../grounded_vision/results/pyxai_exclusion_check_clevr_armB.json)):
+
+| Measurement | Result |
+| --- | --- |
+| Prediction agreement, converted tree vs sklearn | **100/100** |
+| PyXAI audit of native path-restricted reasons (`is_sufficient_reason`) | **100/100 verified** |
+| E0 uniqueness (`n_sufficient_reasons`) | **0/51 instances have a unique sufficient reason**; median count 36–95, max 480 — reasons are highly non-unique, so weighted preferred reasons are meaningful and the path-restricted native reason is one of many |
+| Global minimum ⊆ native path-restricted reason | 1/100 — the path-restriction gap is real and quantified |
+| Arm A: exclude ALL 333 relational features | coverage 0/65 (uniform abstention), 0 leaks |
+| Arm B: exclude the ~4.6 relational literals in each instance's own reason | **coverage 35%, abstention 65%, zero excluded-feature leaks**; alternative reasons mean 7.11 literals vs native 5.01 — the coverage–guarantee trade-off, measured |
+| Excluded-feature leak check | 0 across both arms — the exclusion guarantee holds as advertised |
+
+Conversion gotcha documented for future payloads: sklearn node ids are **not** preorder positions — payload node lists must be allocated by nid (the repo's `export_pyxai_comparison.py` does this correctly; an append-in-recursion-order export silently scrambles the tree and corrupts predictions).
+
+Net: the reviewer's mapping is real — excluded-features reasons, abstention semantics, and uniqueness counting are standard PyXAI 2.0.1 calls (modulo the two bugs), and our contribution stays where they placed it: deriving the excluded set from grounding evidence (the milestone v2 per-image reliability records are the input) and measuring the coverage–guarantee trade-off (arm B above is the first point on that curve).
+
+**Follow-up (same day): the CUB trusted-only table and E1 — executed.** Exclusions from *independent* evidence (per-concept validation agreement, trust set chosen pre-test), δ ∈ {0.60…0.75}, 500 held-out test images, 36-concept/200-class tree — full table and verdict in [`RESULTS.md`](RESULTS.md) §7. Outcome per the pre-agreed rule: trusted-only coverage collapses (28.8% → 0%) and conditional clause-correctness does **not** beat the default (1.2% vs 2.4%, against a 7.5% independence prediction — errors are positively correlated), so sentence 3 stays a lemma at this scale and the paper's contribution is the measured gap. E1: output-match 2.6% vs certificate-event 2.4% — the reason is nearly tight against the output. This also closes the reviewer's "which can you run first" question: both ran, E1 first (fully local), the trusted-only sweep second (reuses the substrate + one Modal job per δ).
+
+**Second follow-up (2026-11-06, after the counts/trust-rule critique) — the guarantee-scaling sweep, executed** ([`RESULTS.md`](RESULTS.md) §8, `run_guarantee_scaling_cub.py`): K ∈ {4…200} with capped-depth trees, native crash-free trusted tests on the full test split, Wilson intervals, per-instance calibrated literal trust (isotonic on validation), and the direct correlation test. Corrections adopted: the δ=0.60 "below default" comparison was underpowered (2 events) and is withdrawn; correlation is now measured directly (var-ratio 5.3 at K=4 → ~1.0 at K≥50 — errors cluster exactly where reasons are short). Findings: P(all clauses correct) scales 25.4% (k=3.6) → 1.7% (k=10.8, all 5,794 images); neither global nor per-instance calibrated trust produces a usable guarantee at any K (coverage ≤25% only at K=4, kept-literal correctness 7–13% there; ~0 beyond K=10). E1 confirmed to use ONE tree on two concept inputs. The publishable claim the review pointed at — "guarantees are useful when reasons are short; here is the measured scaling" — is now on the table.
 
 ---
 

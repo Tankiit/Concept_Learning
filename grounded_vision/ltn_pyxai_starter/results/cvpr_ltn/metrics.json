@@ -1,0 +1,34 @@
+{
+  "test_count": 200,
+  "accepted_count": 191,
+  "matched_count": 191,
+  "task_accuracy": 0.935,
+  "concept_accuracy": 0.9383333333333334,
+  "joint_concept_set_coverage": 0.91,
+  "explanation_coverage": 0.955,
+  "accepted_reason_error": 0.04712041884816754,
+  "false_issued_reason_rate_all_test": 0.045,
+  "matched_repairs": 0,
+  "matched_spoils": 0,
+  "paired_reason_delta": 0.0,
+  "status_counts": {
+    "no_reason_within_length": 9,
+    "verified": 191
+  },
+  "initial_gradient_norms": {
+    "reader": 0.0052065057680010796,
+    "gates": 0.0006621667416766286
+  },
+  "soft_hard_disagreement": 0.045,
+  "alpha": 0.1,
+  "calibration_threshold": 0.6260302066802979,
+  "export_check_inputs": 8,
+  "export_check_exhaustive": true,
+  "oracle_concepts": false,
+  "dataset": "synthetic",
+  "scope": "exact Boolean head reasons; marginal false-issued-premise bound under joint coverage, not conditional precision or task correctness",
+  "pyxai": {
+    "worlds": 8,
+    "pyxai_reasons_checked": 10
+  }
+}

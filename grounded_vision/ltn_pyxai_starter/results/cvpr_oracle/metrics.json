@@ -1,0 +1,29 @@
+{
+  "test_count": 200,
+  "accepted_count": 200,
+  "matched_count": 200,
+  "task_accuracy": 1.0,
+  "concept_accuracy": 1.0,
+  "joint_concept_set_coverage": 1.0,
+  "explanation_coverage": 1.0,
+  "accepted_reason_error": 0.0,
+  "false_issued_reason_rate_all_test": 0.0,
+  "matched_repairs": 0,
+  "matched_spoils": 0,
+  "paired_reason_delta": 0.0,
+  "status_counts": {
+    "verified": 200
+  },
+  "initial_gradient_norms": {
+    "reader": null,
+    "gates": 0.009629513137042522
+  },
+  "soft_hard_disagreement": 0.275,
+  "alpha": 0.1,
+  "calibration_threshold": 0.0,
+  "export_check_inputs": 8,
+  "export_check_exhaustive": true,
+  "oracle_concepts": true,
+  "dataset": "synthetic",
+  "scope": "exact Boolean head reasons; marginal false-issued-premise bound under joint coverage, not conditional precision or task correctness"
+}
