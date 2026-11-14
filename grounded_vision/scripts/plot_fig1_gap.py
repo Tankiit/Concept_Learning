@@ -94,8 +94,6 @@ def main():
                        else ("#c0392b", "--", 2.2))
         ax.add_patch(Rectangle((x * W, y * H), w * W, h * H,
                                fill=False, ec=col, ls=ls, lw=lw))
-        ax.text(x * W, max(0.0, y * H - 6), part, fontsize=5.5,
-                color=col, weight="bold")
     ax.set_title("certified-but-false (red dashed) vs certified-and-true (green)\n"
                  f"typical case: {n_fail} of {n_tot} audited reasons fail, "
                  "yet this prediction is correct", fontsize=6.6, loc="left")
