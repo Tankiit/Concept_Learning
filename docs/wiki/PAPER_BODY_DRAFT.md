@@ -245,6 +245,28 @@ acceptance} (whether what they accept is true). The two can dissociate
 at the same acceptance rate, so every channel is read at matched
 acceptance, separating selection death from support death
 (\S\ref{sec:exp-abstain}).
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{fig_pipeline.pdf}
+\caption{\textbf{We certify a minimal reason exactly, measure every
+rung it must climb toward the image, and gate on its weakest premise.}
+Top: the audited pipeline---oracle part boxes, $F{=}36$ bound
+part--attribute literals read by logistic readers (validation-isotonic
+calibrated), a Boolean tree head (Setting~T trained on predicted bits /
+Setting~D distilled), and the certified reason $R \vDash c$ (minimal,
+exact, cross-checked by an independent engine on $472/472$ sufficiency
+checks). Below, one rung per row: the proof is exact by construction;
+fidelity is measured and partial ($0.81$/$0.61$ at four/ten classes)
+but not binding; premise support is measured and is the binding failure
+($0.254 \to 0.017$ from four to two hundred classes, always below the
+accuracy of the prediction it certifies). Beneath the dashed line, the
+lever the paper tests: calibrated minimum-confidence abstention, which
+restores premise support at partial coverage and pays for it in
+coverage. The class-count curve itself is Fig.~\ref{fig:gap}(b); this
+figure carries its endpoints only.}
+\label{fig:pipeline}
+\end{figure}
 ```
 
 ## §4 Experiments (v2, CVPR-style rewrite 2026-11-13)
@@ -814,3 +836,9 @@ User steer: "I don't want an audit paper — I want to know what survives." §3 
 ## Changelog 2026-11-14 (evening, later) — intro v4 + full-paper survival pass (§2/§4/§5/§6), grounded in the executed runs
 
 User steer: survival framing throughout ("what survives"), intro + all parts written clearly. **§2**: CBM positioning sentence now asks "what survives a formal sufficiency certificate"; formal-explanations closer "what survives the transfer". **§4 roadmap**: the four questions are now survival questions. **§4.1**: class sweep is 4/10/20/50/200 (n = 118/243/515/600/600; 50 and 200 subsample 1,389/5,794; fixed 4-class subset + five random re-draws → app:subset). **§4.2** retitled "Premise support does not survive scale"; tab:scaling gains the K=20/50 rows (0.070 [0.051,0.095] n=515; 0.035 [0.023,0.053] n=600; joint 0.037/0.022) + the smooth-decay sentence (0.254→0.070→0.035→0.017) from `task1_cbcem_K20_50.json`. **§4.3**: re-draws sentence (0.267–0.431; shares 0.62–0.94; negated carriers 0.90–0.98 → what transfers is the concentration, not the slot). **§4.4** retitled "what a gate restores, and at what cost"; gains the pre-registered repair-criterion passage (K20 0.361 [0.24,0.47] vs bar 0.140; K50 0.143 [0.07,0.23] vs 0.070, lower bound AT the bar; K200 0.095 [0.04,0.15] vs 0.033, fragile, join+marginals re-checked → app:prereg) and the RESOLVED reconciliation (forcing ≡ ranking at every δ/K; matched coverage keeps 30/30 under the calibrated channel vs 0.067–0.133 per-instance isotonic → "selection death, not support death"). **§5**: trade-off "survives into the intermediate class counts and thins at the full benchmark" (was "collapses"). **§6**: conclusion opens on survival ("what survives the trip to the image is a measurable, degrading quantity") and grades the gate honestly (robustly at intermediate scale, marginally at full scale, always paying in coverage). Flags 7 updated (calibrated K=200 now measured — keep oracle vs calibrated claims separate); scaling provenance row extended. Intro file updated in parallel (v4, same steer; its changelog lives there).
+
+---
+
+## Changelog 2026-11-14 (latest) — fig:pipeline DRAFTED (the last blocking figure)
+
+Method figure rendered (`scripts/plot_fig_pipeline.py` → `results/figures/fig_pipeline.{png,pdf}`) per the user's slot-mockup: pipeline row (image + oracle boxes → φ(x): F=36 bound literals, logistic readers, val-isotonic → CART depth-12 tree, Settings T/D → R ⊨ c, minimal exact, 472/472 cross-check) over an audit panel of one rung per row (proof ✓ exact by construction; fidelity ≈ measured 0.81/0.61 partial-not-binding; premise support ✗ measured 0.254→0.017 binding), then a dashed separator and the GATE row (calibrated min-confidence abstention — the lever, not a rung; restore at partial coverage, pay in coverage). Rung-4 decision recorded: keep as the gate row; robustness earns no row (exact-by-construction like rung 1) and image truth is the same measurement as premise support at our level of treatment. No K-curve inset — that curve is Fig. 1(b) / `fig:gap`; this figure carries endpoints only. LaTeX figure environment + caption added at the end of §3 (label `fig:pipeline`, resolving the roadmap's reference). NOTE for assembly: `Fig.~\ref{fig:gap}` in this caption resolves in the INTRO file — fine once assembled, expected to look unresolved in per-file checks.
