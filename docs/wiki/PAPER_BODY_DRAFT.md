@@ -58,19 +58,26 @@ dataset we test, and that whether calibration beats raw confidence is a
 property of reader calibration, not of the rule.
 ```
 
-## §3 Method — the audit (v2, CVPR-style rewrite 2026-11-13)
+## §3 Method — what survives (v3, survival reframe 2026-11-14; formal machinery unchanged from v2)
 
 ```latex
-\section{Auditing What Concept Explanations Certify}
+\section{What Survives a Sufficient Reason}
 \label{sec:method}
 
-Figure~\ref{fig:pipeline} summarises the audit. We first fix notation and
-the two model families under audit (\S\ref{sec:setup}); we define
-certified reasons and how we verify them (\S\ref{sec:cert}); we arrange
-what is proved versus what must be measured on a claim ladder
-(\S\ref{sec:ladder}); and we define the three measured quantities---the
-premise-support audit, the vocabulary-ceiling diagnostic, and the
-calibration-gated abstention rule (\S\ref{sec:measured}--\S\ref{sec:abstention}).
+A sufficient reason is proved, not measured. This paper treats its
+journey toward the image as a survival question: which claims hold by
+construction, which hold only with a probability we can estimate, at
+what rate the measured ones die as the task grows, and whether any
+deployment rule restores them. Figure~\ref{fig:pipeline} summarises the
+instrument. We fix notation and the two model families
+(\S\ref{sec:setup}); define certified reasons and how we verify them
+(\S\ref{sec:cert}); arrange the claims between proof and image as a
+survival ladder of exact and measured rungs (\S\ref{sec:ladder}); define
+the survival probabilities and the vocabulary bound that caps them
+(\S\ref{sec:measured}--\S\ref{sec:ceiling}); and define the trust
+channels that might restore survival, together with the pre-registered
+test a channel must pass to count as a repair rather than noise
+(\S\ref{sec:abstention}).
 
 \subsection{Setup and notation}
 \label{sec:setup}
@@ -120,11 +127,13 @@ $c$, and the two premises it needs about the world---that the cited bits
 are true of the image, and that $c$ agrees with $f$---are exactly what it
 cannot express.
 
-\subsection{The claim ladder}
+\subsection{The survival ladder}
 \label{sec:ladder}
-Certified explanations are consumed as if the certificate covered the
-image and the network. We make the distance explicit as a ladder of
-claims, each rung either \emph{exact} or \emph{measured}:
+Certified explanations are consumed as if the proof covered the image
+and the network. We make each intervening claim explicit as a ladder,
+each rung either \emph{exact}---it holds by construction, for every
+input---or \emph{measured}---it holds with a probability the audit
+estimates:
 \begin{equation}
 \underbrace{\text{proof}}_{\text{exact}}
 \;\to\;
@@ -140,9 +149,13 @@ claims, each rung either \emph{exact} or \emph{measured}:
 where \emph{proof} is \eqref{eq:sufficient}, \emph{robustness} is
 invariance of the certificate under predicate perturbations,
 \emph{fidelity} compares $c$ with $f$, and \emph{premise support} and
-\emph{image truth} compare the cited literals with $g(x)$. Rung one is
-what tools certify; users assume rung five. The audit measures how far
-certificates climb.
+\emph{image truth} compare the cited literals with $g(x)$. Rungs one
+and two always survive; that is what a certificate is. Everything the
+user actually cares about lives on the measured rungs, and nothing
+forces them to survive with the proof---so ``is this explanation
+trustworthy'' decomposes into three survival questions, each with its
+own rate. The rest of the paper measures those rates, where they
+concentrate, and what restores them.
 
 \subsection{Measured quantities}
 \label{sec:measured}
@@ -155,7 +168,8 @@ g_i(x) = b \,\right],
 \,\right],
 \label{eq:fidelity}
 \end{align}
-and report their expectations as \emph{premise support}
+and report their expectations---the survival rates of the measured
+rungs---as \emph{premise support}
 $P(\text{support})$---the probability that every cited literal is true
 of the image---and \emph{conditional fidelity}
 $P\big(f = c \,\big|\, \phi(x') \vDash R\big)$, the teacher's
@@ -170,10 +184,11 @@ and a vocabulary that cannot express the task. We separate them by
 training heads of one matched family on predicted bits
 $\phi(x)$, on continuous reader scores $r(x)$, and on ground-truth bits
 $g(x)$. The accuracy gap between the ground-truth head and the predicted
-heads bounds what any Boolean head over this vocabulary can achieve, so
-repair effort targets the right component---vocabulary, head, or readers.
+heads bounds what any Boolean head over this vocabulary can achieve: if
+the gap is wide, the task itself does not survive this vocabulary and
+repair effort belongs there---not in the head or the readers.
 
-\subsection{Calibration-gated abstention}
+\subsection{Trust channels and the repair criterion}
 \label{sec:abstention}
 Premise failures concentrate in identifiable literals
 (\S\ref{sec:audit}), so the deployment question is whether a reason can
@@ -196,6 +211,39 @@ confidence $\min_{(i,b)} r_i(x)$ or its complement; and \textbf{A},
 discrete per-(concept, polarity) reliability estimated on validation.
 Random ordering at matched coverage is the baseline. The calibrator uses
 no test information; the honest-deployment arm is~B.
+
+\paragraph{When is a channel a repair?}
+The coverage--support curve is summarised at each class count $K$ by the
+\emph{repair ratio}
+\begin{equation}
+\rho_K(c) \;=\;
+\frac{P\big(\text{support}(R) \,\big|\, \text{accepted at coverage } c\big)}
+     {P\big(\text{support}(R)\big)},
+\label{eq:repair}
+\end{equation}
+the multiple by which gating lifts premise support above the
+unconditional rate $R_K$ measured in the same run. A channel is called a
+repair at $(K, c)$ only when the lower bound of a cluster-bootstrap
+interval on $\rho_K(c)$ exceeds $2$---the smallest multiple separable at
+audit sample sizes and the smallest a practitioner would call a repair
+rather than noise. Margins below that bar, or margins that hold at one
+coverage and not another, are reported as what they are: a tradeoff
+degrading toward the unconditional rate, not a guarantee restored. The
+criterion, and the decision each outcome triggers, were fixed before the
+scaling runs executed (App.~\ref{app:prereg}).
+
+\paragraph{Ranking, forcing, and selection.}
+Two further distinctions keep the survival claim honest. First, a
+stricter gate---accept a reason only if the literals passing the
+threshold themselves \emph{force} the prediction---accepts the same
+instances as the ranking gate at every threshold and class count we
+measure (\S\ref{sec:exp-abstain}), so ranking is the operating rule and
+forcing a diagnostic. Second, channels fail in two independent ways:
+\emph{selection} (which instances they accept) and \emph{support given
+acceptance} (whether what they accept is true). The two can dissociate
+at the same acceptance rate, so every channel is read at matched
+acceptance, separating selection death from support death
+(\S\ref{sec:exp-abstain}).
 ```
 
 ## §4 Experiments (v2, CVPR-style rewrite 2026-11-13)
@@ -579,6 +627,9 @@ of certified concept explanations.
 | §4.8 label-noise control | observed 0.485/0.439/0.355/0.279 vs analytic 0.484/0.438/0.354/0.281 at ε=5/10/20/30% (Δ≤0.002) | `results/bdd_oia_experiments.json` stage7 (**uncommitted**) |
 | Table methods | ours 2.68/0.27/0.534 [0.521,0.546]/1.00/0.64; erasure 0.67/1.00/0.699/0.00/0.30; topk 3.00/0.22/0.578/0.37/0.59; random 3.00/0.11/0.682/0.01/0.31; n=6,423 shared | `results/bdd_oia_methods.json` part1 (**uncommitted**) |
 | Table families | joint 0.759/0.437/0.807/0.622 [0.611,0.634]; independent 0.707/0.316/0.928/0.513 [0.502,0.524]; sequential 0.721/0.370/0.891/0.542 [0.532,0.553]; sequential-T 0.721/0.370/0.849/0.534; conceptizer acc 0.883 | `results/bdd_oia_methods.json` part2 (**uncommitted**) |
+| §3.6 repair ratio + per-K verdicts | K20 B@.14 0.361 [0.24,0.47] n=72 vs 2×R=0.140 (R=36/515); K50 0.143 [0.07,0.23] n=84 vs 0.070 (R=21/600); K200 0.095 [0.04,0.15] n=84 vs 0.033 (R=10/600, rule-3 verified) | `task1_abstention_K20_50.json`, `task1_abstention_K200.json`, `task1_verdicts.json` |
+| §3.6 ranking≡forcing; selection-vs-support | cov_forcing ≡ cov_ranking and support_kept ≡ minimal ≡ ranking at every δ∈{0.5..0.9}, K∈{4,10}; K4 30/118 support 1.000 vs committed 0.067–0.133 at the same 0.254 coverage | `task3_forcing_sweep.json` + `guarantee_scaling_cub.json` (band) |
+| app:subset draws | P(all) 0.267–0.431 (per-draw Wilson); shares 0.62–0.94; carriers negated, marginals 0.90–0.98 | `task2_subset_sensitivity.json` |
 
 ## Drop-list compliance
 
@@ -591,8 +642,8 @@ of certified concept explanations.
 ## Flags before this freezes
 
 1. **Commit** `results/celeba_audit_smiling.json`, `results/bdd_oia_audit.json`, `scripts/celeba_audit_stage_*.py`, `scripts/rsbench_bdd_audit.py` — body cites them (committed-JSON rule).
-2. **Trust-reconciliation** (guarantee_scaling fixed-δ vs abstention_curves ranking) must be stated in §4.4 text or the scaling readout rerun as a ranking — currently the §4.4 text doesn't mention it; add one sentence.
-3. **Subset-draws run** still pending → the "this subset; App." hedge stays; if it runs before Nov 16, replace with the draws' range.
+2. **Trust-reconciliation RESOLVED 2026-11-14** (`task3_forcing_sweep.json`): at matched 0.254 coverage the calibrated selection is 30/30 supported vs 0.067–0.133 in `guarantee_scaling` — the 0.07–0.10 is raw-channel **selection** death, not support death, and forcing ≡ ranking at every δ. The §4.4 sentence should say exactly this; §3.6 now carries the distinction.
+3. **Subset-draws EXECUTED 2026-11-14** (SUBSET-SPECIFIC, 0/5 dominated; `task2_subset_sensitivity.json`): replace §4.3's "this subset; App." hedge with the draws' range 0.267–0.431 plus the negated-carrier observation; `app:subset` already rewritten with the executed numbers.
 4. Appendix stubs referenced: `app:pyxai` (engine ledger, from REVIEW_VALIDATION_ROADMAP), `app:subset`, `app:clust` (independence table), Fig.~`fig:abstain` (curves from the three JSONs).
 5. Setting D K=10 premise support is 0.124 (keep list spine says 11.5 = Setting T; the D value differs by 1pt) — Table reports T; state in caption or add D column if space.
 6. BDD-OIA fifth action (base rate 0.003, no positive predictions) is silently excluded — one footnote in §4.7.
@@ -602,6 +653,7 @@ of certified concept explanations.
 10. §4.9 families: LTN/DPL (their neuro-symbolic families) not run — probabilistic-logic engines out of scope for the deadline; if a reviewer asks, the answer is the wiki table + "not ported". Consider one clause in §5 Limitations if space.
 11. §4.9 "pos." column is load-bearing: never quote method P(all) without assertion-mix (random beats ours otherwise) — keep the caption sentence.
 12. Instance-drop retrain arm (0.521 vs 0.534, unchanged) exists in the JSON but is not in the text — available if a reviewer asks "did you try cleaning training data" (answer: yes, null).
+13. **Survival reframe vs registered title:** §3 (v3) is survival-voiced; the title/abstract registered Nov 10 say "auditing". The abstract's closer ("we measure it, localise it, and show what calibration-gated abstention can and cannot repair") already reads as survival; decide whether the voice propagates to §2/§4 headings and whether the portal still allows title/abstract edits before Nov 16.
 
 ---
 
@@ -628,11 +680,16 @@ is the paper's authority.
 
 \section{Four-class subset sensitivity}
 \label{app:subset}
-[TO RUN if time: $\ge$5 random four-class draws through the identical
-pipeline, reporting the premise-support range against the committed
-$25.4\%$. Until run, the main text hedges the four-class subset; if the
-run does not happen before submission, this appendix states the hedge
-explicitly and the body wording stands.]
+Five random four-class draws (seeds fixed before execution) through the
+identical pipeline give premise support $0.267$--$0.431$ (per-draw
+Wilson intervals; no draw exceeds one half), against $25.4\%$ for the
+audited subset. Failing reasons concentrate on a single literal in every
+draw (shares $0.62$--$0.94$ of failing reasons), but the carriers are
+\emph{negated} clauses with high marginal annotation support
+($0.90$--$0.98$)---the mirror image of the audited subset's positive
+literal at $0/88$. The one-literal characterisation is therefore a
+property of the audited subset, not a law of four-class problems; the
+main text hedges accordingly.
 
 \section{Clustering above independence}
 \label{app:clust}
@@ -645,6 +702,20 @@ resample; cluster-robust): observed/predicted joint support is $1.52$
 hundred classes. The four-class comparison is degenerate (failure is a
 single literal). We therefore report the clustering as a Setting-T,
 ten-class observation, not a universal law.
+
+\section{Pre-registered survival criteria}
+\label{app:prereg}
+The repair criterion of \S\ref{sec:abstention} and the decisions it
+triggers were fixed in the repository before the scaling runs executed:
+a graceful multiple at both intermediate class counts leaves the paper's
+claims unchanged, while a collapse at either shifts the spine of the
+paper to the collapse; a margin that first appears only at the largest
+class count triggers a verification protocol (join and literal-marginal
+checks, both of which passed) before it may be claimed. The
+forcing-versus-ranking equivalence check and the five-draw
+subset-sensitivity protocol were pre-registered in the same document.
+Verdict artefacts ship with the code (\texttt{results/task1\_verdicts.json},
+\texttt{task2\_subset\_sensitivity.json}, \texttt{task3\_forcing\_sweep.json}).
 ```
 
 **Figure draft:** `scripts/plot_abstention_curves.py` → `tmp/abstention_curves_draft.png` — three panels (CUB D/10 from `abstention_curves.json` `at_coverage` curves incl. oracle A_ir; CelebA; BDD-OIA with A/B/C/random). Camera-ready version moves into the LaTeX tree; data paths verified against the committed JSON schemas.
@@ -696,3 +767,9 @@ expected for well-calibrated readers.
 ```
 
 Provenance: `results/sun_audit.json` via `scripts/sun_audit.py` (**uncommitted**). Intro wording intentionally unchanged ("two further datasets") under the appendix-placement recommendation; if the user promotes SUN to the main table, update intro setup sentence + finding 1 ("both"→"all three") + scope paragraph ("three datasets"→"four") + §4.7.
+
+---
+
+## Changelog 2026-11-14 (evening) — §3 reframed around survival (v3), grounded in the three executed runs
+
+User steer: "I don't want an audit paper — I want to know what survives." §3 re-voiced end to end around the survival question; the formal machinery (definitions, display equations, labels) is unchanged from v2. Section title now **"What Survives a Sufficient Reason"**; the roadmap paragraph asks which claims hold by construction, at what rate the measured rungs die as K grows, and whether any deployment rule restores them. §3.3 "claim ladder" → **"survival ladder"** (exact rungs always survive; the measured rungs carry rates; "is this explanation trustworthy" decomposes into survival questions). §3.5 ceiling gains the task-does-not-survive-this-vocabulary reading. §3.6 "Calibration-gated abstention" → **"Trust channels and the repair criterion"**, adding (i) the **repair ratio ρ_K(c)** display eq. with the pre-registered 2× bar (graceful vs collapsing; margins below it are "a tradeoff degrading toward the unconditional rate, not a guarantee restored") — this is the quantity §4 tabulates per K from `task1_*`; and (ii) the **ranking ≡ forcing** and **selection-vs-support-death** distinctions from `task3_forcing_sweep.json` (both point to `sec:exp-abstain`). New appendix stub `app:prereg` (pre-registered criteria + verdict artifacts); `app:subset` rewritten from [TO RUN] to the executed SUBSET-SPECIFIC numbers; flags 2–3 marked RESOLVED with their artifacts; new flag 13 (survival voice vs the registered Nov-10 title/abstract — user decision). Provenance table gains task1/task2/task3 rows.
