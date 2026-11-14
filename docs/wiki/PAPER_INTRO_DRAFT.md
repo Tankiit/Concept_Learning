@@ -69,21 +69,28 @@ and the audit fixed while the domain, features, and task type vary.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\linewidth]{fig1_gap.pdf}
-\caption{\textbf{A sufficient-reason certificate is exact, yet its
-premises are all true of the image in $25\%$ of cases at four classes
-and $1.7\%$ at two hundred---always below the accuracy of the
-prediction it certifies.} \textbf{(a)}~A correctly classified
-Black-footed Albatross; the certified reason reads \emph{bill yellow
-$\wedge$ bill curved $\wedge$ tail black} (annotated: none hold; red
-dashed boxes) $\cdot$ \emph{right wing not black} $\checkmark$
-$\cdot$ \emph{belly not white} $\checkmark$ (green boxes)---sufficient
-for the tree, not for the bird, and typical: most audited four-class
-reasons fail while the prediction is right. \textbf{(b)}~Prediction
-accuracy vs.\ all-cited-premises-true across the class sweep (Wilson
-$95\%$ bands; $n$ at each point); the dotted line marks certificate
-exactness, which holds by construction. Artefact:
-\texttt{results/figures/fig1\_gap.pdf}.}
+\includegraphics[width=\linewidth]{fig1_v2.pdf}
+\caption{\textbf{We certify concept-level sufficient reasons for a
+vision classifier over part predicates and audit each cited premise
+against held-out part annotations; the proof is exact, yet its premises
+are all true of the image in $25\%$ of cases at four classes and
+$1.7\%$ at two hundred.} \emph{Top:} the pipeline, split by where the
+proof stops (dashed rule)---everything to its left (DINOv3 patches,
+part boxes, readers) is learned from the image and decides whether a
+premise is wrong; everything to its right (tree routing, extraction,
+verification) is exact and unaffected by a wrong premise. The
+$\phi(x)$ stage carries this instance's five reason bits, three of
+them false. \textbf{(a)}~A correctly classified Black-footed Albatross;
+the certified reason reads \emph{bill yellow $\wedge$ bill curved
+$\wedge$ tail black} (annotated: none hold; red dashed boxes)
+$\cdot$ \emph{right wing not black} $\checkmark$ $\cdot$ \emph{belly
+not white} $\checkmark$ (green boxes)---sufficient for the tree, not
+for the bird, and typical: most audited four-class reasons fail while
+the prediction is right. \textbf{(b)}~Prediction accuracy vs.\
+all-cited-premises-true across the class sweep (Wilson $95\%$ bands;
+$n$ at each point); the dotted line marks certificate exactness, which
+holds by construction. Artefact:
+\texttt{results/figures/fig1\_v2.pdf}.}
 \label{fig:gap}
 \end{figure}
 
@@ -237,3 +244,9 @@ Still fully number-free (digits only in LaTeX comments / bib keys; number words 
 ## Changelog 2026-11-14 (later) — Figure 1 added (fig:gap), figure pixels de-cluttered
 
 User requests: remove on-image labels → remove titles → figure kept clean; the certified content moves into the CAPTION. The intro now carries the `figure` environment after the setup paragraph: caption sentence 1 = the gap in numbers (25% → 1.7%, always below accuracy), (a) = the sid-44 albatross example WITH the certified line verbatim ("bill yellow ∧ bill curved ∧ tail black (annotated: none hold) · right wing not black ✓ · belly not white ✓ — sufficient for the tree, not for the bird, and typical"), (b) = proved-vs-survives curve with Wilson bands. NOTE: the intro PROSE stays number-free (user rule); the caption is body matter and carries numbers by design (same split as abstract-vs-body). fig1_gap.pdf regenerated without on-image labels, titles, and footnote (script `scripts/plot_fig1_gap.py`; artifact committed). \ref{fig:gap} not yet cited in prose — add "Figure~\ref{fig:gap}" at the finding-1 sentence at .tex assembly (kept out of the intro prose now to preserve the number-free pass).
+
+---
+
+## Changelog 2026-11-14 (final) — Fig 1 v2: pipeline strip with the measured/exact boundary
+
+Advisor design (slot-mockup + skeleton): keep panels (a)/(b), gain a top strip that says what the system DOES (certify concept-level explanations of a vision classifier) with the Teso-differentiator drawn INTO the diagram: a vertical dashed rule — **where the proof stops** — on the arrow between φ(x) and the tree. Left = measured (image, DINOv3, part boxes, readers: learned, the only stages breakable by changing the image); right = exact (tree routing, extraction, verification: untouched by a wrong premise). φ(x) carries sid 44's five reason bits (✗✗✓✗... three false, two true), tying the strip to panel (a) whose box colors match the measured side. Rendered by `scripts/plot_fig1_v2.py` → `results/figures/fig1_v2.{png,pdf}` (strip QA-passed on a zoomed crop: no duplicated chips, no cutoffs, labels clear of the rule). Caption rewritten in the advisor's template shape ("We certify ... and audit ...; the proof is exact, yet ..."); label kept as `fig:gap` so existing refs stand; `fig1_gap.*` remains as the no-strip variant. Chips note: the ✗/✓ coloring marks premise truth, which is produced by the measured side — the tie the caption makes explicit.
