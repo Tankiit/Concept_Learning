@@ -1,0 +1,144 @@
+{
+ "prereg": "P-A1 (CVPR2027_PREREG_TASK_RUNS.md, fixed before run)",
+ "note": "task3 dump covers K in {4,10} only; K=200 aggregator unmeasured",
+ "blocks": [
+  {
+   "K": 4,
+   "n": 118,
+   "unconditional_R": 0.2542372881355932,
+   "sp_min_product": 0.8103418681683886,
+   "at_coverage": {
+    "0.05": {
+     "min": {
+      "support": 1.0
+     },
+     "product": {
+      "support": 1.0
+     },
+     "mean": {
+      "support": 1.0
+     }
+    },
+    "0.10": {
+     "min": {
+      "support": 1.0
+     },
+     "product": {
+      "support": 1.0
+     },
+     "mean": {
+      "support": 1.0
+     }
+    },
+    "0.14": {
+     "min": {
+      "support": 1.0
+     },
+     "product": {
+      "support": 1.0
+     },
+     "mean": {
+      "support": 1.0
+     }
+    },
+    "0.20": {
+     "min": {
+      "support": 1.0
+     },
+     "product": {
+      "support": 1.0
+     },
+     "mean": {
+      "support": 1.0
+     }
+    },
+    "0.30": {
+     "min": {
+      "support": 0.8571
+     },
+     "product": {
+      "support": 0.8571
+     },
+     "mean": {
+      "support": 0.8571
+     }
+    }
+   },
+   "LB_ratio_at_14pct": {
+    "min": 3.026,
+    "product": 3.026,
+    "mean": 3.026
+   },
+   "LB_ratio_2x_bar": 0.5085
+  },
+  {
+   "K": 10,
+   "n": 243,
+   "unconditional_R": 0.11522633744855967,
+   "sp_min_product": 0.6212221569896681,
+   "at_coverage": {
+    "0.05": {
+     "min": {
+      "support": 0.6667
+     },
+     "product": {
+      "support": 0.5833
+     },
+     "mean": {
+      "support": 0.5833
+     }
+    },
+    "0.10": {
+     "min": {
+      "support": 0.7083
+     },
+     "product": {
+      "support": 0.7083
+     },
+     "mean": {
+      "support": 0.5833
+     }
+    },
+    "0.14": {
+     "min": {
+      "support": 0.7353
+     },
+     "product": {
+      "support": 0.7353
+     },
+     "mean": {
+      "support": 0.5294
+     }
+    },
+    "0.20": {
+     "min": {
+      "support": 0.5306
+     },
+     "product": {
+      "support": 0.5306
+     },
+     "mean": {
+      "support": 0.4898
+     }
+    },
+    "0.30": {
+     "min": {
+      "support": 0.3562
+     },
+     "product": {
+      "support": 0.3836
+     },
+     "mean": {
+      "support": 0.3699
+     }
+    }
+   },
+   "LB_ratio_at_14pct": {
+    "min": 4.697,
+    "product": 4.467,
+    "mean": 3.363
+   },
+   "LB_ratio_2x_bar": 0.2305
+  }
+ ]
+}

@@ -510,6 +510,59 @@ data, smarter reason queries---leave premise support exactly where it
 was. The only lever that moves it is abstention, at its coverage
 price.
 
+\subsection{Ablations: the inversion is not a design artifact}
+\label{sec:ablations}
+Ablations here do a different job from the usual one: they show the
+inversion is not an artifact of a choice we made. Predictions were
+fixed before the runs (App.~\ref{app:prereg}). \emph{Depth, not just
+scale} (Tab.~\ref{tab:ablate}, rows 1--2): varying tree depth at fixed
+class count moves mean reason length $2.0\to6.0$ at ten classes and
+support $0.115\to0.358$---a three-fold gain by knob-turn alone,
+tracking the independence null at every depth (ratios $1.03$--$1.51$;
+the pre-registered threshold was a three-fold rise, and it is met at
+$3.1\times$). The mechanism is interventional, not observational. At
+four classes support is \emph{flat} across depth ($0.254$ exactly, at
+every depth): the yellow-bill literal rides every tree, corroborating
+concentration. At two hundred classes depth spans support
+$0.67\to0.03$---but the shallow tree classifies at chance: the reason
+you can fully trust is the reason of a head that cannot solve the
+task. \emph{Aggregator} (row 3): ranking reasons by the minimum,
+product, or mean of per-literal calibrated trust, min is weakly the
+best at ten classes (support $0.667$ vs.\ $0.583$ for product at $5\%$
+coverage; lower-bound repair ratio $4.7$ vs.\ $4.5$; mean worst at
+$3.4$)---the failure mode is a single bad literal, and min is the
+aggregator built for it. Backbone need not be ablated with new
+compute: the inversion replicates across three different feature
+stacks already (ours on CUB, ours on CelebA, rsbench's on BDD-OIA).
+Remaining ablations (predicted localisation, reader threshold,
+vocabulary size, pooling) are supplement-tier; the localisation one is
+the only claim-relevant unknown and is stated as such in
+\S5.
+
+\begin{table}[t]
+  \centering\small
+  \caption{\textbf{Design ablations} (pre-registered predictions in
+  App.~\ref{app:prereg}; Setting~T, same readers throughout). Row 2
+  holds $K$ fixed and turns depth; the $K{=}200$ cells use a
+  deterministic sid-order subsample, so levels are not comparable to
+  Tab.~\ref{tab:scale}---the within-column trend is the measurement.}
+  \label{tab:ablate}
+  \begin{tabular}{@{}llrrr@{}}
+    \toprule
+    knob & setting & $|R|$ & support & note \\
+    \midrule
+    depth $=2$ & $K{=}10$ & 2.00 & 0.358 & ratio 1.03 \\
+    depth $=12$ & $K{=}10$ & 6.00 & 0.115 & ratio 1.51 \\
+    depth $=2$ & $K{=}200$ & 2.00 & 0.672 & acc $0.00$ \\
+    depth $=12$ & $K{=}200$ & 10.4 & 0.038 & acc $0.16$ \\
+    \midrule
+    agg $=$ min & $K{=}10$, $5\%$ cov & --- & 0.667 & LB ratio $4.7$ \\
+    agg $=$ product & $K{=}10$, $5\%$ cov & --- & 0.583 & LB ratio $4.5$ \\
+    agg $=$ mean & $K{=}10$, $14\%$ cov & --- & 0.529 & LB ratio $3.4$ \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
 \subsection{The beds fail on opposite sides}
 \label{sec:beds}
 CUB is vocabulary-limited and BDD-OIA is perception-limited, so the
@@ -828,3 +881,11 @@ Method figure rendered (`scripts/plot_fig_pipeline.py` → `results/figures/fig_
 **Structure changes**: §4 is now "What survives" in ladder order — exp-verify (exactness floor + PCA indifference) → exp-scale (fig:scale NEW: `scripts/plot_fig_scale.py` → `results/figures/fig_scale.{png,pdf}`, adds the independence-null hollow series + n/|R| under each K) → exp-fidelity (incl. margins + pipit leaf one sentence) → audit/concentration (incl. re-draws + strict-rule check + precision-beyond-base-rates) → ceiling → abstention (per-K verdict table incl. the K=200 three-operating-point honesty; oracle-dies/calibration-separates paragraph; forcing≡ranking paragraph; fig:abstain TO BUILD) → nulls (tab:nulls with sources) → beds (BDD reversals + independence + label-noise control + SUN pointer). Old §4.2–§4.9 superseded; their content preserved here or in app:methods. §3 cross-refs updated to the new labels; §3's duplicate sec:ceiling label removed (label lives on §4.5); §3 gate keeps only sec:gate (§4.6 owns sec:abstention).
 
 **New flags**: (16) fig:abstain to build at camera-ready (data: task1_abstention_K20_50 + the two replication audits; draft = results/figures/task1_abstention_scaling.png). (17) concentration heat-strip figure (literal × polarity per bed) still to build — carries §4.5's claim. (18) ECE per bed optional. (19) drawio strip (fig1_strip.pdf) may replace fig1_v2.pdf at camera-ready — both labels attached. (20) strict-rule sensitivity number for tab:scale caption: "all 30/30 pass strictly" is K=4-only; compute the strict variant at other K if a reviewer asks.
+
+---
+
+## Changelog 2026-11-14 (night) — ABLATIONS EXECUTED under pre-registration (addendum committed BEFORE the runs, 2f88002)
+
+**Depth sweep (C1)** `scripts/ablation_depth_support.py` → `results/ablation_depth_support.json`: |R| and support at depths {2,4,6,8,12,16} × K ∈ {4,10,200}. Verdicts vs the pre-registered P-D1..P-D3: **P-D1 ✓** (|R| monotone in depth, saturating), **P-D2 ✓** (ratio to independence null in [1.00, 1.56] at every cell, inside the pre-registered [0.7, 1.7]), **P-D3 ✓ exactly at the bar** (K=10: 0.358/0.115 = 3.1× ≥ 3×). Two unanticipated findings recorded: (i) K=4 support is EXACTLY flat at 0.254 across all depths — the yellow-bill literal rides every tree (concentration corroboration); (ii) K=200 depth-2 gives support 0.672 at accuracy 0.000 — the trustable reasons come from a head that cannot classify; §4.10 states the trade. CAVEAT recorded in table caption: K=200 ablation cells use first-600-by-sid (class-skewed), so LEVELS are not comparable to tab:scale's 0.017 (committed audit subsample differs); the within-column trend is the measurement. K=4/10 cells match committed levels exactly (0.254, 0.115).
+**Aggregator (D1)** `scripts/ablation_aggregator.py` → `results/ablation_aggregator.json`: vs P-A1 — outcome ✓ (min weakly best at K=10: 0.667 vs product 0.583 at 5% cov; LB ratio 4.7 vs 4.5; mean worst 3.4), rank-correlation sub-prediction ✗ (Spearman min/product 0.81/0.62 < 0.9 — falsified honestly; literal trusts are less skewed than predicted). K=200 aggregator unmeasured (task3 dump covers K ∈ {4,10}) — stated.
+**Not run + rationale:** backbone (A2) — covered by the three replication feature stacks (one sentence in §4.10); predicted localisation (A1) — the only claim-relevant unknown ("can only lower" is an assumption); assigned next, else §5 softens to "untested"; reader threshold / pooling / vocabulary size — supplement tier. New subsection §4.10 "Ablations" + tab:ablate added (10 subsections now — merge with sec:nulls at .tex assembly if space demands).
