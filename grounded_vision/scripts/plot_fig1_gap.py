@@ -94,9 +94,6 @@ def main():
                        else ("#c0392b", "--", 2.2))
         ax.add_patch(Rectangle((x * W, y * H), w * W, h * H,
                                fill=False, ec=col, ls=ls, lw=lw))
-    ax.set_title("certified-but-false (red dashed) vs certified-and-true (green)\n"
-                 "typical case: most audited reasons fail, yet this prediction is "
-                 "correct", fontsize=6.6, loc="left")
 
     ax = axes[1]
     K = [r[0] for r in SCALING]
@@ -122,8 +119,6 @@ def main():
     ax.set_ylabel("rate")
     ax.set_ylim(0, 1.12)
     ax.legend(frameon=False, fontsize=6.8, loc="center right")
-    ax.set_title("what is proved vs what survives, as the task grows",
-                 fontsize=7.5, loc="left")
 
     foot = ("certified: bill yellow \u2227 bill curved \u2227 tail black "
             "(annotated: none hold) \u00b7 right wing not black \u2713 \u00b7 "
