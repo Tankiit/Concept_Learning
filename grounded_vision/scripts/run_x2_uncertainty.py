@@ -531,7 +531,10 @@ def main():
         def blk(setting, k):
             return next(b for b in blocks if b["setting"] == setting and b["K"] == k)
         verdicts = None
-        if seed == 42:
+        # Pre-registered X2 verdicts are defined on the K=4 T block; only computable
+        # when K=4 is part of this run (e.g. the task1 driver runs K=20/50/200 only).
+        if seed == 42 and any(b["setting"] == "T_tree_head" and b["K"] == 4
+                              for b in blocks):
             bt = blk("T_tree_head", 4)
             ar = bt["arm_raw"]
             verdicts = {

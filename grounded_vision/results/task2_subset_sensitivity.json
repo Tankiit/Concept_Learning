@@ -1,0 +1,143 @@
+{
+ "draw_seeds": [
+  1000,
+  1001,
+  1002,
+  1003,
+  1004
+ ],
+ "prereg": ">=3/5 dominated => pattern",
+ "verdict": "SUBSET-SPECIFIC",
+ "draws": [
+  {
+   "n": 119,
+   "n_all_supported": 40,
+   "p_all": 0.33613445378151263,
+   "wilson95": [
+    0.2575647533744133,
+    0.4249532209925764
+   ],
+   "top_literal": {
+    "literal": "beak:bill_color=yellow|0",
+    "share_of_failing": 0.620253164556962,
+    "marginal_support": 0.9183673469387755,
+    "n_failing": 79,
+    "n_failing_with_it": 49
+   },
+   "dominates": false,
+   "draw": 0,
+   "seed": 1000,
+   "class_ids": [
+    70,
+    118,
+    161,
+    163
+   ],
+   "file": "task2_draw0_seed1000_ids70-118-161-163.json"
+  },
+  {
+   "n": 109,
+   "n_all_supported": 47,
+   "p_all": 0.43119266055045874,
+   "wilson95": [
+    0.3421275336702308,
+    0.5249427666445468
+   ],
+   "top_literal": {
+    "literal": "crown:crown_color=white|0",
+    "share_of_failing": 0.9354838709677419,
+    "marginal_support": 0.896551724137931,
+    "n_failing": 62,
+    "n_failing_with_it": 58
+   },
+   "dominates": false,
+   "draw": 1,
+   "seed": 1001,
+   "class_ids": [
+    100,
+    116,
+    127,
+    133
+   ],
+   "file": "task2_draw1_seed1001_ids100-116-127-133.json"
+  },
+  {
+   "n": 118,
+   "n_all_supported": 32,
+   "p_all": 0.2711864406779661,
+   "wilson95": [
+    0.1991312237421961,
+    0.35767039409604623
+   ],
+   "top_literal": {
+    "literal": "beak:bill_color=yellow|0",
+    "share_of_failing": 0.6511627906976745,
+    "marginal_support": 0.9464285714285714,
+    "n_failing": 86,
+    "n_failing_with_it": 56
+   },
+   "dominates": false,
+   "draw": 2,
+   "seed": 1002,
+   "class_ids": [
+    14,
+    49,
+    76,
+    87
+   ],
+   "file": "task2_draw2_seed1002_ids14-49-76-87.json"
+  },
+  {
+   "n": 114,
+   "n_all_supported": 44,
+   "p_all": 0.38596491228070173,
+   "wilson95": [
+    0.3017061930568744,
+    0.47765864923990364
+   ],
+   "top_literal": {
+    "literal": "beak:bill_color=yellow|0",
+    "share_of_failing": 0.8285714285714286,
+    "marginal_support": 0.9827586206896551,
+    "n_failing": 70,
+    "n_failing_with_it": 58
+   },
+   "dominates": false,
+   "draw": 3,
+   "seed": 1003,
+   "class_ids": [
+    11,
+    19,
+    30,
+    59
+   ],
+   "file": "task2_draw3_seed1003_ids11-19-30-59.json"
+  },
+  {
+   "n": 120,
+   "n_all_supported": 32,
+   "p_all": 0.26666666666666666,
+   "wilson95": [
+    0.1956834035411147,
+    0.35212605628498583
+   ],
+   "top_literal": {
+    "literal": "crown:crown_color=white|0",
+    "share_of_failing": 0.6818181818181818,
+    "marginal_support": 0.9333333333333333,
+    "n_failing": 88,
+    "n_failing_with_it": 60
+   },
+   "dominates": false,
+   "draw": 4,
+   "seed": 1004,
+   "class_ids": [
+    101,
+    107,
+    108,
+    184
+   ],
+   "file": "task2_draw4_seed1004_ids101-107-108-184.json"
+  }
+ ]
+}

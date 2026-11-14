@@ -4,9 +4,19 @@
 
 ---
 
-## Delivery status 2026-11-14 — first delivery arrived, but not the three runs
+## Delivery status 2026-11-14 — the three runs EXECUTED (by the lead, locally)
 
-The runner pushed branch [`distillationAndTransforms`](https://github.com/Tankiit/Concept_Learning/tree/distillationAndTransforms) (RSMoon, 2026-11-13; work commit `ca955eb` + merge `ed9d5bf`, based on `9086272`). Lead intake review done (tests re-run locally, `torch-multimodal` env). **Verdict: code only, zero result files — the three assigned runs (Tasks 1–3) remain unexecuted**; the task scripts are untouched and no task outputs exist on this branch or on `main` (checked all remote branches 2026-11-14). Ground rule 5 ("send Task 1 numbers as soon as they exist") is therefore still open with two days to the Nov 16 deadline. Nothing in this delivery changes §9 of the submission plan or the keep list.
+**All three tasks ran on 2026-11-14 and mechanical-PASSed** (executed by the lead on the local Mac, conda `torch-multimodal`, local flip-free caches, pre-registered seeds/paths; numbers and verdict tables in [`CVPR2027_PREREG_TASK_RUNS.md`](CVPR2027_PREREG_TASK_RUNS.md) § execution results):
+
+- **Task 1** — K=20 **GRACEFUL** (B@0.14 = 0.361 [0.24,0.47], n=72, vs 2×R = 0.140), K=50 **GRACEFUL** (0.143 [0.07,0.23], n=84, vs 0.070) → **pre-registered rule 1: abstract unchanged, body gains the scaling curve**; K=200 GRACEFUL on its face (0.095 [0.04,0.15] vs 0.033) → **rule 3 fired, prescribed bug-check executed and clean** (join exact, zero structural-only reasons, marginals 95% diffuse — the oracle filter dies, calibration still separates), decision reserved to the lead.
+- **Task 2** — **SUBSET-SPECIFIC (0/5 draws dominated)**: P(all) per draw 0.267–0.431 (no draw > 50%); failing reasons concentrate on one literal everywhere (shares 0.62–0.94) but via **negated** clauses with **high** marginals (0.90–0.98) — not the pre-registered ≤0.10-marginal profile. Abstract sentence stays; body must state subset-dependence.
+- **Task 3** — cov_forcing ≡ cov_ranking and support_kept ≡ support_minimal ≡ support_ranking at every δ, both K; K=4 is a step function (30/118 = the pipit reasons, support 1.000). **The `guarantee_scaling` 0.07–0.10 is the raw-confidence selection event, not support** — the pre-registered "coverage event, not support" branch (E1/E2 rejected, E3 equality).
+
+Artifacts: `results/task1_{cbcem_K20_50, x2_K20_50_200, abstention_K20_50, abstention_K200, verdicts}.json`, `results/figures/task1_abstention_scaling.{png,pdf}`, `results/task2_draw{0–4}_*.json` + `task2_subset_sensitivity.json`, `results/task3_forcing_sweep.json`. Ground rules verified: all files new, per-instance dumps present, every percentage beside its n.
+
+**Two committed-script bugs found and fixed during the runs** (default behavior unchanged bit-for-bit): (1) `run_x2_uncertainty.py` crashed after full compute on any `--classes` without K=4 (verdict block hardcoded a K=4 lookup before the JSON dump — one full X2 run lost to it); (2) `run_cbm_cem_audit.py --class-ids` never remapped labels to 0..K−1 (crash for draws with ids ≥ K, silent wrong-problem training otherwise). Also: `scripts/tasks/` plumbing now runs under conda `torch-multimodal` (the env of every committed number) instead of base anaconda, and the Task 1 driver is resumable across interrupted stages.
+
+### Prior intake, same day — branch `distillationAndTransforms` (RSMoon, 2026-11-13)
 
 **What the branch does contain** (a perception + reasoning upgrade line, reviewable on its own merits):
 

@@ -23,6 +23,17 @@ import common  # noqa: E402
 import numpy as np  # noqa: E402
 
 
+def resume_out(name):
+    """out_path that also ACCEPTS a file from an interrupted run of this same task
+    (returned unchanged, never overwritten); still refuses unrelated existing names
+    by construction -- callers below only pass task1_* file names."""
+    p = os.path.join(common.REPO, "results", name)
+    if os.path.exists(p):
+        print(f"RESUME (reusing existing output, not overwriting): {p}")
+        return p
+    return common.out_path(name)
+
+
 def curve_json(path):
     return json.load(open(path))
 
@@ -54,13 +65,13 @@ def main():
     xks = args.x2_ks.replace(",", "_")
 
     # 1+2: pipelines (new files only)
-    audit_out = common.out_path(f"task1_cbcem_K{aks}.json")
+    audit_out = resume_out(f"task1_cbcem_K{aks}.json")
     common.run_pipeline("run_cbm_cem_audit.py", audit_out, args.cache_dir, args.data_dir,
                         extra=["--classes", args.audit_ks, "--settings", "T,D",
                                "--seeds", "42"])
     checks.append(common.check(f"audit pipeline wrote {os.path.basename(audit_out)}", True))
 
-    x2_out = common.out_path(f"task1_x2_K{xks}.json")
+    x2_out = resume_out(f"task1_x2_K{xks}.json")
     extra = ["--classes", args.x2_ks, "--seeds", "42"]
     if args.x2_extra:
         extra += args.x2_extra.split()
@@ -69,11 +80,11 @@ def main():
     checks.append(common.check(f"X2 pipeline wrote {os.path.basename(x2_out)}", True))
 
     # 3: abstention curves -- K in both files; K=200 vs the committed audit
-    cur_a = common.out_path(f"task1_abstention_K{aks}.json")
+    cur_a = resume_out(f"task1_abstention_K{aks}.json")
     common.run_script("abstention_curves.py",
                       ["--x2", x2_out, "--audit", audit_out, "--out", cur_a])
     committed_k200 = os.path.join(common.REPO, "results", "cbm_cem_audit_K200.json")
-    cur_b = common.out_path("task1_abstention_K200.json")
+    cur_b = resume_out("task1_abstention_K200.json")
     common.run_script("abstention_curves.py",
                       ["--x2", x2_out, "--audit", committed_k200, "--out", cur_b])
     checks.append(common.check("abstention curves written (never overwrote committed files)", True))
@@ -124,7 +135,7 @@ def main():
                   f"[{b['boot_pct'][0]:.2f},{b['boot_pct'][1]:.2f}] "
                   f"(n={b['k']}, correct={b['n_correct']:.0f}) vs 2xR = {2 * r:.3f} "
                   f"(R = {common.n_pct(int(round(r * blk['n'])), blk['n'])})")
-    json.dump(verdicts, open(common.out_path("task1_verdicts.json"), "w"), indent=1)
+    json.dump(verdicts, open(resume_out("task1_verdicts.json"), "w"), indent=1)
     checks.append(common.check("verdict file written; SEND THESE NUMBERS NOW", True))
     if "K=200" in verdicts and verdicts["K=200"].startswith("GRACEFUL"):
         print("NOTE per pre-reg rule 3: a GRACEFUL K=200 contradicts the committed "

@@ -12,9 +12,13 @@ import subprocess
 import sys
 
 REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-# The audit/X2 pipelines need torch+torchvision+sklearn: the anaconda python has
-# the full stack; the repo venv (ltn_pyxai_starter) has pyxai but no torchvision.
-PIPE_PY = "/Users/tanmoy/anaconda3/bin/python"
+# The audit/X2 pipelines need torch+torchvision+sklearn: the conda env
+# torch-multimodal is the environment every committed local number was produced
+# with (torch 2.10 / torchvision 0.25 / sklearn 1.5.1); base anaconda has an
+# older stack (torch 2.6 / sklearn 1.3) and the repo venv has no torchvision.
+PIPE_PY = "/Users/tanmoy/anaconda3/envs/torch-multimodal/bin/python"
+if not os.path.exists(PIPE_PY):
+    PIPE_PY = "/Users/tanmoy/anaconda3/bin/python"
 if not os.path.exists(PIPE_PY):
     PIPE_PY = os.path.join(REPO, "ltn_pyxai_starter", ".venv", "bin", "python")
 DEFAULT_CACHE = "/Users/tanmoy/research/data/grounded_vision_runs/cub_local_et"

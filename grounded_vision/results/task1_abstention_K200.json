@@ -1,0 +1,309 @@
+{
+ "protocol": {
+  "question": "Does abstention by literal reliability (A) beat calibrated (B) / raw (C) reader confidence and random (D) at matched coverage on joint premise support?",
+  "joins": "task1_x2_K20_50_200.json per_instance (min_conf_ord_cal/raw, lits_ord) x cbm_cem_audit_K200.json per_instance (annotation support) by sid, seed 42, reason-identity checked",
+  "scores": {
+   "A_ir": "min in-reason marginal annotation support (test-estimated, tree-conditioned; oracle-flavoured)",
+   "A_cq": "min per-concept reader accuracy (test-estimated, polarity-blind)",
+   "B": "min val-isotonic calibrated confidence over reason literals (deployment-honest)",
+   "C": "min raw confidence",
+   "D_random": "random order (expect the raw rate at every coverage)"
+  },
+  "bootstrap": "cluster over instances, 10000",
+  "coverages": [
+   0.05,
+   0.1,
+   0.14,
+   0.2,
+   0.3,
+   0.5
+  ]
+ },
+ "blocks": [
+  {
+   "setting": "T_tree_head",
+   "K": 200,
+   "n": 600,
+   "raw_joint": 0.016666666666666666,
+   "n_all_supported": 10,
+   "at_coverage": {
+    "0.050": {
+     "A_ir": {
+      "joint": 0.1,
+      "k": 30,
+      "n_correct": 3.0,
+      "boot_pct": [
+       0.0,
+       0.2
+      ]
+     },
+     "A_cq": {
+      "joint": 0.03333333333333333,
+      "k": 30,
+      "n_correct": 1.0,
+      "boot_pct": [
+       0.0,
+       0.1
+      ]
+     },
+     "B": {
+      "joint": 0.1,
+      "k": 30,
+      "n_correct": 3.0,
+      "boot_pct": [
+       0.0,
+       0.23333333333333334
+      ]
+     },
+     "C": {
+      "joint": 0.03333333333333333,
+      "k": 30,
+      "n_correct": 1.0,
+      "boot_pct": [
+       0.0,
+       0.13333333333333333
+      ]
+     },
+     "D_random": {
+      "joint": 0.016666666666666666,
+      "k": 30,
+      "boot_pct": [
+       0.0,
+       0.06666666666666667
+      ]
+     }
+    },
+    "0.100": {
+     "A_ir": {
+      "joint": 0.06666666666666667,
+      "k": 60,
+      "n_correct": 4.0,
+      "boot_pct": [
+       0.016666666666666666,
+       0.15
+      ]
+     },
+     "A_cq": {
+      "joint": 0.016666666666666666,
+      "k": 60,
+      "n_correct": 1.0,
+      "boot_pct": [
+       0.0,
+       0.05
+      ]
+     },
+     "B": {
+      "joint": 0.11666666666666667,
+      "k": 60,
+      "n_correct": 7.0,
+      "boot_pct": [
+       0.03333333333333333,
+       0.21666666666666667
+      ]
+     },
+     "C": {
+      "joint": 0.05,
+      "k": 60,
+      "n_correct": 3.0,
+      "boot_pct": [
+       0.0,
+       0.11666666666666667
+      ]
+     },
+     "D_random": {
+      "joint": 0.016666666666666666,
+      "k": 60,
+      "boot_pct": [
+       0.0,
+       0.05
+      ]
+     }
+    },
+    "0.140": {
+     "A_ir": {
+      "joint": 0.07142857142857142,
+      "k": 84,
+      "n_correct": 6.0,
+      "boot_pct": [
+       0.023809523809523808,
+       0.13095238095238096
+      ]
+     },
+     "A_cq": {
+      "joint": 0.011904761904761904,
+      "k": 84,
+      "n_correct": 1.0,
+      "boot_pct": [
+       0.0,
+       0.03571428571428571
+      ]
+     },
+     "B": {
+      "joint": 0.09523809523809523,
+      "k": 84,
+      "n_correct": 8.0,
+      "boot_pct": [
+       0.03571428571428571,
+       0.15476190476190477
+      ]
+     },
+     "C": {
+      "joint": 0.03571428571428571,
+      "k": 84,
+      "n_correct": 3.0,
+      "boot_pct": [
+       0.0,
+       0.08333333333333333
+      ]
+     },
+     "D_random": {
+      "joint": 0.016666666666666666,
+      "k": 84,
+      "boot_pct": [
+       0.0,
+       0.047619047619047616
+      ]
+     }
+    },
+    "0.200": {
+     "A_ir": {
+      "joint": 0.05,
+      "k": 120,
+      "n_correct": 6.0,
+      "boot_pct": [
+       0.016666666666666666,
+       0.09166666666666666
+      ]
+     },
+     "A_cq": {
+      "joint": 0.008333333333333333,
+      "k": 120,
+      "n_correct": 1.0,
+      "boot_pct": [
+       0.0,
+       0.025
+      ]
+     },
+     "B": {
+      "joint": 0.06666666666666667,
+      "k": 120,
+      "n_correct": 8.0,
+      "boot_pct": [
+       0.025,
+       0.11666666666666667
+      ]
+     },
+     "C": {
+      "joint": 0.03333333333333333,
+      "k": 120,
+      "n_correct": 4.0,
+      "boot_pct": [
+       0.008333333333333333,
+       0.06666666666666667
+      ]
+     },
+     "D_random": {
+      "joint": 0.016666666666666666,
+      "k": 120,
+      "boot_pct": [
+       0.0,
+       0.041666666666666664
+      ]
+     }
+    },
+    "0.300": {
+     "A_ir": {
+      "joint": 0.03333333333333333,
+      "k": 180,
+      "n_correct": 6.0,
+      "boot_pct": [
+       0.011111111111111112,
+       0.06111111111111111
+      ]
+     },
+     "A_cq": {
+      "joint": 0.005555555555555556,
+      "k": 180,
+      "n_correct": 1.0,
+      "boot_pct": [
+       0.0,
+       0.016666666666666666
+      ]
+     },
+     "B": {
+      "joint": 0.044444444444444446,
+      "k": 180,
+      "n_correct": 8.0,
+      "boot_pct": [
+       0.016666666666666666,
+       0.07777777777777778
+      ]
+     },
+     "C": {
+      "joint": 0.022222222222222223,
+      "k": 180,
+      "n_correct": 4.0,
+      "boot_pct": [
+       0.005555555555555556,
+       0.044444444444444446
+      ]
+     },
+     "D_random": {
+      "joint": 0.016666666666666666,
+      "k": 180,
+      "boot_pct": [
+       0.0,
+       0.03888888888888889
+      ]
+     }
+    },
+    "0.500": {
+     "A_ir": {
+      "joint": 0.03,
+      "k": 300,
+      "n_correct": 9.0,
+      "boot_pct": [
+       0.01,
+       0.043333333333333335
+      ]
+     },
+     "A_cq": {
+      "joint": 0.013333333333333334,
+      "k": 300,
+      "n_correct": 4.0,
+      "boot_pct": [
+       0.0033333333333333335,
+       0.02666666666666667
+      ]
+     },
+     "B": {
+      "joint": 0.03,
+      "k": 300,
+      "n_correct": 9.0,
+      "boot_pct": [
+       0.013333333333333334,
+       0.05
+      ]
+     },
+     "C": {
+      "joint": 0.02,
+      "k": 300,
+      "n_correct": 6.0,
+      "boot_pct": [
+       0.006666666666666667,
+       0.03666666666666667
+      ]
+     },
+     "D_random": {
+      "joint": 0.016666666666666666,
+      "k": 300,
+      "boot_pct": [
+       0.0033333333333333335,
+       0.03333333333333333
+      ]
+     }
+    }
+   }
+  }
+ ]
+}

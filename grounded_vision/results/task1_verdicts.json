@@ -1,0 +1,5 @@
+{
+ "K=20": "GRACEFUL",
+ "K=50": "GRACEFUL",
+ "K=200": "GRACEFUL"
+}

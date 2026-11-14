@@ -528,10 +528,13 @@ def main():
         tree_store = {}          # block_name -> sklearn tree
         for K in classes:
             sel = class_ids if class_ids is not None else range(int(K))
-            tr_ids = [s for s in sorted(fit_sids) if sid_to_label_tr[s] in sel]
-            te_ids = [s for s in te_pooled.keys() if sid_to_label_te[s] in sel]
-            y_tr = np.array([sid_to_label_tr[s] for s in tr_ids])
-            y_te = np.array([sid_to_label_te[s] for s in te_ids])
+            # labels remapped to 0..len(sel)-1 so K-output heads and reason
+            # extraction see contiguous ids (identity when --class-ids is absent)
+            remap = {c: i for i, c in enumerate(sorted(sel))}
+            tr_ids = [s for s in sorted(fit_sids) if sid_to_label_tr[s] in remap]
+            te_ids = [s for s in te_pooled.keys() if sid_to_label_te[s] in remap]
+            y_tr = np.array([remap[sid_to_label_tr[s]] for s in tr_ids])
+            y_te = np.array([remap[sid_to_label_te[s]] for s in te_ids])
 
             # ================= context heads =================================
             majority = int(np.bincount(y_tr).argmax())

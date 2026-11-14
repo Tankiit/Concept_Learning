@@ -49,3 +49,50 @@
 - If support-on-kept ≈ support-ranking at matched coverage instead → the 0.07–0.10 discrepancy is the coverage event, not support. If neither E-hypothesis fits → unexplained; that is a finding about the discrepancy, not a failure of the task.
 
 **Mechanical PASS for all three tasks** = scripts exit 0, new result files written (no existing file touched), per-instance dumps present, every percentage accompanied by n. Scientific verdicts print from these pre-registered thresholds, but exit codes encode only mechanical success.
+
+---
+
+## EXECUTION RESULTS (2026-11-14, run by the lead locally; all three tasks mechanical PASS)
+
+Environment: conda `torch-multimodal` (torch 2.10 / torchvision 0.25 / sklearn 1.5.1) on the local flip-free eval-transform caches, seeds and paths exactly as pre-registered. Two committed-script bugs surfaced and were fixed during the runs (both fixes preserve default behavior bit-for-bit; details in the hand-off page): `run_x2_uncertainty.py` crashed on any `--classes` without K=4 (verdict block hardcoded `blk("T_tree_head", 4)` after all compute, before the dump), and `run_cbm_cem_audit.py --class-ids` never remapped labels to 0..K−1 (crash for any draw containing ids ≥ K; silent wrong-problem training for all-small draws).
+
+### Task 1 — verdicts (per K, B@0.14 vs 2×R, cluster-bootstrap 95% CI)
+
+| K | R (unconditional) | B@0.14 [CI], n | 2×R | Verdict |
+| --- | --- | --- | --- | --- |
+| 20 | 36/515 = 0.070 | 0.361 [0.24, 0.47], n=72 (26 correct) | 0.140 | **GRACEFUL** |
+| 50 | 21/600 = 0.035 | 0.143 [0.07, 0.23], n=84 (12 correct) | 0.070 | **GRACEFUL** |
+| 200 | 10/600 = 0.017 | 0.095 [0.04, 0.15], n=84 (8 correct) | 0.033 | GRACEFUL **→ rule 3** |
+
+- **Rule 1 fires** (K=20 AND K=50 both GRACEFUL): abstract unchanged; body gains the scaling curve (figure `results/figures/task1_abstention_scaling.{png,pdf}`); the tradeoff extends to intermediate scale.
+- **Rule 3 fires at K=200** (the 0.14-coverage lower bound 0.04 ≥ 2×R=0.033; the 0.05 and 0.10 cells do NOT clear it). The prescribed bug-check was executed and is CLEAN: sid-join exact (600 rows, 0 reason mismatches), **zero structural-only reasons** at K=200 (B cannot be inflated by `has_part` literals), and the committed-structure claim re-verified (95% of the 56 reason-literal marginals strictly between 0 and 1 — the *oracle* marginal filter is dead; the *calibrated* per-instance filter is a different mechanism and still separates, B ≈ 5.6×R at 0.14 coverage). Per rule 3 the abstract is NOT strengthened; the K=200 cell is coverage-fragile (only one coverage clears the threshold) and the decision stays with the lead.
+- Full curve tables (A_ir / A_cq / B / C / D at 6 coverages, per K): `results/task1_abstention_K20_50.json`, `results/task1_abstention_K200.json`; sources `task1_cbcem_K20_50.json`, `task1_x2_K20_50_200.json`. Note: the audit's D (distilled) arm is T-only beyond K=20 by design (`K <= 20` guard in the audit script), so K=50/200 curves are Setting T only.
+
+### Task 2 — verdict: **SUBSET-SPECIFIC** (0/5 draws dominated)
+
+| Draw | seed | class ids | P(all) [Wilson 95] | top literal in failing | share | marginal | dominates |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 0 | 1000 | 70,118,161,163 | 40/119 = 0.336 [0.258, 0.425] | `beak:bill_color=yellow\|0` | 0.62 | 0.918 | no |
+| 1 | 1001 | 100,116,127,133 | 47/109 = 0.431 [0.342, 0.525] | `crown:crown_color=white\|0` | 0.94 | 0.897 | no |
+| 2 | 1002 | 14,49,76,87 | 32/118 = 0.271 [0.199, 0.358] | `beak:bill_color=yellow\|0` | 0.65 | 0.946 | no |
+| 3 | 1003 | 11,19,30,59 | 44/114 = 0.386 [0.302, 0.478] | `beak:bill_color=yellow\|0` | 0.83 | 0.983 | no |
+| 4 | 1004 | 101,107,108,184 | 32/120 = 0.267 [0.196, 0.352] | `crown:crown_color=white\|0` | 0.68 | 0.933 | no |
+
+- Per the pre-registered ≤2/5 branch: the abstract sentence ("a single literal carries all of them in our smallest setting") **stays** — it is true of the audited subset — and the **body must report the subset-dependence explicitly**; no generalisation of the one-literal claim.
+- No draw exceeds 50% (max 0.431), so the abstract's "rarely all true" is robust to the spread. Draws 0, 1, 3 have Wilson CIs excluding the committed 25.4% — flagged body-only, as pre-registered.
+- Observation for the lead (numbers, not a conclusion): the failing reasons in every draw DO concentrate on one literal (shares 0.62–0.94), but the carriers are **negated** clauses (`...=yellow|0`, `...=white|0`) with **high** marginal support (0.90–0.98) — the mirror image of the committed subset's positive `bill_color=yellow` at 0/88. The concentration phenomenon recurs; the pre-registered (≥0.80 share AND ≤0.10 marginal) profile does not.
+
+### Task 3 — the forcing sweep (numbers; interpretation stays with the lead)
+
+Setting T, calibrated polarity-aware p_true (val-fit only), greedy-irreducible minimisation, per-instance dumps (`results/task3_forcing_sweep.json`):
+
+| K | δ | cov_forcing | support_kept\|forcing | support_minimal | cov_ranking | support\|ranking |
+| --- | --- | --- | --- | --- | --- | --- |
+| 4 (n=118) | 0.5–0.9 (all) | 30/118 = 0.254 | 30/30 = 1.000 | 1.000 | 0.254 | 1.000 |
+| 10 (n=243) | 0.5 | 32/243 = 0.132 | 23/32 = 0.719 | 0.719 | 0.132 | 0.719 |
+| 10 | 0.6 | 22/243 = 0.091 | 15/22 = 0.682 | 0.682 | 0.091 | 0.682 |
+| 10 | 0.7 | 14/243 = 0.058 | 8/14 = 0.571 | 0.571 | 0.058 | 0.571 |
+| 10 | 0.8 | 12/243 = 0.049 | 8/12 = 0.667 | 0.667 | 0.049 | 0.667 |
+| 10 | 0.9 | 8/243 = 0.033 | 6/8 = 0.750 | 0.750 | 0.033 | 0.750 |
+
+Against the committed `guarantee_scaling` trusted-only at K=4, δ=0.7–0.9: same coverage (0.254, n=30) but P(kept true|covered) = 0.067–0.133 there vs **1.000 here**. Pre-registered expectation outcomes: **E1 rejected** (cov_forcing ≡ cov_ranking at every δ, both K — the forcing event adds nothing beyond the ranking event); **E2 rejected** (support-on-kept is 1.000 at K=4, 0.57–0.75 at K=10 — nowhere near 0.07–0.10); **E3 exact-equality** (support_minimal ≡ support_kept in every cell — reasons are already near-irreducible). The pre-registered alternative branch therefore fires: **the 0.07–0.10 in `guarantee_scaling` is the selection/coverage event (raw-confidence trusted literals), not support given the calibrated selection.** The K=4 curve is a step function (identical at every δ): the only coverable instances are the 30 all-correct pipit reasons.
