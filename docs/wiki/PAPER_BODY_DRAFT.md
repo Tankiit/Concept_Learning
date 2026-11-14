@@ -371,6 +371,24 @@ The same inversion appears on both replication datasets (supp.\
 an accuracy of $0.879$, and on BDD-OIA it is $0.534$ against an
 accuracy of $0.69$--$0.75$.
 
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{fig_failures.pdf}
+  \caption{\textbf{What failure looks like, and where it concentrates.}
+  \emph{Top:} the certified-but-false premises of Fig.~\ref{fig:gap}'s
+  example---a beak crop asserted \texttt{bill\_colour=yellow} with zero
+  yellow pixels (bed average over firing beaks: $3\%$) and a tail crop
+  asserted black; both refuted by the annotations. \emph{Bottom left:}
+  each replication bed's top carrier of failing reasons (CelebA: a
+  negated attribute; BDD-OIA: a positive traffic literal---raw images
+  are not local for these beds, and BDD-OIA ships no per-instance
+  records). \emph{Bottom right:} the share of failing reasons
+  containing at least one of the top-$k$ carrier literals---CUB K=4
+  (thick red), the five re-drawn subsets (thin red; the shape is
+  stable while the top literal's identity changes), CelebA (grey).}
+  \label{fig:failures}
+\end{figure}
+
 \paragraph{Failures concentrate in a few literals.}
 \label{sec:audit}
 Although failures compound across literals, they are not spread
@@ -493,8 +511,11 @@ $0.002$ at every noise level.
   \includegraphics[width=\columnwidth]{fig_abstain.pdf}
   \caption{\textbf{Support--coverage curves for the trust channels of
   \cref{eq:gate}.} One panel per bed (CUB $K{=}20$, CelebA,
-  BDD-OIA); dashed line $=2\times$ unconditional support (the repair
-  bar, fixed in advance); shading from the cluster bootstrap.}
+  BDD-OIA and CUB $K{=}200$); dashed line $=2\times$ unconditional
+  support (the repair bar, fixed in advance); dotted line = the
+  unconditional rate; circle = the $0.14$ operating point. The $K{=}200$
+  panel shows the fragility ourselves: the bar is cleared at $0.14$ and
+  not below. Artefact: \texttt{results/figures/fig\_abstain.pdf}.}
   \label{fig:abstain}
 \end{figure}
 
@@ -577,6 +598,18 @@ than as a method.
     \bottomrule
   \end{tabular}
 \end{table}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.78\columnwidth]{fig_mechanism.pdf}
+  \caption{\textbf{The mechanism, interventional.} At fixed $K{=}20$,
+  the tree-depth knob moves the mean reason length $|R|$ from $2.0$ to
+  $7.2$; measured premise support (red) rides the independence
+  baseline (dashed) at every depth---at depth $2$, $0.528$ measured
+  against $0.522$ predicted---while accuracy falls from $0.42$ to
+  $0.18$. Pre-registered as P-D1--P-D3 (supp.\ \cref{app:prereg}).}
+  \label{fig:mechanism}
+\end{figure}
 
 \cref{tab:ablate} examines whether our findings depend on design
 choices, under predictions fixed before the runs (supp.\
@@ -714,6 +747,18 @@ BDD-OIA & 6{,}433 & 0.69--0.75 & 0.534 [0.522, 0.546] \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.7\columnwidth]{fig_slope.pdf}
+\caption{\textbf{Vocabulary--vs--perception ladder} (matched
+linear/logistic head family; the CART-on-ground-truth-bits collapse
+quoted in \cref{sec:ceiling} is a different head family and is not
+plotted). CUB climbs monotonically to a $0.805$ ceiling---its concepts
+express the task; BDD-OIA starts higher and ends near ceiling---its
+failure is perceptual, not expressive. BDD continuous rung not run.}
+\label{fig:slope}
+\end{figure}
 ```
 
 ## Provenance per table/claim (body-only numbers)
@@ -924,3 +969,9 @@ Method figure rendered (`scripts/plot_fig_pipeline.py` → `results/figures/fig_
 **§4 v4** = user's experiments rewrite, all \todo filled: tab:ceiling CUB (K=4) complete; BDD column filled from committed `bdd_oia_experiments.json` stage6_ladder (predicted bits 0.72 / features 0.75 / GT bits 0.99 forward-action; continuous rung honestly "---"); **tab:ablate completed with a NEW RUN**: depth sweep at K=20 (`ablation_depth_K20.json`; script now takes K from argv) — depth ≤2: acc 0.184, support **0.528** (baseline predicts 0.522 — within 1%), |R| 2.0; ≤4: 0.295/0.307/3.9; ≤6: 0.390/0.109/5.6; the "raises support to \todo vs \todo predicted" sentence is filled with 0.528 vs 0.522; predicted-box and min-cardinality rows filled honestly as NOT RUN (flagged/deferred, engine defect noted); backbone rows removed (sentence instead). fig:scale/fig:abstain environments restored. New supp stubs: `app:unresolved` (strict rule: 30/30 at K=4; K≥10 future), `app:beds` (BDD per-action ladder + reversals), `tab:replication`. `sec:audit` label preserved on the concentration paragraph (intro ref). cleveref now required (\cref) — preamble note.
 
 **Flags:** (21) fig:failures (concentration heat-strip) still to build — §4.3 references it; (22) cleveref in preamble; (23) DINOv2 correction — sweep ALL drafts for stray "DINOv3" at assembly (intro/§2 clean; checked).
+
+---
+
+## Changelog 2026-11-14 (final figures) — the figure set COMPLETE per the advisor plan
+
+Built tonight, all from committed JSONs, all scripts + PNG/PDF committed: **fig_failures** (`plot_fig_failures.py`: sid-44 beak/tail crops — beak measures **0% yellow pixels**, stated alongside the 3% bed average; CelebA/BDD top-carrier cards, images not local; concentration curves CUB K=4 + 5 redraws (thin) + CelebA; BDD has no per-instance records, card instead) — resolves the last unresolved §4.3 ref and kills flag 21. **fig_abstain** (`plot_fig_abstain.py`: K=20 + K=200 panels, channels B/C/A_ir, R and 2×R lines, 0.14 operating point circled; K=200 panel shows the fragility ourselves) — kills flag 16; caption updated (CUB K20+K200, not three beds — CelebA/BDD curves remain supplement-tier). **fig_scale** now log-y (halving = straight line; null markers overlap visibly). **fig_mechanism** (`plot_fig_mechanism.py`: K=20 depth, support rides the baseline; d=2 annotated with acc) wired into §4.7. **fig_slope** (SUPPLEMENT; matched-family caption resolves the 0.805-vs-collapse wrinkle: different head family, not plotted). Advisor questions answered: fig4 = mechanism (the explanation is the spine; the diagnostic is tab:ceiling); deterministic pick rule = Fig-1's rule extended per bed (median-length failing reason citing the bed's top carrier, middle id).
