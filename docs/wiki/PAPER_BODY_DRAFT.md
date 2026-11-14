@@ -18,10 +18,11 @@ does not behave as intended: concepts are leaked or entangled
 \cite{margeloiu2021,mahinpei2021}, and models exploit \emph{reasoning
 shortcuts}---concept assignments that yield correct labels while being
 wrong \cite{marconato2024,bortolotti2024rsbench}. Our audit is
-complementary: rather than asking whether the concept layer is faithful, we
-ask what a \emph{formal sufficiency certificate} over that layer actually
-certifies, and we measure the two premises---image truth and teacher
-agreement---that the proof omits. Our driving-action replication runs on
+complementary: rather than asking whether the concept layer is faithful,
+we ask what survives a formal sufficiency certificate over that
+layer---which of its claims hold by construction, and at what rate the
+two premises the proof omits (image truth and teacher agreement) die as
+the task grows. Our driving-action replication runs on
 the rsbench suite \cite{bortolotti2024rsbench} built to expose reasoning
 shortcuts, and the literals our audit flags (green light, red light) are
 precisely the shortcut-prone concepts that suite identifies.
@@ -44,8 +45,8 @@ visible in their own analysis. Our audit is the mirror image: we certify
 against a symbolic head where exactness is unconditional and reasons are
 essentially unique, and we spend the saved effort measuring the premise
 their setting cannot express. We do not claim novelty for concept-level
-formal explanations; the contribution is the measurement of what they
-transfer.
+formal explanations; the contribution is the measurement of what
+survives the transfer.
 
 \paragraph{Trust, calibration, and abstention.}
 Selective prediction and conformal methods gate predictions on confidence
@@ -254,11 +255,12 @@ acceptance, separating selection death from support death
 
 We evaluate on three datasets with per-image concept ground truth---CUB
 birds (the main audit), CelebA faces, and the BDD-OIA driving-action
-benchmark---and answer four questions. Does premise support bind, and how
-does it scale (\S\ref{sec:exp-scale})? Where does failure concentrate
-(\S\ref{sec:exp-conc})? Can a gate restore trust, and at what cost
+benchmark---and answer four questions, each a survival question about a
+certified reason. Does premise support survive the growth of the task
+(\S\ref{sec:exp-scale})? Where does the failure concentrate
+(\S\ref{sec:exp-conc})? Can a gate restore it, and at what cost
 (\S\ref{sec:exp-abstain})? Do stronger components or smarter selection
-escape the failure (\S\ref{sec:exp-nosec})? Context rungs---ceilings,
+rescue it (\S\ref{sec:exp-nosec})? Context rungs---ceilings,
 fidelity, interventions, and a concept-agnosticity control---follow in
 \S\ref{sec:exp-context}, the replications in \S\ref{sec:exp-repl},
 which of the CUB nulls transfer to a second bed in
@@ -275,11 +277,12 @@ region features, calibrated by validation-carved isotonic regression. The
 teacher is a linear head over concept bits; Boolean heads come in two
 configurations, \emph{Setting~T} (tree trained on predicted bits) and
 \emph{Setting~D} (tree distilled from the teacher). We use official
-train/test splits only and sweep the task difficulty by class count: a
-four-class subset (\emph{this} subset; sensitivity in
-App.~\ref{app:subset}), ten classes, and the full two hundred, auditing
-$n{=}118$, $243$, and $600$ certified test instances respectively (the
-last a subsample of $5{,}794$).
+train/test splits only and sweep the task difficulty by class
+count---four, ten, twenty, fifty, and the full two hundred
+classes---auditing $n{=}118$, $243$, $515$, $600$, and $600$ certified
+test instances respectively (the fifty- and two-hundred-class audits
+subsample $1{,}389$ and $5{,}794$ test images; the four-class subset is
+fixed, with five random re-draws in App.~\ref{app:subset}).
 
 \paragraph{Replications.}
 The identical premise-support measurement runs on two further beds,
@@ -300,7 +303,7 @@ bed---multiple settings, scales, seeds, and controls; the replications are
 single-seed, single-depth evidence that the phenomenon is not an artifact
 of one pipeline.
 
-\subsection{Premise support binds and collapses with scale}
+\subsection{Premise support does not survive scale}
 \label{sec:exp-scale}
 Table~\ref{tab:scaling} reports accuracy, premise support, and the joint
 event across the class sweep. Two facts stand out. First, premise support
@@ -308,7 +311,10 @@ sits \emph{below} accuracy at every scale: the certified explanation is
 less likely to be fully correct than the prediction it certifies. Second,
 it collapses as classes are added---from a quarter of instances on the
 four-class subset to one in fifty-nine on the full benchmark---while
-accuracy degrades far more gracefully. Conditional fidelity is partial
+accuracy degrades far more gracefully. The two intermediate counts,
+measured under criteria fixed before the runs, make the decay smooth
+rather than a cliff: support roughly halves with each step
+($0.254 \to 0.070 \to 0.035 \to 0.017$). Conditional fidelity is partial
 ($0.814$ at four classes, $0.613$ at ten) but is not the binding premise:
 the joint event at two hundred classes ($0.8\%$) is dominated by premise
 failure.
@@ -326,6 +332,8 @@ classes & $n$ & accuracy & $P(\text{all}\,|\,R)$ & joint \\
 \midrule
 4  & 118  & 0.60 & 0.254 [$0.184,0.340$] & --- \\
 10 & 243  & 0.44 & 0.115 [$0.081,0.161$] & --- \\
+20 & 515  & 0.42 & 0.070 [$0.051,0.095$] & 0.037 \\
+50$^{\dagger}$ & 600 & 0.30 & 0.035 [$0.023,0.053$] & 0.022 \\
 200$^{\dagger}$ & 600 & 0.19 & 0.017 [$0.009,0.031$] & 0.008 \\
 \bottomrule
 \end{tabular}
@@ -349,12 +357,19 @@ appears in $1{,}498$ reasons at support $0.615$,
 negatives sit near ceiling (\emph{clear}$=$0: $0.931$); on CelebA they
 are the \emph{negations} of two face attributes. Repair, then, has a
 target: specific (concept, polarity) slots, not the model at large.
+The one-literal story, however, is a property of this subset: five
+random four-class re-draws (App.~\ref{app:subset}) keep premise support
+in a band around the committed value ($0.267$--$0.431$) and keep failure
+concentrated on a single literal ($0.62$--$0.94$ of failing reasons),
+but the carriers are \emph{negated} clauses with high marginal support
+($0.90$--$0.98$)---the mirror image of the zero-support yellow-bill
+literal---so what transfers is the concentration, not the slot.
 Failures are also \emph{positively correlated}---observed joint support
 exceeds the independence prediction by $1.52\times$ [$1.23,1.89$] at ten
 classes (App.~\ref{app:clust})---so compounding over-predicts the decay
 rather than explaining it.
 
-\subsection{Abstention: what restores trust, and at what cost}
+\subsection{Abstention: what a gate restores, and at what cost}
 \label{sec:exp-abstain}
 Table~\ref{tab:abstain} and Fig.~\ref{fig:abstain} compare the three
 gating channels of \S\ref{sec:abstention} at matched coverage. On CUB,
@@ -374,11 +389,27 @@ transfers everywhere; the \emph{diagnosis} (calibration is load-bearing)
 holds exactly where readers are demonstrably miscalibrated. The discrete
 channel (A) never separates failure from success on any bed. And nothing
 survives the full class count: at two hundred classes the oracle filter
-itself retains only $0.125$ at $1.3\%$ coverage. These rankings do not
-contradict our earlier fixed-threshold trust read-out, which retained
-literals at a constant $\delta$ and required the kept subset to
-\emph{force} the prediction---a trusted-sufficient-reason query rather
-than a coverage sweep; only the ranking supports the trade-off claim.
+itself retains only $0.125$ at $1.3\%$ coverage. Judged by the repair
+criterion fixed before the scaling runs (\S\ref{sec:abstention}: a gate
+repairs only if the lower bound of its support multiple clears a
+doubling of the unconditional rate), the calibrated gate survives deep
+into the sweep---at twenty classes it holds $0.361$ [$0.24,0.47$] at
+$14\%$ coverage against a bar of $0.140$; at fifty, $0.143$
+[$0.07,0.23$] against $0.070$, its lower bound sitting at the bar---
+while at the full benchmark the margin is fragile: $0.095$
+[$0.04,0.15$] against a bar of $0.033$, clearing it at some operating
+points and not others. We re-checked the join and the literal marginals
+before reporting that case (App.~\ref{app:prereg}); by the criterion's
+own language it is a tradeoff thinning toward the unconditional rate,
+not a guarantee restored. Finally, the earlier fixed-threshold trust
+read-out, whose kept-true rates of $0.067$--$0.133$ sat far below
+these curves, is not a counterexample but a diagnosis: requiring the
+trusted literals themselves to \emph{force} the prediction accepts the
+same instances the ranking gate accepts (at every threshold and class
+count we measure), so the gap is the channel---at matched coverage, the
+calibrated channel keeps fully supported literal sets ($30/30$ at the
+four-class operating point) where the per-instance isotonic channel
+keeps $0.067$--$0.133$. Selection death, not support death.
 
 \begin{table}[t]
 \centering\small
@@ -591,18 +622,22 @@ replications span faces and driving actions, and the method transfers
 wherever such annotations exist, but the measured rates are properties of
 these beds. The main audit uses oracle part localisation; region readers
 under predicted boxes can only lower premise support. Replications are
-single-seed with a single tree depth. The abstention trade-off collapses
-at the full class count, and we do not claim a repair---only a
-measurement and a gate.
+single-seed with a single tree depth. The abstention trade-off survives
+into the intermediate class counts and thins at the full benchmark,
+where its margin holds at some operating points and not others; we do
+not claim a repair there---only a measurement and a gate.
 
 \section{Conclusion}
-A formal sufficiency certificate is a statement about the symbolic model.
-We made its two unstated premises measurable, found premise support
-binding, structured, and identifiable across datasets, and showed what
-calibration-gated abstention can and cannot restore. The audit is
-cheap---it requires one trained head, certified reasons, and held-out
-concept annotations---and we believe it should accompany any deployment
-of certified concept explanations.
+A formal sufficiency certificate is a statement about the symbolic
+model; what survives the trip to the image is a measurable, degrading
+quantity. We made the certificate's two unstated premises measurable,
+found premise support binding, structured, and identifiable across
+datasets, measured how fast it dies as the task grows, and showed what
+calibration-gated abstention can and cannot restore---robustly at
+intermediate scale, marginally at full scale, always paying in
+coverage. The audit is cheap---it requires one trained head, certified
+reasons, and held-out concept annotations---and we believe it should
+accompany any deployment of certified concept explanations.
 ```
 
 ---
@@ -611,7 +646,7 @@ of certified concept explanations.
 
 | Table / claim | Quantities | Artifact |
 | --- | --- | --- |
-| Table scaling | 25.4 [n=118] / 11.5 [n=243] / 1.7 [n=600 of 5,794] / joint 0.8; acc 0.60/0.44/0.19 | `cbm_cem_audit.json`, `cbm_cem_audit_K200.json`, `guarantee_scaling_cub.json` |
+| Table scaling | 25.4 [n=118] / 11.5 [n=243] / **0.070 [n=515] / 0.035 [n=600] (K=20/50, new 2026-11-14)** / 1.7 [n=600 of 5,794] / joint 0.037/0.022/0.8; acc 0.60/0.44/0.42/0.30/0.19 | `cbm_cem_audit.json`, `cbm_cem_audit_K200.json`, `task1_cbcem_K20_50.json`, `guarantee_scaling_cub.json` |
 | Table scaling CIs | Wilson intervals computed from the same n/p | computed (arithmetic only) |
 | Concentration §4.3 | 88 failures one literal 0/88; 3.3% yellow pixels; 30 passes absent-only; +0.03…+0.13 / +0.06,+0.07 | `independence_gap_cub.json`, `yellow_bill_audit.json` |
 | Clustering §4.3 (appendix) | 1.52 [1.23,1.89], cross-fit 1.48; D/K10 and K200 n.s. | `independence_gap_cub.json` |
@@ -647,7 +682,7 @@ of certified concept explanations.
 4. Appendix stubs referenced: `app:pyxai` (engine ledger, from REVIEW_VALIDATION_ROADMAP), `app:subset`, `app:clust` (independence table), Fig.~`fig:abstain` (curves from the three JSONs).
 5. Setting D K=10 premise support is 0.124 (keep list spine says 11.5 = Setting T; the D value differs by 1pt) — Table reports T; state in caption or add D column if space.
 6. BDD-OIA fifth action (base rate 0.003, no positive predictions) is silently excluded — one footnote in §4.7.
-7. The §4.4 K=200 oracle sentence ("nothing survives the full class count") says *oracle* — keep precise; do not let it drift to the calibrated arm (unmeasured at K=200).
+7. The §4.4 K=200 sentence ("nothing survives the full class count") says *oracle* — keep precise. The **calibrated** arm at K=200 is now MEASURED (2026-11-14, `task1_abstention_K200.json`): fragile — clears the 2× bar at the 14% operating point only — and §4.4 reports it in exactly those words; never merge the two into one claim.
 8. **Commit before citing (rule):** also `results/bdd_oia_experiments.json`, `results/bdd_oia_methods.json`, `scripts/rsbench_bdd_experiments.py`, `scripts/rsbench_bdd_methods.py` — Tables transfer/methods/families cite them.
 9. New §4.8/§4.9 tables are single-seed, single-depth (same caveat as §4.7; stated once in §4.1 protocol paragraph — covers them).
 10. §4.9 families: LTN/DPL (their neuro-symbolic families) not run — probabilistic-logic engines out of scope for the deadline; if a reviewer asks, the answer is the wiki table + "not ported". Consider one clause in §5 Limitations if space.
@@ -773,3 +808,9 @@ Provenance: `results/sun_audit.json` via `scripts/sun_audit.py` (**uncommitted**
 ## Changelog 2026-11-14 (evening) — §3 reframed around survival (v3), grounded in the three executed runs
 
 User steer: "I don't want an audit paper — I want to know what survives." §3 re-voiced end to end around the survival question; the formal machinery (definitions, display equations, labels) is unchanged from v2. Section title now **"What Survives a Sufficient Reason"**; the roadmap paragraph asks which claims hold by construction, at what rate the measured rungs die as K grows, and whether any deployment rule restores them. §3.3 "claim ladder" → **"survival ladder"** (exact rungs always survive; the measured rungs carry rates; "is this explanation trustworthy" decomposes into survival questions). §3.5 ceiling gains the task-does-not-survive-this-vocabulary reading. §3.6 "Calibration-gated abstention" → **"Trust channels and the repair criterion"**, adding (i) the **repair ratio ρ_K(c)** display eq. with the pre-registered 2× bar (graceful vs collapsing; margins below it are "a tradeoff degrading toward the unconditional rate, not a guarantee restored") — this is the quantity §4 tabulates per K from `task1_*`; and (ii) the **ranking ≡ forcing** and **selection-vs-support-death** distinctions from `task3_forcing_sweep.json` (both point to `sec:exp-abstain`). New appendix stub `app:prereg` (pre-registered criteria + verdict artifacts); `app:subset` rewritten from [TO RUN] to the executed SUBSET-SPECIFIC numbers; flags 2–3 marked RESOLVED with their artifacts; new flag 13 (survival voice vs the registered Nov-10 title/abstract — user decision). Provenance table gains task1/task2/task3 rows.
+
+---
+
+## Changelog 2026-11-14 (evening, later) — intro v4 + full-paper survival pass (§2/§4/§5/§6), grounded in the executed runs
+
+User steer: survival framing throughout ("what survives"), intro + all parts written clearly. **§2**: CBM positioning sentence now asks "what survives a formal sufficiency certificate"; formal-explanations closer "what survives the transfer". **§4 roadmap**: the four questions are now survival questions. **§4.1**: class sweep is 4/10/20/50/200 (n = 118/243/515/600/600; 50 and 200 subsample 1,389/5,794; fixed 4-class subset + five random re-draws → app:subset). **§4.2** retitled "Premise support does not survive scale"; tab:scaling gains the K=20/50 rows (0.070 [0.051,0.095] n=515; 0.035 [0.023,0.053] n=600; joint 0.037/0.022) + the smooth-decay sentence (0.254→0.070→0.035→0.017) from `task1_cbcem_K20_50.json`. **§4.3**: re-draws sentence (0.267–0.431; shares 0.62–0.94; negated carriers 0.90–0.98 → what transfers is the concentration, not the slot). **§4.4** retitled "what a gate restores, and at what cost"; gains the pre-registered repair-criterion passage (K20 0.361 [0.24,0.47] vs bar 0.140; K50 0.143 [0.07,0.23] vs 0.070, lower bound AT the bar; K200 0.095 [0.04,0.15] vs 0.033, fragile, join+marginals re-checked → app:prereg) and the RESOLVED reconciliation (forcing ≡ ranking at every δ/K; matched coverage keeps 30/30 under the calibrated channel vs 0.067–0.133 per-instance isotonic → "selection death, not support death"). **§5**: trade-off "survives into the intermediate class counts and thins at the full benchmark" (was "collapses"). **§6**: conclusion opens on survival ("what survives the trip to the image is a measurable, degrading quantity") and grades the gate honestly (robustly at intermediate scale, marginally at full scale, always paying in coverage). Flags 7 updated (calibrated K=200 now measured — keep oracle vs calibrated claims separate); scaling provenance row extended. Intro file updated in parallel (v4, same steer; its changelog lives there).

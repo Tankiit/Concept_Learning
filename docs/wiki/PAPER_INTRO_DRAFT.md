@@ -44,17 +44,20 @@ premises that the proof does not establish: that the cited literals are
 neural model} being explained. Both premises can fail while the certificate
 remains perfectly exact, and the certificate silently inherits the failure:
 nothing in the verified object signals which premise has broken. It is
-sufficient for the tree, not for the bird. What is missing is a measurement
-of how far such certificates actually transfer, and of what---if
-anything---restores them.
+sufficient for the tree, not for the bird. The natural question is
+therefore a survival question: which of the certificate's implicit
+claims hold by construction, which hold only with a probability we can
+measure, how quickly the measured ones die as the task grows, and
+whether anything restores them.
 
 We make this \emph{premise gap} measurable. On CUB fine-grained recognition
 with oracle part localisation, we read a fixed concept vocabulary with
 trained concept readers, attach a Boolean head in two ways---trained
 natively on predicted concepts (Setting~T) and distilled from the neural
 teacher (Setting~D)---and certify minimal sufficient reasons with an exact
-engine, independently re-verified, while sweeping the task from a small
-class subset to the full benchmark. For every certified reason we measure
+native engine, independently re-verified, while sweeping the task from a small
+class subset to the full benchmark; any candidate rescue is judged against
+success criteria fixed before the runs. For every certified reason we measure
 \emph{premise support} (are all cited literals true of the image, against
 held-out part annotations) and \emph{conditional fidelity} (does the neural
 teacher issue the same prediction whenever the cited literals hold), and we
@@ -82,7 +85,10 @@ replicates: on the driving benchmark the failing slots are positive
 traffic literals (green light, red light), on CelebA the negations of two
 face attributes---so failure targets identifiable (concept, polarity) slots
 rather than the model at large, with the polarity direction set by the
-domain rather than universal.
+domain rather than universal. Redrawing the smallest subset at random
+keeps failure concentrated on a single literal but changes which literal
+carries it---to safer-looking, negated clauses---so what transfers is
+the concentration itself, not the specific slot.
 \textbf{The failure is identifiable, and abstention is the lever.}
 Abstaining whenever the minimum \emph{calibrated}, polarity-aware
 per-concept confidence of a reason's literals is low---the calibrator fit
@@ -94,7 +100,15 @@ from success. Where the readers are demonstrably miscalibrated, raw
 confidence selects at or below chance and calibration is load-bearing;
 where readers are already calibrated, raw confidence tracks the calibrated
 rule---so we recommend the calibrated rule, and locate the miscalibration
-diagnosis in the settings that exhibit it. \textbf{No selection rule we tested escapes the premise
+diagnosis in the settings that exhibit it. Judged against a repair bar
+fixed before the runs---clearing at least a doubling of the
+unconditional support at the stated coverage---the calibrated gate
+clears it at the intermediate class counts and only marginally at the
+full benchmark, holding at some operating points and not others. And
+when a gate fails, selection failure is distinguishable from support
+failure: the stricter gate that demands the trusted literals themselves
+force the prediction accepts exactly the same instances.
+\textbf{No selection rule we tested escapes the premise
 failure.} Oracle choice of concepts or readers gains nothing, a
 substantially stronger reader raises accuracy and leaves premise support
 unchanged, and retraining only on certified examples changes nothing;
@@ -146,6 +160,9 @@ we report what it can and cannot restore.
 | Finding 2 | one literal in all 88 K=4 failures (0/88 support), 30 passes absent-only, polarity beyond base rates | `independence_gap_cub.json`, `yellow_bill_audit.json` (worked example, not standalone claim) |
 | Finding 3 | 0.697 [0.52, 0.85] at 13.6% coverage (n=33, 23 correct); oracle 0.727; random 0.123; raw 0.030 | `abstention_curves.json` |
 | Finding 4 | oracle gain 0 (mlp 5/200); stronger reader 0.602→0.678 acc, P(sup) 25.4→24.6%; certified-only retrain unchanged | `cbm_cem_audit*.json`, `certified_only_cub.json` |
+| Finding 2 (redraws) | P(all) 0.267–0.431; shares 0.62–0.94; negated carriers, marginals 0.90–0.98 | `task2_subset_sensitivity.json` |
+| Finding 3 (repair bar) | K20 0.361 [0.24,0.47] n=72 vs 2×R=0.140; K50 0.143 [0.07,0.23] n=84 vs 0.070; K200 0.095 [0.04,0.15] vs 0.033 (rule-3 verified) | `task1_abstention_K{20_50,200}.json`, `task1_verdicts.json` |
+| Finding 3 (selection vs support) | forcing ≡ ranking at every δ∈{0.5..0.9}, K∈{4,10}; 30/30 vs 0.067–0.133 at 0.254 coverage | `task3_forcing_sweep.json`, `guarantee_scaling_cub.json` |
 
 ## Drop-list compliance check
 
@@ -158,8 +175,8 @@ we report what it can and cannot restore.
 
 ## Flags before this freezes
 
-1. **Subset sensitivity (keep-list open item):** finding 2's "on the four-class subset" hedge must stay until the ≥5 random 4-class draws run; if it never runs, the hedge stays permanently.
-2. **Trust-reconciliation (audit re-audit §open):** `guarantee_scaling_cub.json` per-instance isotonic trust (P(kept-true|covered) ≈ 0.07–0.1) vs `abstention_curves.json` B — body must state the fixed-δ trusted-sufficient query vs ranking distinction, or the scaling readout gets rerun as a ranking. The intro sentence is consistent with either resolution but the body text depends on it.
+1. **Subset sensitivity — RESOLVED 2026-11-14:** five random four-class draws EXECUTED (`task2_subset_sensitivity.json`): SUBSET-SPECIFIC (0/5 dominated under the pre-registered criterion), concentration recurs (shares 0.62–0.94) via negated high-marginal carriers. The intro now says this in number-free form ("Redrawing the smallest subset… what transfers is the concentration itself, not the specific slot"); body §4.3 carries the numbers.
+2. **Trust-reconciliation — RESOLVED 2026-11-14** (`task3_forcing_sweep.json`): forcing ≡ ranking at every δ and K; the 0.07–0.10 trusted-query band is raw-channel **selection** death, not support death. Intro states it number-free ("selection failure is distinguishable from support failure… accepts exactly the same instances"); §4.4 carries the numbers.
 3. **Numbers in intro vs number-free style:** RESOLVED v3 (2026-11-13) — user instruction; intro is now fully number-free (no measured quantities, no structural counts, findings de-numbered to bold titles). Only LaTeX comments and bib keys carry digits.
 4. **Subset sensitivity hedge, number-free form:** finding 2 now says "the smallest class subset" — the four-class specificity lives in the body; hedge still required there until the ≥5 random subset draws run.
 4. **Trim targets if the page runs long:** the fidelity parenthetical in finding 1, and the scope paragraph can compress to two sentences.
@@ -188,3 +205,9 @@ Grounded in `results/celeba_audit_smiling.json` and `results/bdd_oia_audit.json`
 ## Changelog 2026-11-13 — v3: number-free pass (user instruction)
 
 Intro now carries **zero numerals in rendered text**, matching the abstract's convention. Changes: setup sentence "four-class subset → full 200 classes" → "a small class subset to the full benchmark"; finding 1 stripped of all quantities (25.4/11.5/1.7/0.8, the ~20-point gap clause, 0.69/0.53/0.88/0.72–0.75, fidelity 0.81/0.61) — now "falls steeply as classes are added… lies below the predictive accuracy… the same ordering holds on both replication datasets"; finding 2 "four-class subset" → "smallest class subset", "one literal… zero support" → "a single literal… no support"; finding 3 stripped of 70%/14%/0.96/0.72, "(CUB)" moved out of the miscalibration clause; findings de-numbered (bold titles, no "(1)–(4)"). Verified by scan: only LaTeX comments and bib keys contain digits. The quantity→artifact map above is now the body's shopping list.
+
+---
+
+## Changelog 2026-11-14 — v4: survival voice (user steer: "I don't want an audit paper — I want to know what survives"), grounded in the three executed runs
+
+Still fully number-free (digits only in LaTeX comments / bib keys; number words as in v3). Changes: ¶2 closer reframed as the survival question (which claims hold by construction / with measurable probability / how fast the measured ones die / what restores them) — matches §3 v3's roadmap. Setup ¶ gains the pre-registration clause ("any candidate rescue is judged against success criteria fixed before the runs"). Finding 2 gains the executed re-draws sentence (concentration recurs, carrier slot does not — number-free). Finding 3 gains the repair-bar sentence (clears at intermediate class counts, marginal at the full benchmark, some operating points only) and the selection-vs-support distinction (forcing accepts exactly the ranking gate's instances) — both grounded in `task1_*` / `task3_forcing_sweep.json`. Findings 1 and 4, the contribution bullets (still mirroring the locked §9 abstract verbatim), and the scope paragraph unchanged. Flags 1–2 RESOLVED with artifacts; artifact map gains three rows. NOTE: bullets say "claim ladder" (abstract's words); §3.3 is titled "survival ladder" for the same object — unify at .tex assembly (either retitle §3.3 or edit the abstract if the portal allows).
