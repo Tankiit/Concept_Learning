@@ -95,8 +95,8 @@ def main():
         ax.add_patch(Rectangle((x * W, y * H), w * W, h * H,
                                fill=False, ec=col, ls=ls, lw=lw))
     ax.set_title("certified-but-false (red dashed) vs certified-and-true (green)\n"
-                 f"typical case: {n_fail} of {n_tot} audited reasons fail, "
-                 "yet this prediction is correct", fontsize=6.6, loc="left")
+                 "typical case: most audited reasons fail, yet this prediction is "
+                 "correct", fontsize=6.6, loc="left")
 
     ax = axes[1]
     K = [r[0] for r in SCALING]
