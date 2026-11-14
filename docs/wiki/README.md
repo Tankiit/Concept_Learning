@@ -64,6 +64,7 @@ Welcome to the **Grounded Vision** documentation wiki for certifiable, relationa
    - Runner-facing assignment as written: Task 1 calibrated abstention at K=20/50 + first-ever calibrated arm at K=200 (due first — decides tradeoff vs collapse), Task 2 five random 4-class draws, Task 3 forcing sweep (explains guarantee_scaling 0.07–0.10)
    - Ground rules (new files only, per-instance dumps, val-only calibrators, n beside every percentage, send Task 1 numbers immediately) + early-finish job: reasoning-shortcuts / Teso comparison table (citations due Nov 15)
    - Links to the ready scripts (grounded_vision/scripts/tasks/), the pre-registered cliff criteria, and the division of labour: numbers to the runner, writing and trust-result reconciliation to the lead
+   - **Delivery status 2026-11-14:** branch `distillationAndTransforms` (RSMoon, Nov 13) reviewed — patch rotation/whitening + tree distillation code with tests (9/9, suite 54 pass), a raw/rotated/whitened comparison harness, but ZERO result files; Tasks 1–3 still unexecuted anywhere; merge flags recorded (canonical config default flipped to whitened — must revert to raw)
 
 12. [**Visual Evidence Gallery**](assets/)
    - [Activation Tree Grounded Evidence Tiles (train/test split)](assets/activation_traintest_examples.png)

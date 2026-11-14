@@ -4,6 +4,29 @@
 
 ---
 
+## Delivery status 2026-11-14 — first delivery arrived, but not the three runs
+
+The runner pushed branch [`distillationAndTransforms`](https://github.com/Tankiit/Concept_Learning/tree/distillationAndTransforms) (RSMoon, 2026-11-13; work commit `ca955eb` + merge `ed9d5bf`, based on `9086272`). Lead intake review done (tests re-run locally, `torch-multimodal` env). **Verdict: code only, zero result files — the three assigned runs (Tasks 1–3) remain unexecuted**; the task scripts are untouched and no task outputs exist on this branch or on `main` (checked all remote branches 2026-11-14). Ground rule 5 ("send Task 1 numbers as soon as they exist") is therefore still open with two days to the Nov 16 deadline. Nothing in this delivery changes §9 of the submission plan or the keep list.
+
+**What the branch does contain** (a perception + reasoning upgrade line, reviewable on its own merits):
+
+- `src/grounded_vision/perception/patch_transform.py` — train-fitted full-rank **patch rotation / optional whitening** before region pooling (eigenbasis of the train patch covariance; fitted on train patches only). Stored inside `perception_checkpoint.pt` so readers and features cannot disagree on the embedding space; the CLS token (PartDetector) stays raw; a legacy `rotation` key is still read.
+- `scripts/fit_perception.py` — `--rotate/--whiten/--no-*` flags, and **seeded initialisation** (`experiment.seed`, default 42) — previously unseeded, so identical invocations trained different readers. Genuine reproducibility fix.
+- `scripts/train_head.py` — optional **tree distillation** (`reasoning.distillation` in config): RandomForest teacher over concept bits → 10× bit-flip augmentation (1–3 attribute-bit flips, part bits fixed) relabelled by the teacher → student `CertifiableTreeHead` at depth 20; train fidelity + distillation config persisted in `tree_head.pkl`.
+- `scripts/compare_patch_transform.py` — end-to-end **raw vs rotated vs whitened** harness over one symlinked feature cache (no duplicated GBs), multi-seed with mean ± std, part-IoU-constant sanity check baked in, and a comparison table that already includes the paper-spine metrics (sufficiency rate, clause correctness, P(all clauses correct), NL faithfulness, reason size) — i.e. it measures the effect on our claims, not just accuracy.
+- `configs/cub_bound_local.yaml` (local protocol: distillation + whitening on, seed 42, no mock fallback), `tests/test_patch_transform.py` (9 tests), `tqdm` dep.
+
+**Verification (lead, 2026-11-14):** 9/9 new tests pass; full suite 54 passed, 1 skipped; the distillation flip-column selection checked against `FeatureCompiler` BOUND vocabulary — it flips attribute bits only, `has_part(...)` bits excluded. Correct.
+
+**Flags for the lead before merging:**
+
+1. `configs/cub_bound.yaml` (canonical) defaults were flipped to `rotate_patches: true, whiten_patches: true`. **Every committed number was produced on raw patches** — merging as-is silently changes the canonical config's embedding space. Revert the default to raw (variants stay opt-in via flags / the local config), or record the switch as a deliberate protocol break.
+2. Distillation fidelity is reported on train only inside `train_head.py`; the test-side effect is only visible through `evaluate.py` metrics (the comparison table covers this — fine, just don't cite train fidelity as if it were the Setting-D headline).
+3. The bit-flip augmentation creates off-manifold rows by design (independent flips can break one-hot value groups); consistent with the distillation intent, but its interaction with `enforce_domain_constraints: true` is untested.
+4. Local-run note: `cub_bound_local.yaml` expects relative `data/CUB_200_2011` and a fresh cache; to run `compare_patch_transform.py` on this Mac, point `data.cache_dir` at the flip-free eval-transform cache `/Users/tanmoy/research/data/grounded_vision_runs/cub_local_et/` (it has the required `{train,test}_features.npz`) and `data_dir` at the nested local CUB root.
+
+---
+
 ## Task 1 (first, due in 1.5 days): calibrated abstention at more class counts
 
 - Run the existing audit and uncertainty-aware reason pipeline at **K=20 and K=50**, and add the **calibrated arm at K=200**, which has never been measured.
