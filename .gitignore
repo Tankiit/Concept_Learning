@@ -86,3 +86,4 @@ venv/
 !**/wiki/**/*.md
 !docs/*.md
 !wiki/*.md
+grounded_vision/tmp/
