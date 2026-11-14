@@ -59,564 +59,542 @@ dataset we test, and that whether calibration beats raw confidence is a
 property of reader calibration, not of the rule.
 ```
 
-## §3 Method — certify, measure, gate (v4, 2026-11-14: the user skeleton, every TODO filled by decision)
+## §3 Method (v5, 2026-11-14 night: user's CVPR rewrite, all TODOs filled; DINOv3→DINOv2 corrected; protocol moved to §4.1)
 
 ```latex
-% ---- macros (move to preamble) --------------------------------------
-\newcommand{\phix}{\phi(x)}
-\newcommand{\Lits}{\mathcal{L}}
-\newcommand{\supp}{\operatorname{supp}}
-\newcommand{\acc}{\operatorname{acc}}
-\newcommand{\Rset}{R}
-\newcommand{\trust}{\tau}
+% NOTE: cleveref required (\cref). Macros: \phix \Rset \Lits \supp \acc \trust.
+% CVPR numeric citations: "Teso \etal~\cite{teso}", not \citet.
 
-\section{Certify, measure, gate}
+\section{Auditing certified concept reasons}
 \label{sec:method}
 
-We certify, then measure, then gate. A sufficient reason's proof is a
-statement about the Boolean head; this section separates what that
-proof establishes by construction from what it implicitly asserts
-about the image, and defines how we estimate the latter. The pipeline
-strip of Fig.~\ref{fig:gap} shows the four stages and where the proof
-stops; the subsections below map one-to-one onto them.
+\cref{fig:gap} summarises our setup. A frozen backbone produces
+part-level features, linear readers turn them into binary concepts, a
+decision tree predicts the class from those concepts, and a formal
+engine extracts a sufficient reason for each prediction. The
+certificate covers only the last two stages. Our goal is to measure how
+much of it survives the first two. \cref{sec:pipeline} describes the
+pipeline, \cref{sec:guarantees} states what the certificate does and
+does not prove, \cref{sec:measures} defines how we measure the gap, and
+\cref{sec:gate} introduces a trust gate that withholds reasons built on
+unreliable concepts.
 
-\subsection{Pipeline: perception, concepts, reasoning, explanation}
+\subsection{Pipeline}
 \label{sec:pipeline}
 
 \paragraph{Perception.}
-An image $x$ is encoded by a frozen DINOv3 backbone into patch tokens
-$z\in\mathbb{R}^{N\times d}$. For each part $p\in\mathcal{P}$ we pool
-tokens inside a fixed-size box centred on the annotated part location,
-giving a region vector $h_p(x)$. Localisation is \emph{oracle}
-throughout---boxes come from the annotated part keypoints, never from
-a detector---so every measured quantity below is conditional on
-localisation; predicted boxes can only lower the reported rates, and
-we label this choice wherever it carries weight.
+Given an image $x$, a frozen DINOv2 ViT-S/14 backbone~\cite{dinov2}
+produces patch tokens $z\in\mathbb{R}^{N\times d}$. For each part
+$p\in\mathcal{P}$, we pool the tokens in a fixed-size box centred on
+the annotated part keypoint to obtain a region feature $h_p(x)$. We use
+these oracle part locations throughout, so that our measurements
+isolate concept errors from localisation errors. With a learned
+detector, the support rates we report can only decrease --- and this
+statement is itself untested: predicted localisation is the one
+design ablation we flag rather than claim (\cref{sec:ablations}).
 
-\paragraph{Concept layer.}
-A vocabulary of $F{=}36$ part-bound concepts $c_k=(p_k,a_k)$ (e.g.\
-\texttt{beak:bill\_color=yellow}) is read by linear readers,
+\paragraph{Concepts.}
+Each of $F{=}36$ concepts $c_k=(p_k,a_k)$ pairs a part with an
+attribute (\eg \texttt{beak:bill\_color=yellow}) and is predicted by a
+linear reader on its part feature:
 \begin{equation}
-  \phi_k(x) = \mathbb{1}\!\left[\sigma\!\left(w_k^\top h_{p_k}(x)\right) > \theta_k\right],
-  \qquad \phix\in\{0,1\}^F,
+  \phi_k(x) = \mathbb{1}\!\left[\sigma\!\left(w_k^\top h_{p_k}(x)\right) > \tfrac12\right],
+  \qquad \phix\in\{0,1\}^F.
   \label{eq:readers}
 \end{equation}
-with $\theta_k=\tfrac12$ for all $k$; each reader's probability is
-calibrated by isotonic regression fit on a validation carve-out that
-no other stage touches. A \emph{literal} is a concept with a polarity,
-$\ell=(k,b)$, $b\in\{0,1\}$; $\Lits$ denotes all $2F$ literals.
+Reader probabilities are calibrated with isotonic regression on a
+held-out validation split. A \emph{literal} $\ell=(k,b)$ is a concept
+with a polarity $b\in\{0,1\}$, and $\Lits$ is the set of all $2F$
+literals.
 
-\paragraph{Reasoning.}
+\paragraph{Reasoning head.}
 A decision tree $t:\{0,1\}^F\to[K]$ predicts the class from $\phix$
-alone, in two settings: \textbf{(T)} $t$ is trained on labels;
-\textbf{(D)} $t$ is distilled from a neural head
-$g:\{0,1\}^F\to[K]$ over the same concepts, so that $t$ is a surrogate
-for the deployed model. Setting~T carries the headline numbers---every
-scaling and abstention table is T unless marked---because its premises
-are exactly the bits a deployment would read; Setting~D appears where
-the surrogate matters (the abstention comparison and the model-family
-table) and is routed there.
+alone. We study two variants.
+\textbf{Label-trained (T):} $t$ is fit to the class labels. Its
+premises are exactly the bits a deployed system reads, so all main
+results use this variant.
+\textbf{Distilled (D):} $t$ is distilled from a neural head
+$g:\{0,1\}^F\to[K]$ over the same concepts and acts as its surrogate.
+We use it where agreement with $g$ matters (\cref{sec:abstention},
+\cref{tab:families}).
 
 \paragraph{Explanation.}
-For a prediction $c=t(\phix)$ we extract a \emph{sufficient reason}: a
-set of literals $\Rset\subseteq\Lits$, each true of $\phix$, such that
+For a prediction $c=t(\phix)$, a \emph{sufficient reason} is a
+subset-minimal set of literals $\Rset\subseteq\Lits$, all true of
+$\phix$, such that
 \begin{equation}
-  \forall\, u\in\{0,1\}^F:\quad u\models \Rset \;\Rightarrow\; t(u)=c,
+  \forall\, u\in\{0,1\}^F:\quad u\models \Rset \;\Rightarrow\; t(u)=c.
   \label{eq:sufficient}
 \end{equation}
-and no proper subset of $\Rset$ has this property. Reasons are
-literal-based and subset-minimal over literals; feature-based
-minimality, which may drop both polarities of a concept at once,
-differs in minimality choice and is relegated to a
-footnote.\footnote{Literal- vs.\ feature-based minimality differ only
-in which subsets are eligible; sufficiency is identical under both.
-The exchange is documented for the PyXAI engine in
-App.~\ref{app:pyxai}.} Reasons are computed by a native reachability
-engine and cross-checked against PyXAI~\cite{pyxai}; the two agree on
-every audited instance ($472/472$ sufficiency checks,
-App.~\ref{app:pyxai}). Concept-level sufficient reasons are the same
-object extracted by \citet{teso} and \citet{soria}; we do not claim
-the object---we audit it.
+We compute reasons with a reachability-based engine and cross-check
+them against PyXAI~\cite{pyxai}; the two agree on every audited
+instance ($118/118$ reasons, $472/472$ sufficiency checks over the
+larger certified-literal pool; Supp.~\cref{app:pyxai}, which also
+covers literal- \vs feature-level minimality). These concept-level
+reasons are the same object used by Teso \etal~\cite{teso} and Soria
+\etal~\cite{soria}. We do not propose a new explanation. We audit what
+this one guarantees.
 
-\subsection{What the certificate proves, and what it does not}
+\subsection{What the certificate proves}
+\label{sec:guarantees}
 \label{sec:ladder}
 
-Equation~\eqref{eq:sufficient} holds for every bit vector $u$; it says
-nothing about whether the cited literals are true of $x$, and nothing
-about whether the tree agrees with the deployed network on inputs
-whose bits satisfy $\Rset$. Everything Eq.~\eqref{eq:sufficient} needs
-lives to the right of the dashed rule in Fig.~\ref{fig:gap}; everything
-it silently needs lives to its left. We organise the claims a
-certified reason invites into a \emph{survival ladder}
-(Tab.~\ref{tab:ladder}): rungs above the dashed rule hold by
-construction; rungs below it are properties of the perception stage
-and can only be estimated.
+\cref{eq:sufficient} holds for every binary vector $u$. It does not say
+whether the cited concepts are present in $x$, nor whether $t$ agrees
+with the deployed network $g$. We make this explicit by distinguishing
+five \emph{levels of guarantee} (\cref{tab:levels}). Levels~1--2 hold
+by construction, whereas levels~3--5 depend on perception and must be
+measured.
 
 \begin{table}[t]
   \centering\small
-  \caption{\textbf{The survival ladder.} Read downward: each rung adds
-  a claim the rung above it cannot express. Rungs above the dashed
-  rule hold by construction for every input; rungs below it are
-  properties of the perception stage, estimated in Sec.~4 with the
-  section that measures each.}
-  \label{tab:ladder}
-  \begin{tabular}{@{}llll@{}}
+  \caption{\textbf{Levels of guarantee for a certified reason.} Each
+  level adds a claim that the levels above it do not imply. Levels
+  above the dashed line hold by construction; those below it are
+  measured in \cref{sec:experiments}.}
+  \label{tab:levels}
+  \begin{tabular}{@{}clll@{}}
     \toprule
-    Rung & Claim about $\Rset$ & Status & Where measured \\
+    & Claim about $\Rset$ & Status & Measured in \\
     \midrule
-    1 & sufficient for $t$ (Eq.~\ref{eq:sufficient}) & exact & App.~\ref{app:pyxai} \\
-    2 & sufficient for all completions of & exact & \S\ref{sec:nulls}, \\
-      & untrusted literals                    &        & \S\ref{sec:nulls}, \S\ref{sec:abstention} \\
+    1 & sufficient for $t$ (\cref{eq:sufficient})        & exact    & Supp.~\ref{app:pyxai} \\
+    2 & sufficient under any untrusted completion        & exact    & \cref{sec:nulls,sec:abstention} \\
     \cdashline{1-4}
-    3 & $t$ agrees with $g$ where $\phix\models\Rset$ & measured & \S\ref{sec:exp-fidelity} \\
-    4 & every premise true of $x$ (support)            & measured & \S\ref{sec:exp-scale} \\
-    5 & premises name the intended concepts            & audited  & \S\ref{sec:exp-verify} \\
+    3 & $t$ agrees with $g$ where $\phix\models\Rset$    & measured & \cref{sec:exp-fidelity} \\
+    4 & every premise is true of $x$                     & measured & \cref{sec:exp-scale} \\
+    5 & premises name the intended concepts              & audited  & \cref{sec:exp-verify} \\
     \bottomrule
   \end{tabular}
 \end{table}
 
-\subsection{Measured quantities}
+\subsection{Measuring the gap}
 \label{sec:measures}
 
 \paragraph{Premise support.}
-Let $a(x)\in\{0,1,\star\}^{F}$ be the annotation, with $\star$ for
-concepts on parts not visible in $x$. A literal $\ell=(k,b)$ is
-\emph{supported} if $a_k(x)=b$, \emph{refuted} if $a_k(x)=1-b$, and
-\emph{unresolved} if $a_k(x)=\star$. Premise support of a reason is
+Let $a(x)\in\{0,1,\star\}^F$ be the ground-truth annotation, where
+$\star$ marks concepts whose part is not visible. A literal
+$\ell=(k,b)$ is \emph{supported} if $a_k(x)=b$. A reason is supported
+if all its literals are:
 \begin{equation}
-  \supp(\Rset,x) = \mathbb{1}\!\left[\forall\,\ell\in\Rset:\ \ell \text{ supported}\right].
+  \supp(\Rset,x) = \mathbb{1}\!\left[\forall\,\ell\in\Rset:\
+  a_k(x)=b\right].
   \label{eq:support}
 \end{equation}
-\emph{Convention for unresolved literals:} an unobserved part
-contributes no positive concepts---its asserted literals are refuted
-and its negated literals are supported. Every number in this paper is
-computed under this convention; the unresolved fraction reaches one
-half of literals at the larger class counts, and the strict
-alternative (support on fully-resolved reasons only) is reported as a
-sensitivity in the appendix.
+For an invisible part, we treat all its concepts as absent. Supp.\
+\cref{app:unresolved} reports the stricter alternative, which scores
+only fully resolved reasons.
 
-\paragraph{The inversion.}
-We compare $\mathbb{E}[\supp(\Rset,x)]$ with
+\paragraph{Support \vs accuracy.}
+We compare $\mathbb{E}[\supp(\Rset,x)]$ with accuracy
 $\acc=\mathbb{E}[\mathbb{1}[t(\phix)=y]]$ on the same audited
-instances. The comparison is the baseline a reader already holds: an
-explanation should be at least as reliable as the prediction it
-explains. The inversion---support below accuracy at every class
-count---breaks that default.
+instances: a reader expects an explanation to be at least as reliable
+as the prediction it explains.
 
-\paragraph{Independence null.}
+\paragraph{Independence baseline.}
 With $\hat p_\ell$ the support rate of literal $\ell$ over its
-occurrences in reasons,
+occurrences in reasons, the \emph{independence baseline} is
 \begin{equation}
   \widehat{\supp}_{\perp} = \frac{1}{n}\sum_{i=1}^{n}
   \prod_{\ell\in \Rset_i} \hat p_\ell,
   \label{eq:null}
 \end{equation}
-is the support expected if premise errors were independent given the
-literal. A ratio above one means failures share literals---failure is
-predictable compounding, and repair has targets; at one, errors are
-independent; below one, errors avoid one another. We measure above one
-on CUB at ten classes and at one on BDD-OIA, and therefore treat
-clustering as bed-specific (App.~\ref{app:clust}) rather than a law.
+the support expected if premise errors were independent given the
+literal. A support-to-baseline ratio above one means failures share
+literals---predictable compounding, with concrete targets for repair;
+departures from one are reported where they are measured
+(\cref{sec:exp-scale}).
 
-\paragraph{Fidelity (Setting D).}
-$\operatorname{fid}(\Rset)=\Pr[g(\phi(x'))=c \mid \phi(x')\models\Rset]$,
-estimated on held-out data with Wilson intervals.
+\paragraph{Fidelity.}
+$\operatorname{fid}(\Rset)=\Pr\!\left[g(\phi(x'))=c \mid
+\phi(x')\models\Rset\right]$, estimated on held-out data with Wilson
+intervals.
 
 \paragraph{Vocabulary ceiling.}
-Low support conflates weak readers with an inexpressive vocabulary.
-Heads of matched family trained on predicted bits, on continuous
-reader scores, and on ground-truth bits bound what any Boolean head
-over this vocabulary can achieve: if the ground-truth head dominates,
-the task does not survive the vocabulary and repair belongs
-there---not in the head or the readers.
+Matched heads trained on predicted bits, on continuous reader scores,
+and on ground-truth bits bound what any head over this vocabulary can
+achieve, locating repair in the readers or the vocabulary rather than
+in the head (\cref{sec:ceiling}).
 
-\subsection{Gating reasons by literal trust}
+\subsection{Gating reasons by concept trust}
 \label{sec:gate}
 
 A \emph{trust channel} assigns each literal occurrence a score
-$\trust(\ell,x)\in[0,1]$. A reason is issued only if its weakest
+$\trust(\ell,x)\in[0,1]$, and a reason is issued only if its weakest
 literal clears a threshold,
 \begin{equation}
-  \operatorname{issue}(\Rset,x) = \mathbb{1}\!\left[\min_{\ell\in\Rset}\trust(\ell,x)\ge\lambda\right].
+  \operatorname{issue}(\Rset,x) =
+  \mathbb{1}\!\left[\min_{\ell\in\Rset}\trust(\ell,x)\ge\lambda\right].
   \label{eq:gate}
 \end{equation}
-Channels compared: \textbf{raw confidence} (the reader's probability,
-or its complement for negated literals); \textbf{calibrated,
-polarity-aware confidence} (the validation-isotonic probability of the
-asserted polarity---the honest-deployment arm); \textbf{discrete
-per-(concept, polarity) reliability} (validation-estimated rates);
-\textbf{random ordering} at matched coverage as baseline, with the
-oracle marginal-support filter as a reference upper bound. No results
-here; Sec.~\ref{sec:abstention}.
+Channels: \textbf{raw} reader confidence (or its complement, for
+negated literals); \textbf{calibrated} per-concept confidence
+(validation isotonic, polarity-aware); \textbf{discrete}
+per-(concept, polarity) reliability rates; \textbf{random} ordering at
+matched coverage; and an oracle marginal-support filter as reference.
+The criterion under which a channel counts as a repair, and the
+decision rules it triggers, were fixed before evaluation
+(\cref{sec:exp-setup}).
+```
 
-\paragraph{Repair criterion (fixed before the runs).}
-A channel counts as a repair at operating point $\lambda$ if the
-cluster-bootstrap lower bound of
-$\mathbb{E}[\supp\mid\operatorname{issue}]/\mathbb{E}[\supp]$ is at
-least $2$---the smallest multiple separable at audit sample sizes and
-the smallest a practitioner would call a repair rather than noise. The
-criterion, and the decision each outcome triggers, were fixed on
-2026-11-11, before the scaling runs executed (App.~\ref{app:prereg}).
-Coverage is the price and is always reported:
-$\operatorname{cov}=\mathbb{E}[\operatorname{issue}]$; the ratio is
-defined at matched acceptance, separating selection death from support
-death (\S\ref{sec:abstention}).
-
-\subsection{Protocol}
-\label{sec:protocol}
-
-Main audit: CUB with official train/test splits, class counts
-$K\in\{4,10,20,50,200\}$, the four-class subset fixed and re-drawn
-five times at seeds 1000--1004 (App.~\ref{app:subset}); audited
-reasons cover all certified test instances at $K\le 20$ ($n=118$,
-$243$, $515$) and subsamples of $n{=}600$ at $K{=}50$ and $200$ (of
-$1{,}389$ and $5{,}794$; deterministic by sid order). Replications
-with the measurement held fixed: CelebA (official identity-disjoint
-splits) and BDD-OIA (rsbench splits); a third (SUN, carved split) is
-relegated to the appendix as a protocol deviation. All runs use seed
-$42$; intervals are cluster bootstraps over instances ($10^{4}$
-resamples) or Wilson where noted. Pre-registered on 2026-11-11,
-before execution: the repair criterion, the verdict rules it triggers,
-the dominance criterion for subset re-draws, and the
-forcing-versus-ranking equivalence check (App.~\ref{app:prereg}).
-## §4 What survives (v3, 2026-11-14: the user skeleton, ladder-ordered, every TODO filled)
+## §4 Experiments (v4, 2026-11-14 night: user's rewrite adopted, all \todo filled)
 
 ```latex
-\section{What survives}
+\section{Experiments}
 \label{sec:experiments}
 
-We walk the ladder of Tab.~\ref{tab:ladder} from the exact rungs down.
-The proof holds everywhere and certifies whatever concept bank it is
-given (\S\ref{sec:exp-verify}); premise support is the rung that fails,
-decaying smoothly with scale (\S\ref{sec:exp-scale}); fidelity survives
-partially and is not the binding premise (\S\ref{sec:exp-fidelity});
-the failure concentrates in identifiable slots
-(\S\ref{sec:audit}); the vocabulary, not head capacity, limits the main
-bed (\S\ref{sec:ceiling}); the calibrated gate is the only lever and
-pays in coverage (\S\ref{sec:abstention}); a pre-registered list of
-escape attempts returns nulls (\S\ref{sec:nulls}); and the beds fail on
-opposite sides of the same audit (\S\ref{sec:beds}).
+Our experiments examine the five levels of guarantee in
+\cref{tab:levels} in turn, from those that hold by construction to
+those that must be measured empirically. They address four questions.
+\textbf{(Q1)} Is the certificate exact, and does exactness depend on
+the semantics of the concept bank? \textbf{(Q2)} How often are the
+premises of a certified reason true of the image, and how does this
+change with the number of classes? \textbf{(Q3)} Where does premise
+failure originate: in the vocabulary, in perception, or in the
+reasoning head? \textbf{(Q4)} Can any intervention restore premise
+support, and at what cost?
 
-\subsection{Setup}
+\subsection{Experimental setup}
 \label{sec:exp-setup}
-Everything experimental is as in \S\ref{sec:protocol}; we state here
-only what it deferred. The four-class subset is fixed; five random
-re-draws (seeds 1000--1004) are reported where subset identity matters
-(\S\ref{sec:audit}, App.~\ref{app:subset}). All CUB results use oracle
-localisation; CelebA and BDD-OIA concepts are image-level, so there is
-no part localisation to relax there---the oracle caveat is a CUB
-statement, labelled as such wherever it carries weight. Audited reasons
-cover all certified test instances at $K\le20$ and deterministic
-$n{=}600$ subsamples at $K{=}50,200$. All runs fit on one workstation.
 
-\subsection{The proof survives: exactness, and its indifference to meaning}
+\paragraph{Datasets.}
+Our primary benchmark is CUB-200-2011~\cite{cub}, for which part
+annotations allow every premise to be checked against ground truth. We
+use the official splits and vary the number of classes over
+$K\in\{4,10,20,50,200\}$. To test whether our findings depend on the
+choice of classes, the four-class subset is redrawn five times (supp.\
+\cref{app:subset}). We repeat the full evaluation, with the same
+readers, heads, reason extraction and support scoring, on
+CelebA~\cite{celeba} using identity-disjoint splits and on
+BDD-OIA~\cite{bddoia} using the splits of rsbench~\cite{rsbench}.
+Results on SUN, for which no official split exists, are reported in
+the supplement.
+
+\paragraph{Evaluation protocol.}
+For each test image, we extract a sufficient reason for the tree's
+prediction, regardless of whether that prediction is correct, and
+compare each cited literal with the ground-truth part annotations
+(\cref{eq:support}). At $K\le 20$ we score every certified test
+instance ($n=118$, $243$ and $515$, respectively). At $K=50$ and
+$K=200$ we score a fixed subsample of $n=600$ instances, drawn from
+$1{,}389$ and $5{,}794$ certified instances. All CUB results use
+oracle part localisation. Because the concepts in CelebA and BDD-OIA
+are defined at the image level, this caveat applies to CUB alone.
+Unless stated otherwise, intervals are 95\% cluster-bootstrap
+intervals over instances with $10^4$ resamples. The repair criterion
+of \cref{sec:gate} and the associated decision rules were fixed before
+any experiment was run (supp.\ \cref{app:prereg}). All experiments run
+on a single workstation.
+
+\subsection{The certificate is exact, irrespective of semantics}
 \label{sec:exp-verify}
-Every issued reason is sufficient for its tree, confirmed by an
-independent engine on every audited instance. The native extractor and
-real PyXAI agree on $118/118$ audited four-class reasons and on
-$472/472$ sufficiency checks over the larger certified-literal pool
-(the CUB trusted-reason certificates; engine ledger and four isolated
-PyXAI defects in App.~\ref{app:pyxai}). Exactness extends to banks
-with no semantics at all: on PCA feature banks (CLS-token and
-mean-patch), the same machinery issues exact three-literal certificates
-whose teacher-sufficiency is zero---the machinery certifies whatever
-bank it is given, which is rung five's point: \emph{semantics never
-entered the machinery}. Exactness is the floor everything below is
-measured against, not a finding.
 
-\subsection{Premise support does not survive scale}
+Every reason issued by our engine is sufficient for its tree. We
+verify this against PyXAI~\cite{pyxai}, which agrees with our engine
+on all $118$ four-class reasons and on all $472$ sufficiency checks
+over the larger pool of certified literals (supp.\ \cref{app:pyxai}).
+
+Exactness, however, carries no information about the meaning of the
+concepts. When we replace the concept bank with principal components
+of the CLS token or of the mean patch embedding, the same pipeline
+returns exact certificates of three literals on average, yet these
+certificates are never sufficient for the teacher network. The
+certificate is thus equally valid for any bank it is given, which is
+precisely why level~5, that the premises name the intended concepts,
+must be checked against annotations rather than assumed. We therefore
+treat exactness as the baseline against which the remaining levels are
+measured, not as a result in its own right.
+
+\subsection{Premise support degrades with scale}
 \label{sec:exp-scale}
 
-Premise support falls below accuracy at every class count, and the
-decay is smooth---roughly halving at each step of the sweep. Fig.~\ref{fig:scale}
-and Tab.~\ref{tab:scale} also carry the mechanism: the decay tracks an
-independence null closely (ratios $1.00$--$1.52$), so premise failure
-is per-literal compounding over reasons that lengthen with $K$; only at
-ten classes do errors cluster significantly above the null ($1.52$
-[$1.23,1.89$]), and the four-class ratio of exactly one is degenerate:
-one zero-support literal carries every failure and every passing
-literal has support one. The same inversion (support well below
-accuracy) holds on both replication beds (Appendix table; CelebA
-$0.693$ vs.\ $0.879$, BDD-OIA $0.534$ vs.\ $0.69$--$0.75$).
+\begin{table}[t]
+  \centering\small
+  \setlength{\tabcolsep}{4pt}
+  \caption{\textbf{Premise support and accuracy on CUB} (Setting~T,
+  oracle localisation). \emph{Null} is the support expected under
+  independent literal errors (\cref{eq:null}). \emph{Ratio} is
+  support/null with a 95\% bootstrap interval. $|\Rset|$ is the mean
+  reason length. $^\dagger$Degenerate: a single literal with zero
+  support accounts for every failure.}
+  \label{tab:scale}
+  \begin{tabular}{@{}rrccccr@{}}
+    \toprule
+    $K$ & $n$ & Acc. & Support & Null & Ratio & $|\Rset|$ \\
+    \midrule
+      4 & 118 & .602 & .254 & .254 & 1.00$^\dagger$ &  3.6 \\
+     10 & 243 & .444 & .115 & .076 & 1.52 {\scriptsize[1.23, 1.89]} &  5.9 \\
+     20 & 515 & .416 & .070 & .061 & 1.15 {\scriptsize[0.87, 1.44]} &  7.1 \\
+     50 & 600 & .303 & .035 & .034 & 1.02 {\scriptsize[0.64, 1.40]} &  8.6 \\
+    200 & 600 & .193 & .017 & .013 & 1.24 {\scriptsize[0.56, 2.00]} & 10.8 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
 
 \begin{figure}[t]
   \centering
   \includegraphics[width=\columnwidth]{fig_scale.pdf}
   \caption{\textbf{Premise support versus accuracy and versus the
-  independence null (Setting~T, CUB).} Solid red: fraction of certified
-  reasons whose literals are all true (Wilson 95\% bands). Hollow: the
-  independence null of Eq.~\eqref{eq:null}---support expected if
-  premise errors were independent given the literal; the decay rides
-  the null rather than departing from it. $n$ and mean reason length
-  $|R|$ under each $K$. Artefact: \texttt{results/figures/fig\_scale.pdf}.}
+  independence baseline (Setting~T, CUB).} Solid red: fraction of
+  certified reasons whose literals are all true (Wilson 95\% bands).
+  Hollow: the independence baseline of \cref{eq:null}---support
+  expected if premise errors were independent given the literal; the
+  decay rides the baseline rather than departing from it. $n$ and mean
+  reason length $|\Rset|$ under each $K$.}
   \label{fig:scale}
 \end{figure}
 
+\cref{tab:scale} and \cref{fig:scale} report premise support alongside
+classification accuracy. At every class count, the probability that
+all premises of a certified reason hold is substantially lower than
+the probability that the prediction itself is correct. The gap widens
+with scale. Between $K=4$ and $K=200$, accuracy decreases by a factor
+of roughly three (from $0.602$ to $0.193$), whereas premise support
+decreases by a factor of fifteen (from $0.254$ to $0.017$), roughly
+halving at each step of the sweep.
+
+The independence null accounts for most of this decay. Mean reason
+length grows from $3.6$ to $10.8$ literals as $K$ increases, and the
+observed support remains statistically consistent with the product of
+per-literal support rates at $K=20$, $50$ and $200$. The only
+significant departure occurs at $K=10$, where the ratio of $1.52$
+indicates that failures share literals more often than independence
+would predict. The ratio of exactly one at $K=4$ is degenerate for the
+reason given in \cref{tab:scale}. These results suggest that premise
+failure is driven primarily by per-literal error compounding over
+reasons that lengthen with the number of classes, rather than by a
+small number of correlated failure modes. We test this interpretation
+directly in \cref{sec:ablations}.
+
+The same inversion appears on both replication datasets (supp.\
+\cref{tab:replication}). On CelebA, premise support is $0.693$ against
+an accuracy of $0.879$, and on BDD-OIA it is $0.534$ against an
+accuracy of $0.69$--$0.75$.
+
+\paragraph{Failures concentrate in a few literals.}
+\label{sec:audit}
+Although failures compound across literals, they are not spread
+uniformly across the vocabulary (\cref{fig:failures}). At $K=4$, all
+$88$ failing reasons cite \texttt{bill\_color=yellow} as present, a
+literal the annotations never support. The corresponding reader fires
+on beak regions in which only $3.3\%$ of pixels are yellow on average,
+indicating a visual shortcut rather than a poorly chosen threshold.
+Conversely, all $30$ passing reasons rely exclusively on negated
+literals, and all of them remain valid under the stricter scoring rule
+that excludes concepts on unobserved parts. Concentration persists
+across the five redrawn subsets: premise support remains between
+$0.267$ and $0.431$, and the most frequent failing literal appears in
+$62$--$94\%$ of failing reasons. The identity and polarity of that
+literal, however, change with the subset. In the redrawn subsets it is
+a negated literal with high marginal support ($0.90$--$0.98$), the
+mirror image of the yellow-bill case. The domain likewise determines
+the polarity across datasets. Failures on BDD-OIA are carried by
+positive traffic literals, such as \texttt{green\_light=1}, which is
+supported in only $61.5\%$ of its $1{,}498$ occurrences, whereas
+failures on CelebA are carried by negated facial attributes.
+
+\subsection{Fidelity holds partially but is not the bottleneck}
+\label{sec:exp-fidelity}
+
+In Setting~D, the tree is a surrogate for a neural head $g$, and a
+certified reason transfers to $g$ only if the two agree on inputs that
+satisfy it. This conditional fidelity is $0.814$ at $K=4$ and $0.613$
+at $K=10$. Although imperfect, fidelity is not what limits the
+reliability of certified reasons. The probability that a reason is
+both premise-supported and faithful to the teacher is $0.037$,
+$0.022$ and $0.008$ at $K=20$, $50$ and $200$. This joint probability
+is governed by premise support, the smaller of the two factors at
+every scale.
+
+Interventional evidence leads to the same conclusion. Perturbing the
+literals of a certified reason changes the teacher's margin by about
+as much as perturbing a random set of literals of the same size
+(retention $-6.71$ versus $-6.25$; necessity $-0.39$ versus $-0.55$),
+and discrete interventions on certified literals remain at their
+chance floor. Even where the tree agrees with the teacher, the
+certified reason thus does not identify the inputs that drive the
+teacher's decision.
+
+\subsection{Vocabulary versus perception}
+\label{sec:ceiling}
+
 \begin{table}[t]
   \centering\small
-  \caption{Setting~T on CUB, oracle localisation. Support counts every
-  cited literal against part annotations under the unresolved-literal
-  convention of Eq.~\eqref{eq:support} (asserted on unobserved parts
-  refuted; negated supported). Null: Eq.~\eqref{eq:null}. Ratio:
-  observed/ null with cluster-bootstrap 95\% CI.}
-  \label{tab:scale}
-  \begin{tabular}{@{}rrrrrrr@{}}
+  \caption{\textbf{Accuracy of matched heads by input.} The gap
+  between predicted and ground-truth bits bounds what better readers
+  could recover; the ground-truth row bounds what any head over this
+  vocabulary can achieve. BDD-OIA column: \textsc{forward} action
+  (per-action ranges in supp.\ \cref{app:beds}); the continuous-scores
+  rung was not run on BDD-OIA.}
+  \label{tab:ceiling}
+  \begin{tabular}{@{}lcc@{}}
     \toprule
-    $K$ & $n$ & acc & support & null & ratio [CI] & $|\Rset|$ \\
+    Head input & CUB ($K{=}4$) & BDD-OIA \\
     \midrule
-      4 & 118 & .602 & .254 & .254 & 1.00 (degen.) & 3.6 \\
-     10 & 243 & .444 & .115 & .076 & 1.52 [1.23,1.89] & 5.9 \\
-     20 & 515 & .416 & .070 & .061 & 1.15 [0.87,1.44] & 7.1 \\
-     50 & 600 & .303 & .035 & .034 & 1.02 [0.64,1.40] & 8.6 \\
-    200 & 600 & .193 & .017 & .013 & 1.24 [0.56,2.00] & 10.8 \\
+    Predicted bits $\phix$     & 0.627 & 0.72 \\
+    Pooled region features     & 0.712 & 0.75 \\
+    Continuous reader scores   & 0.746 & --- \\
+    Ground-truth bits $a(x)$   & 0.805 & 0.99 \\
     \bottomrule
   \end{tabular}
 \end{table}
 
-\subsection{Fidelity survives partially, and is not the binding premise}
-\label{sec:exp-fidelity}
-Conditional fidelity---the teacher's agreement restricted to inputs
-whose bits satisfy the reason---is $0.814$ at four classes and $0.613$
-at ten (Wilson-intervaled in \texttt{conditional\_fidelity.json}). (The
-$0.627$ in the ceiling ladder is a different quantity: the accuracy of
-a tree on predicted bits against all inputs; it belongs to
-\S\ref{sec:ceiling}.) Fidelity is not binding because support is the
-smaller factor at every scale: the joint event (support and teacher
-agreement) is $0.037/0.022/0.008$ at twenty/fifty/two hundred classes,
-tracking support, not fidelity. Interventions agree: certified reasons
-perturb the teacher's margin like random size-matched perturbations
-(retention $-6.71$ vs.\ $-6.25$; necessity $-0.39$ vs.\ $-0.55$), and
-discrete interventions sit at their chance floor---the certificate
-neither tracks nor manipulates the network. The thirty all-correct
-pipit reasons are the exception that frames the rule: perfect
-conditional fidelity (1.0 on the pattern) with failure elsewhere.
+To determine where repair should be directed, we train heads of the
+same family on progressively more informative inputs
+(\cref{tab:ceiling}). On CUB, accuracy increases monotonically from
+predicted bits ($0.627$) to ground-truth bits ($0.805$). The concept
+vocabulary can therefore express the task, and the shortfall lies in
+the readers that instantiate it. BDD-OIA presents the opposite
+picture. Its ceiling is close to $0.99$ on the \textsc{forward} and
+\textsc{stop} actions, its failures are almost entirely perceptual,
+and its premise errors sit at the independence prediction ($1.003$,
+CI $[1.00, 1.01]$).
 
-\subsection{The failure concentrates}
-\label{sec:audit}
-Failures occupy few (concept, polarity) slots on every bed, but which
-slot is a property of the subset, not the method. At four classes, all
-$88$ failing reasons cite \emph{bill\_colour{=}yellow} present
-(annotation support $0/88$; the reader fires on beak regions averaging
-$3.3\%$ yellow pixels---a visual shortcut, not a threshold artifact),
-while all $30$ passing reasons cite only absent-valued literals---and
-none of the thirty owes its pass to the scoring rule: all would
-survive the strict variant that excludes concepts on unobserved parts
-(checked directly; \texttt{cbm\_cem\_audit.json} + part visibility).
-Re-drawing the subset five times keeps premise support in a band
-($0.267$--$0.431$) and keeps failure concentrated (top literal in
-$0.62$--$0.94$ of failing reasons) but moves the carrier to
-\emph{negated} slots with high marginal support ($0.90$--$0.98$)---the
-mirror image of the zero-support yellow-bill literal
-(App.~\ref{app:subset}). Across beds the polarity direction is set by
-the domain: positive traffic literals fail on BDD-OIA
-(\emph{green\_light}$=$1 at support $0.615$ in $1{,}498$ reasons),
-negated face attributes on CelebA. Positive-literal precision exceeds
-base rates by only $+0.03$--$0.13$ (negative $+0.06/+0.07$): the
-asymmetry is not a base-rate effect.
+This difference is reflected in how the two datasets respond to
+intervention. On BDD-OIA, interventions on the training side, which
+leave premise support unchanged on CUB (\cref{sec:abstention}),
+improve it substantially. Stronger readers raise support from $0.534$
+to $0.628$, and restricting the vocabulary to certified concepts
+raises it to $0.786$, albeit with a different population of
+certificates (supp.\ \cref{app:beds}). Interventions on the
+certificate itself remain ineffective on both datasets. On BDD-OIA,
+oracle subset selection gains $0.0003$, and uncertainty-aware reasons
+coincide with standard reasons on $98.3\%$ of instances. As a positive
+control for the metric, injecting i.i.d.\ annotation noise changes
+measured support by the amount the noise model predicts, to within
+$0.002$ at every noise level.
 
-\subsection{The vocabulary ceiling}
-\label{sec:ceiling}
-The main bed is vocabulary-limited, not capacity-limited. Matched
-heads reach $0.627$ on predicted bits, $0.712$ on pooled region
-features, $0.746$ on continuous reader scores, and $0.805$ on
-ground-truth bits: the vocabulary can express the task, so repair
-belongs in the readers/vocabulary, not the head. Conversely, a tree
-trained directly on ground-truth bits collapses to the majority
-($0.254$/$0.03$ at four/two hundred classes): ground-truth bits without
-learned readers yield no usable head---the reader layer is
-indispensable even as it fails. BDD-OIA sits on the other side
-(\S\ref{sec:beds}): ceiling near $0.95$, failure almost entirely
-perceptual.
-
-\subsection{Abstention is the only lever, and it pays in coverage}
+\subsection{Abstention restores support at a cost in coverage}
 \label{sec:abstention}
-The calibrated, polarity-aware weakest-literal gate clears the
-pre-registered repair bar at the intermediate class counts, sits at it
-at fifty, and is fragile at two hundred:
 
-\begin{center}\small
-\begin{tabular}{@{}rlrrl@{}}
-\toprule
-$K$ & operating point & support$|$issue & LB ratio vs.\ $2\times$ & verdict \\
-\midrule
-20  & $\lambda$ s.t.\ cov $=0.14$ & $0.361$ [$0.24,0.47$] ($n{=}72$) & $3.4$ & cleared \\
-50  & cov $=0.14$ & $0.143$ [$0.07,0.23$] ($n{=}84$) & $2.0$ & at the bar \\
-200 & cov $=0.14$ & $0.095$ [$0.04,0.15$] ($n{=}84$) & $2.4$ & cleared here only \\
-200 & cov $=0.10$ & $0.117$ [$0.03,0.22$] ($n{=}60$) & $1.8$ & not cleared \\
-200 & cov $=0.05$ & $0.100$ [$0.00,0.23$] ($n{=}30$) & $\le 1$ & not cleared \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-The K=200 cell was verified before reporting (join exact, no
-structural-literal artifacts; App.~\ref{app:prereg}): it is a tradeoff
-thinning toward the unconditional rate, not a guarantee restored. Raw
-confidence separates exactly where readers are miscalibrated---on CUB
-it selects \emph{below} the random baseline ($0.030$ vs.\ $0.123$ at
-matched coverage), while on the calibrated-reader beds it tracks the
-calibrated rule; we use the raw-vs-calibrated reversal itself as the
-miscalibration diagnostic. Two further facts complete the picture.
-First, the \emph{oracle} marginal filter dies at two hundred classes
-($95\%$ of reason literals have marginal support strictly between zero
-and one, so min-marginal ranking has no signal) while the calibrated
-per-instance channel still separates---the oracle is dead and
-calibration is not, which is why the K=200 row is delicate rather than
-null. Second, the stricter forcing gate---accept only if the trusted
-literals themselves force the prediction---accepts exactly the
-ranking gate's instances at every threshold and class count we
-measure, and the earlier fixed-threshold read-out's low kept-true
-rates ($0.067$--$0.133$) are the raw channel's \emph{selection} death:
-at matched coverage the calibrated channel keeps fully supported sets
-($30/30$). Support--coverage curves per bed: Fig.~\ref{fig:abstain}.
+\begin{table}[t]
+  \centering\small
+  \setlength{\tabcolsep}{3.5pt}
+  \caption{\textbf{Calibrated weakest-literal gate on CUB}
+  (Setting~T). LB is the bootstrap lower bound on the ratio of support
+  among issued reasons to unconditional support. The pre-registered
+  repair criterion requires $\mathrm{LB}\ge 2$.}
+  \label{tab:gate}
+  \begin{tabular}{@{}rcccl@{}}
+    \toprule
+    $K$ & Coverage & Support $\mid$ issued & LB & Criterion \\
+    \midrule
+     20 & 0.14 & 0.361 {\scriptsize[0.24, 0.47]} & 3.4 & met \\
+     50 & 0.14 & 0.143 {\scriptsize[0.07, 0.23]} & 2.0 & at threshold \\
+    200 & 0.14 & 0.095 {\scriptsize[0.04, 0.15]} & 2.4 & met \\
+    200 & 0.10 & 0.117 {\scriptsize[0.03, 0.22]} & 1.8 & not met \\
+    200 & 0.05 & 0.100 {\scriptsize[0.00, 0.23]} & $\le$1.0 & not met \\
+    \bottomrule
+  \end{tabular}
+\end{table}
 
 \begin{figure}[t]
   \centering
   \includegraphics[width=\columnwidth]{fig_abstain.pdf}
   \caption{\textbf{Support--coverage curves for the trust channels of
-  Eq.~\eqref{eq:gate}.} One panel per bed (CUB $K{=}20$, CelebA,
+  \cref{eq:gate}.} One panel per bed (CUB $K{=}20$, CelebA,
   BDD-OIA); dashed line $=2\times$ unconditional support (the repair
-  bar, fixed in advance); shading from the cluster bootstrap. [TO
-  BUILD at camera-ready from \texttt{task1\_abstention\_K20\_50.json}
-  + the two replication audits; draft exists as
-  \texttt{results/figures/task1\_abstention\_scaling.png}.]}
+  bar, fixed in advance); shading from the cluster bootstrap.}
   \label{fig:abstain}
 \end{figure}
 
-\subsection{What does not survive}
-\label{sec:nulls}
+\cref{tab:gate} and \cref{fig:abstain} evaluate the gate of
+\cref{eq:gate} with calibrated, polarity-aware confidence as the trust
+channel. Issuing only those reasons whose weakest literal is
+confidently predicted meets the pre-registered criterion at $K=20$,
+where support among issued reasons rises from $0.070$ to $0.361$ at a
+coverage of $14\%$. The criterion is met exactly at $K=50$, and only
+at a single operating point at $K=200$. At this scale, the gain
+diminishes toward the unconditional rate as coverage decreases, and it
+should be read as a trade-off rather than a restored guarantee.
+
+The choice of trust channel matters. On CUB, raw reader confidence
+selects reasons with lower support than random selection at matched
+coverage ($0.030$ versus $0.123$). On CelebA and BDD-OIA, where the
+readers are well calibrated, raw confidence performs on par with the
+calibrated channel, so the disagreement between the two channels
+itself serves as a diagnostic of miscalibration. Calibrated
+per-instance confidence also remains informative where
+population-level information does not. At $K=200$, $95\%$ of the
+literals in reasons have marginal support strictly between zero and
+one, so an oracle filter based on marginal support has no signal,
+whereas the calibrated channel continues to separate supported from
+unsupported reasons. Finally, a stricter gate, which accepts a reason
+only if its trusted literals alone force the prediction, selects
+exactly the same instances as the ranking gate at every threshold and
+class count. The gate's limitations therefore stem from the ranking it
+induces rather than from the acceptance rule.
 
 \begin{table}[t]
   \centering\small
-  \caption{Interventions that do not move premise support (CUB,
-  Setting~T).}
+  \setlength{\tabcolsep}{4pt}
+  \caption{\textbf{Interventions that do not change premise support}
+  (CUB, Setting~T, $K=4$).}
   \label{tab:nulls}
-  \begin{tabular}{@{}lll@{}}
+  \begin{tabular}{@{}ll@{}}
     \toprule
-    Intervention & Effect on support & Source \\
+    Intervention & Effect \\
     \midrule
-    Oracle concept/reader selection & gain $0$ (best of 200 readers, $5/200$) & \texttt{cbm\_cem\_audit.json} \\
-    Stronger reader (MLP) & acc $0.602{\to}0.678$, support $0.254{\to}0.246$ & \texttt{cbm\_cem\_audit\_reader\_mlp.json} \\
-    Certified-only retraining & unchanged & \texttt{certified\_only\_cub.json} \\
-    Uncertainty-aware reasons & identical ($722/722$) & \texttt{x2\_uncertainty\_reasons.json} \\
-    Discrete reliability channel & no separation, any bed & \texttt{abstention\_curves.json} \\
+    Oracle concept / reader selection & no gain (best of 200 candidates) \\
+    Stronger reader (MLP)             & acc.\ $0.602\to0.678$; support $0.254\to0.246$ \\
+    Retraining on certified instances & unchanged \\
+    Uncertainty-aware reasons         & identical on $722/722$ instances \\
+    Discrete reliability channel      & no separation on any dataset \\
     \bottomrule
   \end{tabular}
 \end{table}
 
-These nulls are pre-registered as such, and they are the reason this
-is a measured-limit paper rather than a method paper: the levers one
-would reach for---better selection, better readers, cleaner training
-data, smarter reason queries---leave premise support exactly where it
-was. The only lever that moves it is abstention, at its coverage
-price.
+Abstention is the only intervention we found that changes premise
+support. \cref{tab:nulls} lists the alternatives we pre-registered:
+oracle selection of concepts or readers, stronger readers, retraining
+on certified instances, uncertainty-aware reasons and discrete
+reliability estimates. None of them alters premise support on CUB.
+Most notably, a stronger reader improves accuracy by more than seven
+points while leaving support unchanged. This set of null results is
+the principal reason we present the paper as a measured limit rather
+than as a method.
 
-\subsection{Ablations: the inversion is not a design artifact}
+\subsection{Ablations}
 \label{sec:ablations}
-Ablations here do a different job from the usual one: they show the
-inversion is not an artifact of a choice we made. Predictions were
-fixed before the runs (App.~\ref{app:prereg}). \emph{Depth, not just
-scale} (Tab.~\ref{tab:ablate}, rows 1--2): varying tree depth at fixed
-class count moves mean reason length $2.0\to6.0$ at ten classes and
-support $0.115\to0.358$---a three-fold gain by knob-turn alone,
-tracking the independence null at every depth (ratios $1.03$--$1.51$;
-the pre-registered threshold was a three-fold rise, and it is met at
-$3.1\times$). The mechanism is interventional, not observational. At
-four classes support is \emph{flat} across depth ($0.254$ exactly, at
-every depth): the yellow-bill literal rides every tree, corroborating
-concentration. At two hundred classes depth spans support
-$0.67\to0.03$---but the shallow tree classifies at chance: the reason
-you can fully trust is the reason of a head that cannot solve the
-task. \emph{Aggregator} (row 3): ranking reasons by the minimum,
-product, or mean of per-literal calibrated trust, min is weakly the
-best at ten classes (support $0.667$ vs.\ $0.583$ for product at $5\%$
-coverage; lower-bound repair ratio $4.7$ vs.\ $4.5$; mean worst at
-$3.4$)---the failure mode is a single bad literal, and min is the
-aggregator built for it. Backbone need not be ablated with new
-compute: the inversion replicates across three different feature
-stacks already (ours on CUB, ours on CelebA, rsbench's on BDD-OIA).
-Remaining ablations (predicted localisation, reader threshold,
-vocabulary size, pooling) are supplement-tier; the localisation one is
-the only claim-relevant unknown and is stated as such in
-\S5.
 
 \begin{table}[t]
   \centering\small
-  \caption{\textbf{Design ablations} (pre-registered predictions in
-  App.~\ref{app:prereg}; Setting~T, same readers throughout). Row 2
-  holds $K$ fixed and turns depth; the $K{=}200$ cells use a
-  deterministic sid-order subsample, so levels are not comparable to
-  Tab.~\ref{tab:scale}---the within-column trend is the measurement.}
+  \caption{\textbf{Ablations on CUB} ($K=20$, Setting~T). The first
+  row is the committed default audit; depth rows vary tree depth with
+  readers, seed and scoring held fixed (pre-registered P-D1--P-D3,
+  supp.\ \cref{app:prereg}).}
   \label{tab:ablate}
-  \begin{tabular}{@{}llrrr@{}}
+  \begin{tabular}{@{}llccc@{}}
     \toprule
-    knob & setting & $|R|$ & support & note \\
+    Component & Variant & Acc. & Support & $|\Rset|$ \\
     \midrule
-    depth $=2$ & $K{=}10$ & 2.00 & 0.358 & ratio 1.03 \\
-    depth $=12$ & $K{=}10$ & 6.00 & 0.115 & ratio 1.51 \\
-    depth $=2$ & $K{=}200$ & 2.00 & 0.672 & acc $0.00$ \\
-    depth $=12$ & $K{=}200$ & 10.4 & 0.038 & acc $0.16$ \\
-    \midrule
-    agg $=$ min & $K{=}10$, $5\%$ cov & --- & 0.667 & LB ratio $4.7$ \\
-    agg $=$ product & $K{=}10$, $5\%$ cov & --- & 0.583 & LB ratio $4.5$ \\
-    agg $=$ mean & $K{=}10$, $14\%$ cov & --- & 0.529 & LB ratio $3.4$ \\
+    ---           & default (oracle box, DINOv2) & 0.416 & 0.070 & 7.1 \\
+    Reason length & tree depth $\le 2$ & 0.184 & 0.528 & 2.0 \\
+                  & tree depth $\le 4$ & 0.295 & 0.307 & 3.9 \\
+                  & tree depth $\le 6$ & 0.390 & 0.109 & 5.6 \\
+                  & min.-cardinality reasons & \multicolumn{3}{l}{not run (engine defect, supp.~\cref{app:pyxai})} \\
+    Localisation  & predicted box & \multicolumn{3}{l}{not run --- flagged, not claimed (\S\ref{sec:pipeline}, \S5)} \\
     \bottomrule
   \end{tabular}
 \end{table}
 
-\subsection{The beds fail on opposite sides}
-\label{sec:beds}
-CUB is vocabulary-limited and BDD-OIA is perception-limited, so the
-same audit points repair at different stages. Certificate-level
-escapes replicate on BDD-OIA (oracle subset-selection gain $0.0003$;
-uncertainty-aware reasons set-identical on $98.3\%$; the
-fixed-threshold trusted query keeps fully-true sets in $0.090$ of
-covered instances, inside CUB's $0.067$--$0.10$ band), while every
-training-side null reverses: stronger readers lift support
-$0.534\to0.628$; retraining with the vocabulary restricted to
-certified concepts lifts pooled support to $0.786$ (with a reshaped
-certificate population, stated in the text); and the ground-truth-bits
-tree does \emph{not} collapse ($0.987/0.986$ on
-\textsc{forward}/\textsc{stop} vs.\ CUB's $0.254$ majority collapse),
-with a ceiling near $0.95$. Premise errors sit \emph{at} the
-independence prediction there ($1.003$ [$1.00,1.01$] vs.\ $1.52\times$
-on CUB), and as a positive control, i.i.d.\ annotation noise moves
-measured support exactly as the corresponding noise model predicts
-(agreement within $0.002$ at every noise level): the metric responds
-to annotation noise and to nothing else we injected. A third bed, SUN,
-appears in the appendix only (carved, non-official split): premise
-support $0.833/0.704$ at four/ten categories against the mildest gap
-of any bed, consistent with its being the strongest-reader bed.
+\cref{tab:ablate} examines whether our findings depend on design
+choices, under predictions fixed before the runs (supp.\
+\cref{app:prereg}). Shortening reasons at fixed $K$ is the decisive
+knob: limiting tree depth to $2$ at $K=20$ raises premise support from
+$0.070$ to $0.528$---within one percent of the $0.522$ the
+independence baseline predicts for reasons of that length---at the
+price of halving accuracy. This turns the compounding account of
+\cref{sec:exp-scale} from an observational into an interventional
+claim. Predicted localisation is the one ablation we flag rather than
+claim: it is untested here and stated as such (\S\ref{sec:pipeline});
+with a learned detector the reported rates can only decrease is an
+assumption we do not make. Backbone swaps likewise remain untested on
+CUB, but the inversion already replicates across three different
+feature stacks (ours on CUB and CelebA, rsbench's on BDD-OIA).
+Minimum-cardinality reasons are deferred by an isolated engine defect
+(supp.\ \cref{app:pyxai}); the depth knob delivers the same
+interventional claim.
 ```
-
-## §5 Limitations, §6 Conclusion
-
-```latex
-\section{Limitations}
-The audit requires per-image concept ground truth, which is scarce; our
-replications span faces and driving actions, and the method transfers
-wherever such annotations exist, but the measured rates are properties of
-these beds. The main audit uses oracle part localisation; region readers
-under predicted boxes can only lower premise support. Replications are
-single-seed with a single tree depth. The abstention trade-off survives
-into the intermediate class counts and thins at the full benchmark,
-where its margin holds at some operating points and not others; we do
-not claim a repair there---only a measurement and a gate.
-
-\section{Conclusion}
-A formal sufficiency certificate is a statement about the symbolic
-model; what survives the trip to the image is a measurable, degrading
-quantity. We made the certificate's two unstated premises measurable,
-found premise support binding, structured, and identifiable across
-datasets, measured how fast it dies as the task grows, and showed what
-calibration-gated abstention can and cannot restore---robustly at
-intermediate scale, marginally at full scale, always paying in
-coverage. The audit is cheap---it requires one trained head, certified
-reasons, and held-out concept annotations---and we believe it should
-accompany any deployment of certified concept explanations.
-```
-
----
-
 
 ## Appendix: other explanation methods and model families (moved from §4 v2 at the 2026-11-14 restructure)
 
@@ -691,6 +669,50 @@ sequential-T (ours, audit) & 0.721 & 0.370 & 0.849 & 0.534 [$0.521,0.546$] \\
 \end{table}
 ```
 
+```
+
+
+## Appendix stubs: app:unresolved, app:beds, tab:replication (added 2026-11-14 night)
+
+```latex
+\section{Unresolved-literal sensitivity}
+\label{app:unresolved}
+Under the convention of \cref{eq:support}, concepts on invisible parts
+count as absent: their negated literals are supported and their
+asserted literals refuted. Under the stricter rule---score only
+reasons whose every literal sits on a visible part---all $30$ passing
+four-class reasons still pass, so the concentration finding does not
+depend on the convention. The unresolved fraction reaches one half of
+literals at the larger class counts; the strict variant at $K\ge10$
+is left to future runs.
+
+\section{BDD-OIA per-action detail}
+\label{app:beds}
+Per-action head accuracies on BDD-OIA (rsbench splits, seed 42):
+\textsc{forward} deployed tree $0.716$, direct feature probe $0.753$,
+ground-truth-bits teacher $0.986$; \textsc{stop} $0.747/0.755/0.996$;
+\textsc{left} $0.730/0.746/0.913$; \textsc{right}
+$0.685/0.731/0.979$. The training-side reversals quoted in
+\cref{sec:ceiling} (stronger readers $0.534\to0.628$;
+certified-vocabulary retraining $\to0.786$ with a reshaped certificate
+population) and the certificate-level escape replications (oracle gain
+$0.0003$; uncertainty-aware $\equiv$ ordinary on $98.3\%$) are from
+the same committed artifact (\texttt{bdd\_oia\_experiments.json}).
+
+\begin{table}[h]
+\centering\small
+\caption{\textbf{Replication summary} (same readers, heads,
+extraction and scoring as CUB; single seed).}
+\label{tab:replication}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+dataset & $n$ (reasons) & accuracy & premise support \\
+\midrule
+CelebA  & 6{,}654 & 0.879 & 0.693 [0.682, 0.704] \\
+BDD-OIA & 6{,}433 & 0.69--0.75 & 0.534 [0.522, 0.546] \\
+\bottomrule
+\end{tabular}
+\end{table}
 ```
 
 ## Provenance per table/claim (body-only numbers)
@@ -889,3 +911,15 @@ Method figure rendered (`scripts/plot_fig_pipeline.py` → `results/figures/fig_
 **Depth sweep (C1)** `scripts/ablation_depth_support.py` → `results/ablation_depth_support.json`: |R| and support at depths {2,4,6,8,12,16} × K ∈ {4,10,200}. Verdicts vs the pre-registered P-D1..P-D3: **P-D1 ✓** (|R| monotone in depth, saturating), **P-D2 ✓** (ratio to independence null in [1.00, 1.56] at every cell, inside the pre-registered [0.7, 1.7]), **P-D3 ✓ exactly at the bar** (K=10: 0.358/0.115 = 3.1× ≥ 3×). Two unanticipated findings recorded: (i) K=4 support is EXACTLY flat at 0.254 across all depths — the yellow-bill literal rides every tree (concentration corroboration); (ii) K=200 depth-2 gives support 0.672 at accuracy 0.000 — the trustable reasons come from a head that cannot classify; §4.10 states the trade. CAVEAT recorded in table caption: K=200 ablation cells use first-600-by-sid (class-skewed), so LEVELS are not comparable to tab:scale's 0.017 (committed audit subsample differs); the within-column trend is the measurement. K=4/10 cells match committed levels exactly (0.254, 0.115).
 **Aggregator (D1)** `scripts/ablation_aggregator.py` → `results/ablation_aggregator.json`: vs P-A1 — outcome ✓ (min weakly best at K=10: 0.667 vs product 0.583 at 5% cov; LB ratio 4.7 vs 4.5; mean worst 3.4), rank-correlation sub-prediction ✗ (Spearman min/product 0.81/0.62 < 0.9 — falsified honestly; literal trusts are less skewed than predicted). K=200 aggregator unmeasured (task3 dump covers K ∈ {4,10}) — stated.
 **Not run + rationale:** backbone (A2) — covered by the three replication feature stacks (one sentence in §4.10); predicted localisation (A1) — the only claim-relevant unknown ("can only lower" is an assumption); assigned next, else §5 softens to "untested"; reader threshold / pooling / vocabulary size — supplement tier. New subsection §4.10 "Ablations" + tab:ablate added (10 subsections now — merge with sec:nulls at .tex assembly if space demands).
+
+---
+
+## Changelog 2026-11-14 (latest) — §3 v5 + §4 v4: user's CVPR rewrites adopted, ALL TODOs/\todo filled; DINOv3→DINOv2 CORRECTED
+
+**Factual correction:** the committed pipeline's backbone is **DINOv2 ViT-S/14** (`dinov2_vits14`, 384-dim — `perception/backbone.py`, configs), not DINOv3 as earlier drafts claimed. Fixed in §3.1 (cite `dinov2`), fig_pipeline + fig1_v2 strips (re-rendered, re-committed). This also reframes the advisor's backbone ablation: DINOv2 IS the default; CLIP/supervised remain untested (one sentence in §4.7: three feature stacks already covered by the replications).
+
+**§3 v5** = user's rewrite ("Auditing certified concept reasons", levels-of-guarantee table `tab:levels`, protocol moved to §4.1) with every TODO filled: (i) support-vs-accuracy = one definitional sentence + the ≤15-word rationale ("a reader expects an explanation to be at least as reliable as the prediction it explains"); (ii) independence NULL renamed **independence baseline**, three-case reading cut to one sentence (ratio > 1 = failures share literals — predictable compounding with repair targets), CUB-vs-BDD finding stays in §4; (iii) vocabulary ceiling = one sentence + pointer to tab:ceiling; (iv) gate channels as a run-in list, "honest-deployment arm" jargon dropped, repair criterion moved to §4.1 with a one-line pointer; (v) oracle-localisation sentence now says the decrease claim is an ASSUMPTION we flag rather than claim. Label aliases kept (sec:ladder→sec:guarantees; tab:family→tab:families).
+
+**§4 v4** = user's experiments rewrite, all \todo filled: tab:ceiling CUB (K=4) complete; BDD column filled from committed `bdd_oia_experiments.json` stage6_ladder (predicted bits 0.72 / features 0.75 / GT bits 0.99 forward-action; continuous rung honestly "---"); **tab:ablate completed with a NEW RUN**: depth sweep at K=20 (`ablation_depth_K20.json`; script now takes K from argv) — depth ≤2: acc 0.184, support **0.528** (baseline predicts 0.522 — within 1%), |R| 2.0; ≤4: 0.295/0.307/3.9; ≤6: 0.390/0.109/5.6; the "raises support to \todo vs \todo predicted" sentence is filled with 0.528 vs 0.522; predicted-box and min-cardinality rows filled honestly as NOT RUN (flagged/deferred, engine defect noted); backbone rows removed (sentence instead). fig:scale/fig:abstain environments restored. New supp stubs: `app:unresolved` (strict rule: 30/30 at K=4; K≥10 future), `app:beds` (BDD per-action ladder + reversals), `tab:replication`. `sec:audit` label preserved on the concentration paragraph (intro ref). cleveref now required (\cref) — preamble note.
+
+**Flags:** (21) fig:failures (concentration heat-strip) still to build — §4.3 references it; (22) cleveref in preamble; (23) DINOv2 correction — sweep ALL drafts for stray "DINOv3" at assembly (intro/§2 clean; checked).

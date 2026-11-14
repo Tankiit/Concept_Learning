@@ -33,9 +33,11 @@ from run_cbm_cem_audit import FastBinaryTree  # noqa: E402
 
 CACHE = "/Users/tanmoy/research/data/grounded_vision_runs/cub_local_et"
 DATA = "/Users/tanmoy/research/data/CUB_200_2011/CUB_200_2011"
-OUT = os.path.join(REPO, "results", "ablation_depth_support.json")
 DEPTHS = [2, 4, 6, 8, 12, 16]
-KS = [4, 10, 200]
+# Ks come from argv (default: the pre-registered 4,10,200); output file is
+# named after them so reruns at other K never collide (new-files rule).
+KS = [int(a) for a in (sys.argv[1:] or ["4", "10", "200"])]
+OUT = os.path.join(REPO, "results", "ablation_depth_K" + "_".join(map(str, KS)) + ".json")
 
 
 def main():

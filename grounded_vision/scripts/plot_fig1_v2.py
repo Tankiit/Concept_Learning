@@ -3,7 +3,7 @@
 
 Strip  : the five stages of the audit, split by WHERE THE PROOF STOPS —
          a vertical dashed rule on the arrow between phi(x) and the tree.
-         Left (measured): image, DINOv3 patches, readers — learned from
+         Left (measured): image, DINOv2 patches, readers — learned from
          the image, the only stages a reviewer can break by changing it.
          Right (exact): tree routing, reason extraction + verification —
          unaffected by a wrong premise. phi(x) carries sid 44's five
@@ -42,7 +42,7 @@ SCALING = [
 # (label, sublabel, side); boundary drawn on the arrow after phi(x)
 STAGES = [
     ("image", "CUB, oracle part boxes", "measured"),
-    ("DINOv3 patches", "frozen", "measured"),
+    ("DINOv2 patches", "frozen", "measured"),
     ("predicates $\\phi(x)$", "$F{=}36$ part-bound literals\nlogistic readers", "measured"),
     ("decision tree", "CART $d{=}12$, predicted bits\nSetting T / distilled D", "exact"),
     ("sufficient reason $R$", "$R \\vDash c$, minimal\nengine cross-check", "exact"),

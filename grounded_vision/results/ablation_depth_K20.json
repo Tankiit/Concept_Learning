@@ -1,0 +1,89 @@
+{
+ "prereg": "P-D1..P-D3 (CVPR2027_PREREG_TASK_RUNS.md, fixed before run)",
+ "cells": [
+  {
+   "K": 20,
+   "depth": 2,
+   "n": 515,
+   "acc": 0.1845,
+   "mean_len_R": 2.0,
+   "support": 0.5282,
+   "null": 0.5225,
+   "ratio": 1.011,
+   "ratio_boot_pct": [
+    0.999,
+    1.024
+   ]
+  },
+  {
+   "K": 20,
+   "depth": 4,
+   "n": 515,
+   "acc": 0.2951,
+   "mean_len_R": 3.86,
+   "support": 0.3068,
+   "null": 0.2922,
+   "ratio": 1.05,
+   "ratio_boot_pct": [
+    0.992,
+    1.111
+   ]
+  },
+  {
+   "K": 20,
+   "depth": 6,
+   "n": 515,
+   "acc": 0.3903,
+   "mean_len_R": 5.61,
+   "support": 0.1087,
+   "null": 0.0926,
+   "ratio": 1.175,
+   "ratio_boot_pct": [
+    0.977,
+    1.386
+   ]
+  },
+  {
+   "K": 20,
+   "depth": 8,
+   "n": 515,
+   "acc": 0.4039,
+   "mean_len_R": 6.81,
+   "support": 0.0699,
+   "null": 0.0635,
+   "ratio": 1.101,
+   "ratio_boot_pct": [
+    0.841,
+    1.37
+   ]
+  },
+  {
+   "K": 20,
+   "depth": 12,
+   "n": 515,
+   "acc": 0.3961,
+   "mean_len_R": 7.22,
+   "support": 0.0699,
+   "null": 0.0594,
+   "ratio": 1.177,
+   "ratio_boot_pct": [
+    0.901,
+    1.474
+   ]
+  },
+  {
+   "K": 20,
+   "depth": 16,
+   "n": 515,
+   "acc": 0.4058,
+   "mean_len_R": 7.24,
+   "support": 0.068,
+   "null": 0.0621,
+   "ratio": 1.095,
+   "ratio_boot_pct": [
+    0.823,
+    1.371
+   ]
+  }
+ ]
+}
