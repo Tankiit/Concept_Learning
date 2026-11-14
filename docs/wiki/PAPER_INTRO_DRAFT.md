@@ -4,38 +4,55 @@
 
 ---
 
-## LaTeX source
+## LaTeX source (v5, 2026-11-14: teaser figure + filled sec_intro skeleton; every TODO decided)
 
 ```latex
-% NOTE 2026-11-12: citation keys are PLACEHOLDERS (related-work pass
-% scheduled Nov 15). Planned anchors: CBMs koh2020concept; post-hoc
-% concept explanations yuksekgonul2023posthoc; CEM zarlenga2022cem;
-% abductive explanations ignatiev2019abduction; PyXAI pyxai;
-% concept-level formal / partial-input explanations teso, soria, huang
-% (these occupy the novelty ground -- do NOT claim first formal concept
-% explanations); reasoning shortcuts marconato2024 (comparison lives in
-% the audit section, not here).
-% RESOLVED 2026-11-12: canizales = Canizales, Gopinath, Pasareanu, Mangal,
-% "Concept-Based Abductive and Contrastive Explanations for Behaviors of
-% Vision Models", arXiv:2605.06640 -- the CSU-TrustLab/behavior-explainer
-% repo. Their machinery is already ported (grounded_vision/bankexp/) and
-% run on our K=4 setup; see bankexp/results/comparison_banks_K4.md and the
-% keep-list rung 10 (graded bank metrics).
+% Figure 1: current committed render = results/figures/fig1_v2.pdf
+% (matplotlib). The drawio strip (fig1_strip.pdf) can replace it at
+% camera-ready; both labels are attached so no ref dangles.
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\textwidth]{fig1_v2.pdf}
+  \caption{\textbf{A certified concept explanation, and what it rests
+  on.} An image is encoded by a frozen backbone (\emph{perception}),
+  read into part-bound concept bits $\phi(x)$ (\emph{concept layer}),
+  classified by a decision tree over those bits alone
+  (\emph{reasoning}), and explained by a minimal sufficient reason $R$
+  that is verified exactly (\emph{explanation}). The verification
+  covers the last two stages only---the dashed rule marks where the
+  proof stops: $R$ entails the tree's prediction for every bit vector
+  satisfying it, but whether each cited bit is true of the image is
+  decided by the first two. On CUB image \#44 the prediction is
+  correct and $R$ is verified, yet three of its five premises are false
+  against the part annotations, and one surviving premise cites a part
+  that is not visible (negated literals on unobserved parts are counted
+  supported; \S\ref{sec:measures}). This is the typical case (typical
+  by a deterministic rule, not selection: among the failing four-class
+  reasons citing the yellow-bill literal---which is all eighty-eight of
+  them---we show the median-length reason, middle image id): a
+  quarter of certified reasons have fully true premises at four classes
+  and one in fifty-nine at two hundred---always below the accuracy of
+  the prediction they certify (\S\ref{sec:exp-scale}).}
+  \label{fig:teaser}
+  \label{fig:gap}
+\end{figure*}
+
 \section{Introduction}
 \label{sec:intro}
 
 Concept-based neural networks promise predictions that can be justified in
 a human-readable vocabulary: \emph{this bird is an American Pipit because
 its bill is not yellow and its bill shape is not curved}
-\cite{koh2020concept,yuksekgonul2023posthoc,zarlenga2022cem}. Formal
+\cite{koh2020concept,zarlenga2022concept}. Formal
 explanation methods make that promise a guarantee: an \emph{abductive}
 (sufficient-reason) certificate is a minimal set of concept literals that
 provably entails the prediction of a Boolean concept model---remove any
 literal and the entailment breaks
-\cite{ignatiev2019abduction,pyxai,teso,canizales,soria,huang}. The
-certificate is exact, cheap to compute, and free of extraction heuristics,
+\cite{ignatiev2018abductionbased,audemard2024pyxai,teso2026when,canizales2026conceptbased,soria2026formal,paul2024formal}.
+The certificate is exact, cheap to compute, and free of extraction heuristics,
 which is precisely why it is attractive as the interface between a neural
-model and the person relying on its explanation.
+model and the person relying on its explanation. The pipit sentence above is
+a reason that survives; Figure~\ref{fig:teaser} shows one that does not.
 
 The guarantee, however, is a statement about the symbolic model---not about
 the image, and not about the network it summarises. It rests on two
@@ -44,10 +61,10 @@ premises that the proof does not establish: that the cited literals are
 neural model} being explained. Both premises can fail while the certificate
 remains perfectly exact, and the certificate silently inherits the failure:
 nothing in the verified object signals which premise has broken. It is
-sufficient for the tree, not for the bird. The natural question is
-therefore a survival question: which of the certificate's implicit
-claims hold by construction, which hold only with a probability we can
-measure, how quickly the measured ones die as the task grows, and
+sufficient for the tree, not for the bird. The question this paper asks of
+every certified reason is therefore a survival question: which of its
+implicit claims hold by construction, which hold only with a probability we
+can measure, how quickly the measured ones die as the task grows, and
 whether anything restores them.
 
 We make this \emph{premise gap} measurable. On CUB fine-grained recognition
@@ -55,67 +72,44 @@ with oracle part localisation, we read a fixed concept vocabulary with
 trained concept readers, attach a Boolean head in two ways---trained
 natively on predicted concepts (Setting~T) and distilled from the neural
 teacher (Setting~D)---and certify minimal sufficient reasons with an exact
-native engine, independently re-verified, while sweeping the task from a small
+engine, independently re-verified, while sweeping the task from a small
 class subset to the full benchmark; any candidate rescue is judged against
-success criteria fixed before the runs. For every certified reason we measure
-\emph{premise support} (are all cited literals true of the image, against
-held-out part annotations) and \emph{conditional fidelity} (does the neural
-teacher issue the same prediction whenever the cited literals hold), and we
-organise the results on a \emph{claim ladder} from what is proved to what
-merely transfers. We then replicate the premise-support measurement on two
-further datasets with per-image concept ground truth---CelebA face
-attributes and the BDD-OIA driving-action benchmark---keeping the ladder
-and the audit fixed while the domain, features, and task type vary.
+success criteria fixed before the runs. For every certified reason we
+measure \emph{premise support} (are all cited literals true of the image,
+against held-out part annotations) and \emph{conditional fidelity} (does
+the neural teacher issue the same prediction whenever the cited literals
+hold), and we organise the results on a \emph{survival ladder} from what is
+proved to what merely transfers. We then replicate the premise-support
+measurement on two further datasets with per-image concept ground
+truth---CelebA face attributes and the BDD-OIA driving-action
+benchmark---keeping the ladder and the audit fixed while the domain,
+features, and task type vary; a third bed (SUN) is reported in the appendix
+under a carved, non-official split.
 
-\begin{figure}[t]
-\centering
-\includegraphics[width=\linewidth]{fig1_v2.pdf}
-\caption{\textbf{We certify concept-level sufficient reasons for a
-vision classifier over part predicates and audit each cited premise
-against held-out part annotations; the proof is exact, yet its premises
-are all true of the image in $25\%$ of cases at four classes and
-$1.7\%$ at two hundred.} \emph{Top:} the pipeline, split by where the
-proof stops (dashed rule)---everything to its left (DINOv3 patches,
-part boxes, readers) is learned from the image and decides whether a
-premise is wrong; everything to its right (tree routing, extraction,
-verification) is exact and unaffected by a wrong premise. The
-$\phi(x)$ stage carries this instance's five reason bits, three of
-them false. \textbf{(a)}~A correctly classified Black-footed Albatross;
-the certified reason reads \emph{bill yellow $\wedge$ bill curved
-$\wedge$ tail black} (annotated: none hold; red dashed boxes)
-$\cdot$ \emph{right wing not black} $\checkmark$ $\cdot$ \emph{belly
-not white} $\checkmark$ (green boxes)---sufficient for the tree, not
-for the bird, and typical: most audited four-class reasons fail while
-the prediction is right. \textbf{(b)}~Prediction accuracy vs.\
-all-cited-premises-true across the class sweep (Wilson $95\%$ bands;
-$n$ at each point); the dotted line marks certificate exactness, which
-holds by construction. Artefact:
-\texttt{results/figures/fig1\_v2.pdf}.}
-\label{fig:gap}
-\end{figure}
-
-Four findings survive the full audit---across both heads, three scales,
-and three datasets.
-\textbf{Premise support is the binding constraint, and it collapses
-with scale.} The fraction of certified reasons whose literals are all true
-of the image falls steeply as classes are added, and lies below the
-predictive accuracy of the model being explained at every scale: a
-certified explanation is less likely to be fully correct than the
-prediction it certifies. The same ordering---premise support well below
-accuracy---holds on both replication datasets. Conditional fidelity is
-partial but is not the binding premise.
-\textbf{The failure is concentrated, not diffuse.} On the smallest
-class subset, a single literal---yellow bill colour---occurs in every
+Four findings remain under the full evaluation---across both heads, five
+class counts, and three datasets.
+\textbf{Premise support is the binding constraint, and it decays with
+scale.} The fraction of certified reasons whose literals are all true of
+the image falls smoothly---roughly halving at each step of the class
+sweep---and lies below the predictive accuracy of the model being
+explained at every scale: a certified explanation is less likely to be
+fully correct than the prediction it certifies. The same
+ordering---premise support well below accuracy---holds on both replication
+datasets. Conditional fidelity is partial but is not the binding premise.
+\textbf{The failure is concentrated, not diffuse.} On the audited
+four-class subset, a single literal---yellow bill colour---occurs in every
 failing reason with no support in the part annotations, while every
-passing reason cites only the \emph{absence} of concepts. The pattern
-replicates: on the driving benchmark the failing slots are positive
-traffic literals (green light, red light), on CelebA the negations of two
-face attributes---so failure targets identifiable (concept, polarity) slots
-rather than the model at large, with the polarity direction set by the
-domain rather than universal. Redrawing the smallest subset at random
-keeps failure concentrated on a single literal but changes which literal
-carries it---to safer-looking, negated clauses---so what transfers is
-the concentration itself, not the specific slot.
+passing reason cites only the \emph{absence} of concepts---and none of the
+thirty passing reasons owes its pass to the scoring rule (all would
+survive the strict variant that excludes concepts on unobserved parts).
+The concentration replicates; the slot does not: re-drawing the subset at
+random keeps failure on a single literal but moves the carrier to
+different, negated slots. Across beds the same structure appears---on the
+driving benchmark the failing slots are positive traffic literals (green
+light, red light), on CelebA the negations of two face attributes---so
+failure targets identifiable (concept, polarity) slots rather than the
+model at large, with the polarity direction set by the domain rather than
+universal.
 \textbf{The failure is identifiable, and abstention is the lever.}
 Abstaining whenever the minimum \emph{calibrated}, polarity-aware
 per-concept confidence of a reason's literals is low---the calibrator fit
@@ -123,60 +117,46 @@ on a small validation split---recovers high premise support at partial
 coverage on every dataset we test, on the main audit statistically
 indistinguishable from an oracle filter that knows each literal's true
 support, whereas discrete per-concept reliability never separates failure
-from success. Where the readers are demonstrably miscalibrated, raw
-confidence selects at or below chance and calibration is load-bearing;
-where readers are already calibrated, raw confidence tracks the calibrated
-rule---so we recommend the calibrated rule, and locate the miscalibration
-diagnosis in the settings that exhibit it. Judged against a repair bar
-fixed before the runs---clearing at least a doubling of the
-unconditional support at the stated coverage---the calibrated gate
-clears it at the intermediate class counts and only marginally at the
-full benchmark, holding at some operating points and not others. And
-when a gate fails, selection failure is distinguishable from support
-failure: the stricter gate that demands the trusted literals themselves
-force the prediction accepts exactly the same instances.
-\textbf{No selection rule we tested escapes the premise
-failure.} Oracle choice of concepts or readers gains nothing, a
-substantially stronger reader raises accuracy and leaves premise support
-unchanged, and retraining only on certified examples changes nothing;
+from success. Judged by a repair bar fixed before the runs---a doubling of
+the unconditional support, in lower bound, at the stated coverage---the
+gate clears it at the intermediate class counts and at the full benchmark
+holds at some operating points and not others; and when a gate fails,
+selection failure is distinguishable from support failure, because the
+stricter gate that demands the trusted literals themselves force the
+prediction accepts exactly the same instances. Where the readers are
+demonstrably miscalibrated, raw confidence selects at or below chance and
+calibration is load-bearing; where readers are already calibrated, raw
+confidence tracks the calibrated rule---so we recommend the calibrated
+rule, and locate the miscalibration diagnosis in the settings that exhibit
+it. \textbf{No selection rule we tested escapes the premise failure.}
+Oracle choice of concepts or readers gains nothing, a substantially
+stronger reader raises accuracy and leaves premise support unchanged, and
+retraining only on certified examples changes nothing;
 calibration-gated abstention is the only lever that moves premise support,
 and it does so at the price of coverage.
 
 In contributions form:
 \begin{itemize}
-\item \textbf{A claim ladder} separating what a certified explanation
+\item \textbf{A survival ladder} separating what a certified explanation
 proves (entailment by the symbolic model) from what must be measured to
 transfer (fidelity, premise support), so users of certified explanations
 know which guarantee they actually hold (\S\ref{sec:ladder}).
 \item \textbf{A vocabulary-ceiling diagnostic} separating an inexpressive
 concept vocabulary from a symbolic model that lacks capacity, so repair
 effort targets the right component (\S\ref{sec:ceiling}).
-\item \textbf{A premise-support audit} across two heads, three scales, and
-three datasets, showing that verified reasons agree only partially with the
-neural teacher, that their premises are rarely all true of the image and
-become rarer as classes are added, and that failures concentrate in
-identifiable (concept, polarity) slots, so repair targets those slots
-rather than the model at large (\S\ref{sec:audit}).
-\item \textbf{A calibration-gated abstention rule} under which raw concept
-confidence does not identify unreliable reasons---it is no better than
-chance---whereas per-concept, polarity-aware calibration does, recovering
-high premise support at low coverage, so deployments can tell when a
-certified reason may be trusted (\S\ref{sec:abstention}).
+\item \textbf{A premise-support audit} across two heads, five class
+counts, and three datasets, showing that verified reasons agree only
+partially with the neural teacher, that their premises are rarely all true
+of the image and become rarer as classes are added, and that failures
+concentrate in identifiable (concept, polarity) slots, so repair targets
+those slots rather than the model at large (\S\ref{sec:audit}).
+\item \textbf{A calibration-gated abstention rule} under which raw
+concept confidence does not identify unreliable reasons where readers are
+miscalibrated---there it is no better than chance---whereas per-concept,
+polarity-aware calibration does, recovering high premise support at low
+coverage on every bed we test, so deployments can tell when a certified
+reason may be trusted (\S\ref{sec:abstention}).
 \end{itemize}
-
-We are equally deliberate about what we do not claim. That the
-certification machinery is exact is a property of abductive certificates by
-construction; we verify it with an independent checker and treat it as a
-sanity check, not a finding. Our main audit is CUB with oracle localisation
-and decision-tree heads, and its CUB-specific quantities---scaling with
-class count, interventions, vocabulary ceilings---remain single-bed; the
-premise-support measurement itself is replicated across three datasets,
-two feature pipelines, and task types from binary attributes to driving
-actions. And calibration repairs trust conditionally, paying in coverage:
-we report what it can and cannot restore.
-```
-
----
 
 ## Quantity → artifact map (for the BODY — the intro draft itself is number-free, all quantities live in the body)
 

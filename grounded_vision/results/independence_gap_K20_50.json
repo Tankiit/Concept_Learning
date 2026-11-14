@@ -1,0 +1,26 @@
+{
+ "protocol": "cluster bootstrap over instances (10k), marginals re-estimated per resample; same method as independence_gap_cub.json (K=4/10/200 committed there)",
+ "source": "task1_cbcem_K20_50.json per-instance records",
+ "blocks": {
+  "K20": {
+   "n": 515,
+   "observed": 0.06990291262135923,
+   "null": 0.060867676814447,
+   "ratio": 1.1484406220144696,
+   "boot_pct": [
+    0.8713648965966252,
+    1.438690606824866
+   ]
+  },
+  "K50": {
+   "n": 600,
+   "observed": 0.035,
+   "null": 0.03443832359262775,
+   "ratio": 1.0163096326643637,
+   "boot_pct": [
+    0.6440608324351345,
+    1.4042493198647248
+   ]
+  }
+ }
+}
