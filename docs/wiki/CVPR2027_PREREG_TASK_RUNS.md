@@ -96,3 +96,19 @@ Setting T, calibrated polarity-aware p_true (val-fit only), greedy-irreducible m
 | 10 | 0.9 | 8/243 = 0.033 | 6/8 = 0.750 | 0.750 | 0.033 | 0.750 |
 
 Against the committed `guarantee_scaling` trusted-only at K=4, δ=0.7–0.9: same coverage (0.254, n=30) but P(kept true|covered) = 0.067–0.133 there vs **1.000 here**. Pre-registered expectation outcomes: **E1 rejected** (cov_forcing ≡ cov_ranking at every δ, both K — the forcing event adds nothing beyond the ranking event); **E2 rejected** (support-on-kept is 1.000 at K=4, 0.57–0.75 at K=10 — nowhere near 0.07–0.10); **E3 exact-equality** (support_minimal ≡ support_kept in every cell — reasons are already near-irreducible). The pre-registered alternative branch therefore fires: **the 0.07–0.10 in `guarantee_scaling` is the selection/coverage event (raw-confidence trusted literals), not support given the calibrated selection.** The K=4 curve is a step function (identical at every δ): the only coverable instances are the 30 all-correct pipit reasons.
+
+---
+
+## Pre-registration addendum 2026-11-14 (evening) — ablation predictions, written BEFORE the ablation runs
+
+Scope: the mechanism claim in §4.3 ("per-literal compounding over reasons that lengthen with K") is currently observational across K. Two ablations make it interventional; predictions fixed here before execution:
+
+**Depth sweep (C1)** — vary tree max_depth ∈ {2,4,6,8,12,16} at fixed K ∈ {4,10,200}, same readers/seed/protocol (task3-style), recording |R|, support, and the independence null per cell:
+- **P-D1:** mean |R| is monotone non-decreasing in max_depth at every K.
+- **P-D2:** support tracks the independence null at every (K, depth): ratio support/null inside [0.7, 1.7] everywhere (two-sided — far ABOVE null falsifies compounding; far BELOW falsifies the null as the right null).
+- **P-D3 (the directional one):** at K=10, support at the shallowest depth (|R| ≈ 2–3) is at least three times support at depth 12. **Falsifier:** if support stays flat as |R| falls at fixed K, compounding is not operative and §4.3 reverts to an observational statement.
+
+**Aggregator (D1)** — rank reasons by min vs. product vs. mean of per-literal calibrated p_true (from the committed task3_forcing_sweep.json; K ∈ {4,10}), support at coverage {5,10,14,20,30}% with cluster-bootstrap LB ratio:
+- **P-A1:** min ≈ product at both K (Spearman ≥ 0.9; support@14% CIs overlap) — because the product is dominated by its weakest factor when literal trusts are skewed; **mean is worse or equal** (dilutes a single bad literal). Falsifier: product ≫ min at K ≤ 10 would sink the min-gate design choice; product ≫ min is EXPECTED to matter only at K=200 (unmeasurable from this dump — task3 covered K ∈ {4,10}).
+
+**Deferred with reason:** minimum-cardinality reasons (C2) — PyXAI's minimal_sufficient_reason deadlocks on arm64 macOS (engine bug ii-b, app:pyxai); a native greedy cardinality search is the fallback if time permits. Predicted direction if run: same as P-D3 (fewer literals → higher support, tracking the null).
