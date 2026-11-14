@@ -67,6 +67,26 @@ further datasets with per-image concept ground truth---CelebA face
 attributes and the BDD-OIA driving-action benchmark---keeping the ladder
 and the audit fixed while the domain, features, and task type vary.
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{fig1_gap.pdf}
+\caption{\textbf{A sufficient-reason certificate is exact, yet its
+premises are all true of the image in $25\%$ of cases at four classes
+and $1.7\%$ at two hundred---always below the accuracy of the
+prediction it certifies.} \textbf{(a)}~A correctly classified
+Black-footed Albatross; the certified reason reads \emph{bill yellow
+$\wedge$ bill curved $\wedge$ tail black} (annotated: none hold; red
+dashed boxes) $\cdot$ \emph{right wing not black} $\checkmark$
+$\cdot$ \emph{belly not white} $\checkmark$ (green boxes)---sufficient
+for the tree, not for the bird, and typical: most audited four-class
+reasons fail while the prediction is right. \textbf{(b)}~Prediction
+accuracy vs.\ all-cited-premises-true across the class sweep (Wilson
+$95\%$ bands; $n$ at each point); the dotted line marks certificate
+exactness, which holds by construction. Artefact:
+\texttt{results/figures/fig1\_gap.pdf}.}
+\label{fig:gap}
+\end{figure}
+
 Four findings survive the full audit---across both heads, three scales,
 and three datasets.
 \textbf{Premise support is the binding constraint, and it collapses
@@ -211,3 +231,9 @@ Intro now carries **zero numerals in rendered text**, matching the abstract's co
 ## Changelog 2026-11-14 — v4: survival voice (user steer: "I don't want an audit paper — I want to know what survives"), grounded in the three executed runs
 
 Still fully number-free (digits only in LaTeX comments / bib keys; number words as in v3). Changes: ¶2 closer reframed as the survival question (which claims hold by construction / with measurable probability / how fast the measured ones die / what restores them) — matches §3 v3's roadmap. Setup ¶ gains the pre-registration clause ("any candidate rescue is judged against success criteria fixed before the runs"). Finding 2 gains the executed re-draws sentence (concentration recurs, carrier slot does not — number-free). Finding 3 gains the repair-bar sentence (clears at intermediate class counts, marginal at the full benchmark, some operating points only) and the selection-vs-support distinction (forcing accepts exactly the ranking gate's instances) — both grounded in `task1_*` / `task3_forcing_sweep.json`. Findings 1 and 4, the contribution bullets (still mirroring the locked §9 abstract verbatim), and the scope paragraph unchanged. Flags 1–2 RESOLVED with artifacts; artifact map gains three rows. NOTE: bullets say "claim ladder" (abstract's words); §3.3 is titled "survival ladder" for the same object — unify at .tex assembly (either retitle §3.3 or edit the abstract if the portal allows).
+
+---
+
+## Changelog 2026-11-14 (later) — Figure 1 added (fig:gap), figure pixels de-cluttered
+
+User requests: remove on-image labels → remove titles → figure kept clean; the certified content moves into the CAPTION. The intro now carries the `figure` environment after the setup paragraph: caption sentence 1 = the gap in numbers (25% → 1.7%, always below accuracy), (a) = the sid-44 albatross example WITH the certified line verbatim ("bill yellow ∧ bill curved ∧ tail black (annotated: none hold) · right wing not black ✓ · belly not white ✓ — sufficient for the tree, not for the bird, and typical"), (b) = proved-vs-survives curve with Wilson bands. NOTE: the intro PROSE stays number-free (user rule); the caption is body matter and carries numbers by design (same split as abstract-vs-body). fig1_gap.pdf regenerated without on-image labels, titles, and footnote (script `scripts/plot_fig1_gap.py`; artifact committed). \ref{fig:gap} not yet cited in prose — add "Figure~\ref{fig:gap}" at the finding-1 sentence at .tex assembly (kept out of the intro prose now to preserve the number-free pass).

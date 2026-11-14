@@ -120,11 +120,7 @@ def main():
     ax.set_ylim(0, 1.12)
     ax.legend(frameon=False, fontsize=6.8, loc="center right")
 
-    foot = ("certified: bill yellow \u2227 bill curved \u2227 tail black "
-            "(annotated: none hold) \u00b7 right wing not black \u2713 \u00b7 "
-            "belly not white \u2713  \u2014  sufficient for the tree, not for the bird")
-    fig.text(0.02, 0.012, foot, fontsize=6.2, color="#333")
-    fig.tight_layout(rect=(0, 0.05, 1, 1))
+    fig.tight_layout()
     os.makedirs(os.path.dirname(args.out), exist_ok=True)
     for ext in ("png", "pdf"):
         fig.savefig(f"{args.out}.{ext}", dpi=220)
