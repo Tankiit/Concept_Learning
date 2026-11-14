@@ -86,9 +86,8 @@ def main():
     img = plt.imread(os.path.join(DATA, "images", id2path[str(sid)]))
     H, W = img.shape[:2]
 
-    fig, axes = plt.subplots(2, 2, figsize=(8.6, 5.0),
-                             gridspec_kw={"height_ratios": [1, 1.15], "wspace": 0.25,
-                                          "hspace": 0.45})
+    fig = plt.figure(figsize=(8.8, 5.2))
+    gs = fig.add_gridspec(2, 3, height_ratios=[1, 1.2], hspace=0.5, wspace=0.3)
 
     def show_crop(part, ax):
         x, y, w, h = boxes[part]
@@ -101,20 +100,18 @@ def main():
         ax.axis("off")
         return crop
 
-    beak = show_crop("beak", axes[0, 0])
-    axes[0, 0].set_title("beak crop — certified bill_colour = yellow\n"
-                         f"({yellow_pct(beak):.0f}% yellow pixels here; bed average "
-                         "over firing beaks 3%; annotated: not yellow)",
-                         fontsize=6.4, color=RED)
-    show_crop("tail", axes[0, 1])
-    axes[0, 1].set_title("tail crop — certified tail_colour = black\n"
-                         "(annotated: not black)", fontsize=6.4, color=RED)
+    ax00 = fig.add_subplot(gs[0, 0])
+    beak = show_crop("beak", ax00)
+    ax00.set_title("beak crop — certified bill_colour = yellow\n"
+                   f"({yellow_pct(beak):.0f}% yellow pixels here; bed average "
+                   "over firing beaks 3%; annotated: not yellow)",
+                   fontsize=6.4, color=RED)
+    ax01 = fig.add_subplot(gs[0, 1])
+    show_crop("tail", ax01)
+    ax01.set_title("tail crop — certified tail_colour = black\n"
+                   "(annotated: not black)", fontsize=6.4, color=RED)
 
-    # ---- cards: replication-bed top carriers -------------------------------
-    ax = axes[1, 0]
-    ax.axis("off")
-    ax.set_title("replication beds: top carrier of failing reasons",
-                 fontsize=7, color=GREY)
+    # ---- CelebA: real face selected by annotation ---------------------------
     cele = json.load(open(os.path.join(REPO, "results", "celeba_audit_smiling.json")))
     fails_c = [r for r in cele["per_instance"] if not r["all_true"]]
     cc = Counter()
@@ -122,21 +119,42 @@ def main():
         for lit, b in r["reason"]:
             cc[(lit, b)] += 1
     (lit, b), n_top = cc.most_common(1)[0]
+    cdata = "/Users/tanmoy/research/data/celeba"
+    part = [l.split() for l in open(f"{cdata}/list_eval_partition.txt").read().strip().splitlines()]
+    alines = open(f"{cdata}/list_attr_celeba.txt").read().strip().splitlines()
+    cattrs = alines[1].split()
+    hc = cattrs.index("High_Cheekbones")
+    rows = [l.split() for l in alines[2:]]
+    attrmap = {r[0]: [int(x) for x in r[1:]] for r in rows}
+    # annotation-picked (audit export kept no filenames): middle test-partition
+    # image whose annotations AFFIRM the cheekbones the carrier literal denies
+    cands = sorted(f for f, p in part if p == "2" and attrmap[f][hc] > 0)
+    cfile = cands[len(cands) // 2]
+    ax10 = fig.add_subplot(gs[1, 0])
+    ax10.imshow(plt.imread(f"{cdata}/img_align_celeba/{cfile}"))
+    ax10.axis("off")
+    ax10.set_title(f"CelebA — carrier literal denies what this face affirms\n"
+                   f"certified {lit} = {b} in {n_top / len(fails_c):.0%} of "
+                   f"{len(fails_c):,} failing reasons;\nannotations: "
+                   f"{lit} present (image selected by annotation)",
+                   fontsize=6.0, color=GREY)
+
+    # ---- BDD-OIA card (no local images) --------------------------------------
+    ax02 = fig.add_subplot(gs[0, 2])
+    ax02.axis("off")
+    ax02.set_title("BDD-OIA — top carrier", fontsize=7, color=GREY)
     bdd = json.load(open(os.path.join(REPO, "results", "bdd_oia_audit.json")))
     gl = bdd["literal_marginals"]["green_light=1"]
-    ax.add_patch(Rectangle((0.03, 0.52), 0.94, 0.40, fill=False, ec="#bbb", lw=0.8))
-    ax.add_patch(Rectangle((0.03, 0.06), 0.94, 0.40, fill=False, ec="#bbb", lw=0.8))
-    ax.text(0.5, 0.83, "CelebA", ha="center", fontsize=7.5, weight="bold", color=GREY)
-    ax.text(0.5, 0.66, f"{lit} = {b}  (negated attribute)\n"
-            f"in {n_top / len(fails_c):.0%} of {len(fails_c):,} failing reasons",
-            ha="center", fontsize=6.4, color=GREY)
-    ax.text(0.5, 0.37, "BDD-OIA", ha="center", fontsize=7.5, weight="bold", color=GREY)
-    ax.text(0.5, 0.20, "green_light = 1  (positive traffic literal)\n"
-            f"{gl['n']:,} occurrences, support {gl['support']:.1%}",
-            ha="center", fontsize=6.4, color=GREY)
+    ax02.text(0.5, 0.5, "green_light = 1\n(positive traffic literal)\n\n"
+              f"{gl['n']:,} occurrences,\nsupport {gl['support']:.1%}\n\n"
+              "(no local frames; no per-instance\nrecords committed)",
+              ha="center", va="center", fontsize=6.6, color=GREY,
+              transform=ax02.transAxes)
+    ax02.add_patch(Rectangle((0.06, 0.18), 0.88, 0.64, fill=False, ec="#bbb", lw=0.8,
+                             transform=ax02.transAxes))
 
     # ---- concentration curves ----------------------------------------------
-    ax = axes[1, 1]
+    ax = fig.add_subplot(gs[1, 1:])
     main_curve, n_fail = share_curve(pi)
     ks = np.arange(1, len(main_curve) + 1)
     ax.plot(ks, main_curve, "o-", color=RED, ms=3.5, lw=1.4,

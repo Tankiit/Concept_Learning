@@ -7,36 +7,6 @@
 ## LaTeX source (v5, 2026-11-14: teaser figure + filled sec_intro skeleton; every TODO decided)
 
 ```latex
-% Figure 1: current committed render = results/figures/fig1_v2.pdf
-% (matplotlib). The drawio strip (fig1_strip.pdf) can replace it at
-% camera-ready; both labels are attached so no ref dangles.
-\begin{figure*}[t]
-  \centering
-  \includegraphics[width=\textwidth]{fig1_v2.pdf}
-  \caption{\textbf{A certified concept explanation, and what it rests
-  on.} An image is encoded by a frozen backbone (\emph{perception}),
-  read into part-bound concept bits $\phi(x)$ (\emph{concept layer}),
-  classified by a decision tree over those bits alone
-  (\emph{reasoning}), and explained by a minimal sufficient reason $R$
-  that is verified exactly (\emph{explanation}). The verification
-  covers the last two stages only---the dashed rule marks where the
-  proof stops: $R$ entails the tree's prediction for every bit vector
-  satisfying it, but whether each cited bit is true of the image is
-  decided by the first two. On CUB image \#44 the prediction is
-  correct and $R$ is verified, yet three of its five premises are false
-  against the part annotations, and one surviving premise cites a part
-  that is not visible (negated literals on unobserved parts are counted
-  supported; \S\ref{sec:measures}). This is the typical case (typical
-  by a deterministic rule, not selection: among the failing four-class
-  reasons citing the yellow-bill literal---which is all eighty-eight of
-  them---we show the median-length reason, middle image id): a
-  quarter of certified reasons have fully true premises at four classes
-  and one in fifty-nine at two hundred---always below the accuracy of
-  the prediction they certify (\S\ref{sec:exp-scale}).}
-  \label{fig:teaser}
-  \label{fig:gap}
-\end{figure*}
-
 \section{Introduction}
 \label{sec:intro}
 
@@ -51,8 +21,7 @@ literal and the entailment breaks
 \cite{ignatiev2018abductionbased,audemard2024pyxai,teso2026when,canizales2026conceptbased,soria2026formal,paul2024formal}.
 The certificate is exact, cheap to compute, and free of extraction heuristics,
 which is precisely why it is attractive as the interface between a neural
-model and the person relying on its explanation. The pipit sentence above is
-a reason that survives; Figure~\ref{fig:teaser} shows one that does not.
+model and the person relying on its explanation.
 
 The guarantee, however, is a statement about the symbolic model---not about
 the image, and not about the network it summarises. It rests on two

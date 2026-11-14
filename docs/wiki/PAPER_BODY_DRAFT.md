@@ -68,7 +68,7 @@ property of reader calibration, not of the rule.
 \section{Auditing certified concept reasons}
 \label{sec:method}
 
-\cref{fig:gap} summarises our setup. A frozen backbone produces
+Our setup is a four-stage pipeline: a frozen backbone produces
 part-level features, linear readers turn them into binary concepts, a
 decision tree predicts the class from those concepts, and a formal
 engine extracts a sufficient reason for each prediction. The
@@ -375,8 +375,8 @@ accuracy of $0.69$--$0.75$.
   \centering
   \includegraphics[width=\linewidth]{fig_failures.pdf}
   \caption{\textbf{What failure looks like, and where it concentrates.}
-  \emph{Top:} the certified-but-false premises of Fig.~\ref{fig:gap}'s
-  example---a beak crop asserted \texttt{bill\_colour=yellow} with zero
+  \emph{Top:} the certified-but-false premises of our running
+  example (image \#44)---a beak crop asserted \texttt{bill\_colour=yellow} with zero
   yellow pixels (bed average over firing beaks: $3\%$) and a tail crop
   asserted black; both refuted by the annotations. \emph{Bottom left:}
   each replication bed's top carrier of failing reasons (CelebA: a
@@ -975,3 +975,9 @@ Method figure rendered (`scripts/plot_fig_pipeline.py` → `results/figures/fig_
 ## Changelog 2026-11-14 (final figures) — the figure set COMPLETE per the advisor plan
 
 Built tonight, all from committed JSONs, all scripts + PNG/PDF committed: **fig_failures** (`plot_fig_failures.py`: sid-44 beak/tail crops — beak measures **0% yellow pixels**, stated alongside the 3% bed average; CelebA/BDD top-carrier cards, images not local; concentration curves CUB K=4 + 5 redraws (thin) + CelebA; BDD has no per-instance records, card instead) — resolves the last unresolved §4.3 ref and kills flag 21. **fig_abstain** (`plot_fig_abstain.py`: K=20 + K=200 panels, channels B/C/A_ir, R and 2×R lines, 0.14 operating point circled; K=200 panel shows the fragility ourselves) — kills flag 16; caption updated (CUB K20+K200, not three beds — CelebA/BDD curves remain supplement-tier). **fig_scale** now log-y (halving = straight line; null markers overlap visibly). **fig_mechanism** (`plot_fig_mechanism.py`: K=20 depth, support rides the baseline; d=2 annotated with acc) wired into §4.7. **fig_slope** (SUPPLEMENT; matched-family caption resolves the 0.805-vs-collapse wrinkle: different head family, not plotted). Advisor questions answered: fig4 = mechanism (the explanation is the spine; the diagnostic is tab:ceiling); deterministic pick rule = Fig-1's rule extended per bed (median-length failing reason citing the bed's top carrier, middle id).
+
+---
+
+## Changelog 2026-11-14 (final, per user) — fig 1 + fig:pipeline DROPPED from the paper; fig_failures v2 with a real CelebA face
+
+User: "i dont need fig 1 and fig pipeline." Removed from the paper: the teaser figure environment and its two intro pointer sentences (¶1 pipit-contrast sentence deleted; intro prose intact otherwise), and §3's opening no longer references any figure ("Our setup is a four-stage pipeline..."). fig:failures caption reworded ("our running example (image #44)" instead of Fig.~\ref{fig:gap}). The artifacts (fig1_v2, fig1_gap, fig_pipeline + scripts) REMAIN COMMITTED as available-if-wanted; no text references them. fig_failures v2: CelebA panel now shows a REAL FACE — annotation-selected (middle test-partition image whose attributes AFFIRM High_Cheekbones, the state the top failing carrier literal denies), because the audit's identity-disjoint parquet export retained no idx→filename mapping (verified: Smiling-gt agreement against the archive order is chance, 3,384/6,654; custom 17,134/6,623/6,654 split). The panel title states both the carrier share (50% of 2,042 failing reasons) and the selection rule. BDD-OIA keeps its card: no frames local (bdd100k not downloaded) and no per-instance records committed — the only honest option. Layout now: [beak | tail | BDD card] / [CelebA face | concentration curves].
