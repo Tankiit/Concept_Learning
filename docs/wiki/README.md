@@ -77,3 +77,18 @@ Welcome to the **Grounded Vision** documentation wiki for certifiable, relationa
    - `clevr_relational_results.json`
    - `cub_bound_mock_benchmark_results.json`
    - `predicate_grounding_milestone.json`
+12. [**Behavior-Explainer Comparison (Canizales et al.)**](BEHAVIOR_EXPLAINER_COMPARISON.md)
+    - Code audit of CSU-TrustLab/behavior-explainer (arXiv:2605.06640): their AXp oracle IS the neural head via CLIP-erasure (fidelity by construction, exactness conditional on monotonicity 52.5–99.1%), 42–10,234 AXps/image vs our unique 2.89-literal reason
+    - Dataset verdicts (RIVAL10/EuroSAT: premise support unmeasurable) + ready related-work paragraph for the Nov 15 citation pass
+
+13. [**Second Datasets — Survey, Downloads, Three Executed Audits**](SECOND_DATASETS.md)
+    - SUN / CelebA / DeepFashion / RIVAL10 / EuroSAT: provenance ledger, verification, base rates
+    - EXECUTED rows: CelebA 0.693 (n=6,654), BDD-OIA/rsbench 0.534 (n=6,433), SUN 0.833/0.704 (K=4/10, carved split) — premise support below accuracy on every bed
+    - The reader-strength gradient (readers .71/.88/.89/.95 → gaps 35/20/19/8 pts) + three-dataset abstention verdict
+
+14. [**Paper Intro Draft (v3, number-free)**](PAPER_INTRO_DRAFT.md)
+    - LaTeX intro built from the keep list; number-free per user choice; quantity→artifact map for the body; changelogs v1→v3
+
+15. [**Paper Body Draft (v2, CVPR-style)**](PAPER_BODY_DRAFT.md)
+    - §2 related work · §3 method (formal definitions, claim ladder, eqs) · §4 experiments (CVPR-style rewrite) · §5–6 + appendix stubs (PyXAI ledger, subset, clustering, optional SUN)
+    - Per-table provenance map to committed JSONs, drop-list compliance, freeze flags, abstention figure script

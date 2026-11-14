@@ -137,3 +137,13 @@ def main(cfg):
 | Flip condition already in notes (positive literal, τ≥0.8) | **Not found; pre-regs predict the opposite** | P2 in `run_certified_literals_cub.py`; PR1 in `build_predicate_rung_table.py` |
 | Notes list Canizales / Soria / Teso / Huang | **Not in this repo** (may live in an external note store) | case-insensitive grep of all files incl. PDFs |
 | K = [4, 10, 20] supported | **True** (4/10/20 in frontier; 4–200 in scaling sweep) | `certified_literals_frontier*.json`, `guarantee_scaling_cub.json` |
+
+---
+
+## Status addendum 2026-11-14 (three days out; supersedes §6 schedule for the remaining items)
+
+**Paper drafts COMPLETE (wiki, not yet .tex):** intro v3 (number-free, `PAPER_INTRO_DRAFT.md`), body v2 (`PAPER_BODY_DRAFT.md`: §2 related work incl. the Canizales mirror-image paragraph, §3 formal method, §4 CVPR-style experiments, §5–6, appendix stubs incl. optional SUN block), abstention figure script (`scripts/plot_abstention_curves.py` + draft PNG). Abstract §9 unchanged and consistent.
+
+**Off-CUB replications EXECUTED** (keep-list addendum in `CVPR2027_CLAIM_AUDIT.md`; ledger in `SECOND_DATASETS.md`): CelebA 0.693 [0.682,0.704] n=6,654; BDD-OIA (rsbench) 0.534 [0.522,0.546] n=6,433; SUN 0.833/0.704 (K=4/10; carved split — protocol deviation, appendix placement recommended). Cross-dataset findings folded into intro v2/v3: polarity direction domain-specific; calibration-specific superiority CUB-only; discrete channel fails everywhere; reader-strength gradient.
+
+**Remaining to submission:** (1) commit replication artifacts (`results/{celeba_audit_smiling,bdd_oia_audit,sun_audit}.json` + 5 scripts + figure script) — required by the committed-JSON rule before the paper cites them; (2) `fig:pipeline` method figure; (3) Nov 15 citation pass (placeholder keys listed in both drafts; canizales resolved); (4) user decision on SUN placement (appendix recommended); (5) optional subset-draws run (upgrades the K=4 hedge); (6) assemble .tex from the wiki drafts.
