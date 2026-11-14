@@ -257,8 +257,9 @@ support, and at what cost?
 \label{sec:exp-setup}
 
 \paragraph{Datasets.}
-Our primary benchmark is CUB-200-2011~\cite{cub}, for which part
-annotations allow every premise to be checked against ground truth. We
+We fully audit CUB-200-2011~\cite{cub}: its per-image part annotations
+allow every premise of a certified reason to be checked against ground
+truth. We
 use the official splits and vary the number of classes over
 $K\in\{4,10,20,50,200\}$. To test whether our findings depend on the
 choice of classes, the four-class subset is redrawn five times (supp.\
