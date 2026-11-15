@@ -60,19 +60,22 @@ Welcome to the **Grounded Vision** documentation wiki for certifiable, relationa
    - Constructive half alive at K≤10: cross-fitted literal-reliability filter gives 70% joint support at 14% coverage (vs 12% raw) on the distilled arm; dead at K=200; reader confidence does not identify the bad literals (X2 coverage@0.05 = 0)
    - Filled title + abstract written into the submission plan §9 the same day
 
-11. [**CVPR 2027 Hand-off — The Three Runs (Assignment Brief)**](CVPR2027_HANDOFF_TASKS.md)
+11. [**Results Summary — Every Executed Number, One Page**](RESULTS_SUMMARY.md)
+   - The paper's numbers ledger (compiled 2026-11-15 from committed JSONs only): scaling/inversion table incl. K=20/50, concentration per bed, fidelity, ceiling ladder both beds, gate verdicts + replications + aggregator, nulls, BDD transfer, depth ablations, replication beds, methods/families, engine verification, prereg verdicts — each with its source artifact
+
+12. [**CVPR 2027 Hand-off — The Three Runs (Assignment Brief)**](CVPR2027_HANDOFF_TASKS.md)
    - Runner-facing assignment as written: Task 1 calibrated abstention at K=20/50 + first-ever calibrated arm at K=200 (due first — decides tradeoff vs collapse), Task 2 five random 4-class draws, Task 3 forcing sweep (explains guarantee_scaling 0.07–0.10)
    - Ground rules (new files only, per-instance dumps, val-only calibrators, n beside every percentage, send Task 1 numbers immediately) + early-finish job: reasoning-shortcuts / Teso comparison table (citations due Nov 15)
    - Links to the ready scripts (grounded_vision/scripts/tasks/), the pre-registered cliff criteria, and the division of labour: numbers to the runner, writing and trust-result reconciliation to the lead
    - **2026-11-14:** the three runs EXECUTED by the lead (local, torch-multimodal): Task 1 K=20/50 GRACEFUL (abstract unchanged per rule 1; K=200 GRACEFUL-with-rule-3-flag, bug-check clean), Task 2 SUBSET-SPECIFIC 0/5 (concentration recurs via negated high-marginal literals), Task 3 — the guarantee_scaling 0.07–0.10 is the raw-confidence selection event, not support; two committed-script bugs fixed; same-day branch `distillationAndTransforms` (RSMoon) reviewed — code only (patch rotation/whitening + tree distillation, 54 tests pass), merge flags recorded (canonical config default must stay raw)
 
-12. [**Visual Evidence Gallery**](assets/)
+13. [**Visual Evidence Gallery**](assets/)
    - [Activation Tree Grounded Evidence Tiles (train/test split)](assets/activation_traintest_examples.png)
    - [Activation Test→Train Exemplar Retrieval](assets/activation_traintest_exemplars.png)
    - [Activation Tree Grounded Evidence Tiles (historical 100-image rerun)](assets/activation_tree_grounded_examples.png)
    - [Activation Exemplar Prototype Matches (historical rerun)](assets/activation_exemplar_examples.png)
 
-13. [**Raw Result Files**](../../grounded_vision/results/)
+14. [**Raw Result Files**](../../grounded_vision/results/)
    - `activation_track_traintest_results.json` / `..._c4.json` (official split, primary)
    - `activation_tree_grounded_metrics.json`, `shap_vs_sufficient_results.json`, `grounding_selected_reasons.json` (historical in-cache protocol, fixed-pooling rerun)
    - `clevr_relational_results.json`
