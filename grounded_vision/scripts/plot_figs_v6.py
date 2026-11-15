@@ -86,7 +86,11 @@ ax.set_xticks(list(x)); ax.set_xticklabels([f"{k}\n|R|={r:.1f}" for k, r in zip(
 ax.set_xlabel("number of classes $K$"); ax.set_ylabel("probability")
 ax.text(4.1, acc[-1], "accuracy", color=INK, va="center", fontsize=7)
 ax.text(4.1, sup[-1] * 1.15, "premise\nsupport", color=INK, va="center", fontsize=7)
+strict = jload("strict_support_cub.json")["blocks"]
+sv = [strict[f"K{k}"]["strict"] for k in (4, 10, 20, 50, 200)]
+ax.plot(x, sv, ":", color=ORANGE, lw=1.4)
 ax.text(0.05, .011, "○ independence baseline", color="#555", fontsize=7)
+ax.text(0.05, .0155, "··· strict scoring", color=ORANGE, fontsize=7)
 ax.grid(axis="y", color="#e6e6e3", lw=.5); ax.set_axisbelow(True)
 save(fig, "fig_scale")
 

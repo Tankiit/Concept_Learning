@@ -54,6 +54,7 @@ def select_rows(inst):
                    key=lambda r: r["sid"])
     b = sameb[len(sameb) // 2]
     succ = [r for r in inst if r["by_depth"][d]["all_supported"]
+            and r["by_depth"][d]["correct"]
             and any(l["b"] == 1 for l in r["by_depth"][d]["literals"])]
     medc = statistics.median(len(r["by_depth"][d]["literals"]) for r in succ)
     samec = sorted((r for r in succ if len(r["by_depth"][d]["literals"]) == medc),
@@ -81,7 +82,7 @@ def worst_color(lits):
 def short(f):
     part, attr = f.split(":", 1)
     name, _, val = attr.rpartition("=")
-    return f"{val}\u2011{name.split('_')[0]}\u2011{part[:4]}"
+    return f"{val} {name} ({part})"
 
 
 def main():

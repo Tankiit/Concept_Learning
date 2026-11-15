@@ -53,8 +53,14 @@ and reasons are essentially unique, and we spend the saved effort
 measuring the premise their setting cannot express---against held-out
 per-image annotations, with pre-registered criteria. Teso et al.\
 \cite{teso2026when} ask when CBM explanations can be faithful
-\emph{and compact}; we measure a complementary axis, when a faithful,
-compact, certified reason is actually \emph{true of the image}. We do
+\emph{and compact}, answering at the architecture level: faithfulness
+forces all-concept explanations unless concepts are probabilistic and
+sparsified at training time. Beyond them, we take the certified
+explanation as given and measure the axis they leave open---whether
+its premises are \emph{true of the image}, how fast that truth decays
+with scale, and what restores it---finding, among other things, that
+their sparsification lever (shorter reasons) buys premise truth only
+by giving up accuracy. We do
 not claim novelty for concept-level formal explanations; the
 contribution is the measurement of what survives the transfer.
 
@@ -359,8 +365,10 @@ everywhere, and indifferent to the semantics of the bank.\textbf{)}
   certified reasons whose literals are all true (Wilson 95\% bands).
   Hollow: the independence baseline of \cref{eq:null}---support
   expected if premise errors were independent given the literal; the
-  decay tracks the baseline rather than departing from it. $n$ and mean
-  reason length $|\Rset|$ under each $K$.}
+  decay tracks the baseline rather than departing from it. Dotted:
+  strict scoring (only reasons whose every literal sits on a visible
+  part)---indistinguishable from the main curve at four of five class
+  counts. $n$ and mean reason length $|\Rset|$ under each $K$.}
   \label{fig:scale}
 \end{figure}
 
@@ -386,8 +394,12 @@ reasons that lengthen with the number of classes, rather than by a
 small number of correlated failure modes. We test this interpretation
 directly in \cref{sec:ablations}.
 
-The same inversion appears on both replication datasets (supp.\
-\cref{tab:replication}). On CelebA, premise support is $0.693$ against
+The scoring convention does not create the decay: under strict
+scoring, which counts only reasons whose every literal sits on a
+visible part, support is unchanged at four of five class counts
+($0.254$, $0.115$, $0.035$, $0.017$) and moves from $0.070$ to $0.054$
+at twenty (dotted line, \cref{fig:scale}). The same inversion appears
+on both replication datasets (supp.\ \cref{tab:replication}). On CelebA, premise support is $0.693$ against
 an accuracy of $0.879$, and on BDD-OIA it is $0.534$ against an
 accuracy of $0.690$--$0.755$. \textbf{(Q2:} rarely all true, at every
 class count; roughly halving per step and tracking the independence
@@ -535,13 +547,15 @@ $0.002$ at every noise level.
 \begin{figure}[t]
   \centering
   \includegraphics[width=\columnwidth]{fig_abstain.pdf}
-  \caption{\textbf{Support--coverage curves for the trust channels of
-  \cref{eq:gate}.} One panel per bed (CUB $K{=}20$, CelebA,
-  BDD-OIA and CUB $K{=}200$); dashed line $=2\times$ unconditional
-  support (the repair bar, fixed in advance); dotted line = the
-  unconditional rate; circle = the $0.14$ operating point. The $K{=}200$
-  panel shows the fragility ourselves: the bar is cleared at $0.14$ and
-  not below. Artefact: \texttt{results/figures/fig\_abstain.pdf}.}
+  \caption{\textbf{The gate, channel by channel and point by point.}
+  \textbf{(a)}~Support among issued reasons at matched coverage
+  ($K{=}10$, Setting~D): the calibrated weakest-literal channel matches
+  the oracle marginal filter, while raw confidence selects below
+  random. \textbf{(b)}~Setting~T operating points: issued support
+  (orange, bootstrap bars) against the unconditional rate (grey
+  circles) and the dashed $2\times$ repair bar, fixed in advance; the
+  $K{=}200$ rows show the fragility ourselves---the bar is cleared at
+  coverage $0.14$ and not below.}
   \label{fig:abstain}
 \end{figure}
 
@@ -629,10 +643,11 @@ limit rather than as a method.
   (b)~The depth trade-off: the depth-two reason is fully true but
   justifies the wrong class, whereas the default tree is correct; this
   occurs for $92$ of the $515$ instances ($17.9\%$).
-  (c)~A success that cites positive evidence; $35$ of the $36$ fully
-  supported default reasons cite at least one positive literal (here
-  the prediction itself is wrong---full premises do not entail a
-  correct class).
+  (c)~A success: fully supported default reason with a correct
+  prediction, citing positive evidence---as do all $19$ fully
+  supported \emph{and} correct default reasons (of the $36$ fully
+  supported, $35$ cite a positive literal; the remainder of those are
+  wrong-class successes, which is why we require correctness here).
   Rows are selected by fixed rules: (a)~median-length failing default
   reason, (b,\,c)~median length among qualifying instances, with ties
   broken by the middle instance index (supp.\ \cref{app:qualitative}).}
@@ -834,7 +849,7 @@ random $3$ literals & 3.00 & 0.11 & \textbf{0.682} & 0.01 & 0.31 \\
 \caption{\textbf{Model families on BDD-OIA} (their architectures, their
 tensors, seed 42; readers and Boolean student held fixed). Agreement:
 student vs.\ family on test. Sequential-T is the audit pipeline of
-\S\ref{sec:beds}.}
+\cref{sec:ceiling}.}
 \label{tab:families}
 \begin{tabular}{lcccc}
 \toprule
@@ -913,10 +928,10 @@ default-depth aggregate reproduces the committed sweep exactly).
 (b)~among instances whose depth-2 reason is fully true, whose depth-2
 prediction is wrong, and whose default prediction is correct
 ($92$ instances), the median-length depth-2 reason; (c)~among fully
-supported default reasons citing at least one positive literal ($35$
-of $36$), the median-length reason. Ties in all cases are broken by
-the middle instance index; the selected instances are
-$\#513$, $\#714$ and $\#462$.
+supported \emph{and correctly predicting} default reasons citing at
+least one positive literal ($19$ instances qualify), the median-length
+reason. Ties in all cases are broken by the middle instance index; the
+selected instances are $\#513$, $\#714$ and $\#603$.
 
 \section{Unresolved-literal sensitivity}
 \label{app:unresolved}
@@ -1079,6 +1094,11 @@ forcing-versus-ranking equivalence check and the five-draw
 subset-sensitivity protocol were pre-registered in the same document.
 Verdict artefacts ship with the code (\texttt{results/task1\_verdicts.json},
 \texttt{task2\_subset\_sensitivity.json}, \texttt{task3\_forcing\_sweep.json}).
+Timestamped record: the criteria entered repository history before any
+run executed (commit \texttt{848faba}, 2026-11-11: criteria and
+decision rules; ablation predictions in \texttt{2f88002} precede
+ablation results in \texttt{9905d62}); an anonymised OSF registration
+mirrors the same text for review.
 ```
 
 **Figure draft:** `scripts/plot_abstention_curves.py` → `tmp/abstention_curves_draft.png` — three panels (CUB D/10 from `abstention_curves.json` `at_coverage` curves incl. oracle A_ir; CelebA; BDD-OIA with A/B/C/random). Camera-ready version moves into the LaTeX tree; data paths verified against the committed JSON schemas.
@@ -1237,3 +1257,7 @@ n filled = **515** (the full K=20 audited set; same file as the 35/36 — no sub
 ## Changelog 2026-11-15 — §5 Discussion (new) + §6 Conclusion v2
 
 §5 is now a five-paragraph Discussion that folds limitations in: (i) what a deployer can hold (exactness + gated reasons at partial coverage; the menu of what NOT to buy); (ii) repair targets slots not aggregates (MLP null vs BDD reversal vs between-dataset gradient — the audit as repair manual); (iii) true premises are necessary, not sufficient (the qualitative success row predicts wrong; premise support is the binding rung, fidelity stays separate); (iv) the per-literal gate as the level the UQ position papers call for (jimenez/aldoma cited); (v) limitations (oracle-localisation assumption flagged-not-claimed, two stacks, single-seed, gate thinning at 200). §6 Conclusion v2: survival summary + the interventional confirmation + "fully true ≠ correct class" + closing line "the certificate tells you what the tree knows; only the measurement tells you what the bird does." All claims trace to committed JSONs; no new numbers beyond those already in the ledger.
+
+## Changelog 2026-11-15 (tier-review response) — strict-scoring line, true-success row (c), abstract v2, Teso difference, prereg receipts, caption fixes
+
+**Strict scoring COMPUTED** (`strict_support_cub.py` → `strict_support_cub.json`, committed): strict = convention at K=4/10/50/200 (0.254/0.115/0.035/0.017); only K=20 moves (0.070→0.054). Wired as the dotted line in fig_scale + one §4.2 sentence + fig:scale caption clause — the "convention inflates support" attack is now answered in the headline figure itself. **Row (c) fixed**: select_rows now requires all-supported AND correct AND ≥1 positive literal (19 qualify; pick sid 603 by the median/middle rule); literal labels de-truncated (full attribute + part names); caption (c) rewritten as a true success with the 19/36-vs-35/36 numbers; app:qualitative updated. **Abstract v2** written into plan §9 (survival voice, number-free, scoped raw-confidence claim, polarity-domain correction, and the two non-obvious findings led with: sufficiency's own cost — unguaranteed explanations are more often fully true — and the compounding law confirmed interventionally). **§2**: explicit Teso difference (architecture-level faithfulness/compactness vs our image-truth axis; their sparsification lever = our accuracy-price finding). **app:prereg**: timestamped receipts (commits 848faba → 2f88002 → 9905d62; OSF mirror note). **fig:abstain caption** finally matches the two-panel design; sec:beds dangler (app:methods tab:families) → sec:ceiling. Combined-document ref check: all paper-text refs resolve.

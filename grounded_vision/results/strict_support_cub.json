@@ -1,0 +1,30 @@
+{
+ "protocol": "strict: all literals on visible parts AND supported; convention values from the same dumps",
+ "blocks": {
+  "K4": {
+   "n": 118,
+   "strict": 0.2542,
+   "convention": 0.2542
+  },
+  "K10": {
+   "n": 243,
+   "strict": 0.1152,
+   "convention": 0.1152
+  },
+  "K20": {
+   "n": 515,
+   "strict": 0.0544,
+   "convention": 0.0699
+  },
+  "K50": {
+   "n": 600,
+   "strict": 0.035,
+   "convention": 0.035
+  },
+  "K200": {
+   "n": 600,
+   "strict": 0.0167,
+   "convention": 0.0167
+  }
+ }
+}
