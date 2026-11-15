@@ -393,40 +393,20 @@ accuracy of $0.690$--$0.755$. \textbf{(Q2:} rarely all true, at every
 class count; roughly halving per step and tracking the independence
 baseline.\textbf{)}
 
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=\linewidth]{fig_failures.pdf}
-  \caption{\textbf{What failure looks like, and where it concentrates.}
-  \emph{Top:} the certified-but-false premises of our running
-  example (image \#44)---a beak crop asserted \texttt{bill\_colour=yellow} with zero
-  yellow pixels (bed average over firing beaks: $3\%$) and a tail crop
-  asserted black; both refuted by the annotations. \emph{Bottom left:}
-  each replication bed's top carrier of failing reasons (CelebA: a
-  negated attribute; BDD-OIA: top fault slot \texttt{green\_light=1} at
-  support $0.62$, alongside the stereotyped co-resident
-  \texttt{rider=0} in $76\%$ of failing reasons at support $0.92$; the
-  deterministic pick is frame \texttt{6c0cc8ca-e1dd9997\_3}---bdd100k
-  frames are not local). \emph{Bottom right:} the share of failing
-  reasons containing at least one of the top-$k$ carrier literals---CUB
-  K=4 (thick red), the five re-drawn subsets (thin red; the shape is
-  stable while the top literal's identity changes), CelebA (grey),
-  BDD-OIA (green; its top-$1$ coverage is the stereotyped
-  \texttt{rider=0}, a usually-true co-resident---the fault sits in the
-  traffic-light slots).}
-  \label{fig:failures}
-\end{figure}
-
 \paragraph{Failures concentrate in a few literals.}
 \label{sec:exp-conc}
 Although failures compound across literals, they are not spread
-uniformly across the vocabulary (\cref{fig:failures}). At $K=4$, all
+uniformly across the vocabulary (supp.\ \cref{fig:failures}). At $K=4$, all
 $88$ failing reasons cite \texttt{bill\_color=yellow} as present, a
 literal the annotations never support. The corresponding reader fires
 on beak regions in which only $3.3\%$ of pixels are yellow on average,
-indicating a visual shortcut rather than a poorly chosen threshold (the reader fires on beaks with as little as zero percent yellow pixels; four examples in the supplement, Fig.~\ref{fig:beakstrip}).
-Conversely, all $30$ passing reasons rely exclusively on negated
-literals, and all of them remain valid under the stricter scoring rule
-that excludes concepts on unobserved parts. Concentration persists
+indicating a visual shortcut rather than a poorly chosen threshold (the reader fires even on beaks with no yellow pixels at all---mean $3.3\%$ across firing beaks---four examples in the supplement, Fig.~\ref{fig:beakstrip}).
+All $30$ passing reasons at $K=4$ cite only negated literals, but
+this is a property of the small subset rather than of the method: at
+$K=20$, $35$ of the $36$ fully supported reasons cite at least one
+positive literal (\cref{fig:qualitative}c). All thirty remain valid
+under the stricter scoring rule that excludes concepts on unobserved
+parts, so none owes its pass to the convention. Concentration persists
 across the five redrawn subsets: premise support remains between
 $0.267$ and $0.431$, and the most frequent failing literal appears in
 $62$--$94\%$ of failing reasons. The identity and polarity of that
@@ -494,7 +474,7 @@ BDD-OIA, perception alone.\textbf{)}
 
 To determine where repair should be directed, we train heads of the
 same family on progressively more informative inputs
-(\cref{tab:ceiling}). On CUB, accuracy increases monotonically from
+(\cref{tab:ceiling}; visual in supp.\ \cref{fig:ceiling}). On CUB, accuracy increases monotonically from
 predicted bits ($0.627$) to ground-truth bits ($0.805$). The concept
 vocabulary can therefore express the task, and the shortfall lies in
 the readers that instantiate it. BDD-OIA presents the opposite
@@ -699,7 +679,11 @@ reasons of that length---while accuracy falls from $0.396$ to $0.184$.
 This turns the compounding account of \cref{sec:exp-scale} from an
 observational into an interventional claim, and the accuracy price is
 itself the finding: well-supported reasons come from heads that
-classify worse. Ranking the gate by the product or the mean of
+classify worse. The trade-off row of \cref{fig:qualitative} is an
+event, not an anecdote: over the same $515$ instances, $92$ ($17.9\%$)
+have a fully true depth-2 reason that predicts the wrong class while
+the default prediction is correct (the $35/36$ successes above are
+over the same $515$, from the same per-instance dump). Ranking the gate by the product or the mean of
 literal trust instead of the minimum changes nothing for the better
 (at $K{=}10$, $0.583$ versus $0.667$ support at $5\%$ coverage)---
 failure is a single bad literal, and the minimum is the aggregator
@@ -822,6 +806,42 @@ sequential-T (ours, audit) & 0.721 & 0.370 & 0.849 & 0.534 [$0.521,0.546$] \\
 ## Appendix stubs: app:unresolved, app:beds, tab:replication (added 2026-11-14 night)
 
 ```latex
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.9\linewidth]{fig_ceiling.pdf}
+\caption{\textbf{Vocabulary--vs--perception ladder} (matched
+linear/logistic head family; the CART-on-ground-truth-bits collapse
+quoted in the text is a different head family and is not plotted).
+CUB climbs monotonically to a $0.805$ ceiling---its concepts express
+the task; BDD-OIA starts higher and ends near ceiling---its failure is
+perceptual, not expressive. The continuous-scores variant was not run
+on BDD-OIA (dashed).}
+\label{fig:ceiling}
+\end{figure}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{fig_failures.pdf}
+  \caption{\textbf{What failure looks like, and where it concentrates.}
+  \emph{Top:} the certified-but-false premises of our running
+  example (image \#44)---a beak crop asserted \texttt{bill\_colour=yellow} with zero
+  yellow pixels (bed average over firing beaks: $3\%$) and a tail crop
+  asserted black; both refuted by the annotations. \emph{Bottom left:}
+  each replication bed's top carrier of failing reasons (CelebA: a
+  negated attribute; BDD-OIA: top fault slot \texttt{green\_light=1} at
+  support $0.62$, alongside the stereotyped co-resident
+  \texttt{rider=0} in $76\%$ of failing reasons at support $0.92$; the
+  deterministic pick is frame \texttt{6c0cc8ca-e1dd9997\_3}---bdd100k
+  frames are not local). \emph{Bottom right:} the share of failing
+  reasons containing at least one of the top-$k$ carrier literals---CUB
+  K=4 (thick red), the five re-drawn subsets (thin red; the shape is
+  stable while the top literal's identity changes), CelebA (grey),
+  BDD-OIA (green; its top-$1$ coverage is the stereotyped
+  \texttt{rider=0}, a usually-true co-resident---the fault sits in the
+  traffic-light slots).}
+  \label{fig:failures}
+\end{figure}
+
 \begin{figure}[h]
 \centering
 \includegraphics[width=\linewidth]{fig_beakstrip.pdf}
