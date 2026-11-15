@@ -64,7 +64,10 @@ sweep---and lies below the predictive accuracy of the model being
 explained at every scale: a certified explanation is less likely to be
 fully correct than the prediction it certifies. The same
 ordering---premise support well below accuracy---holds on both replication
-datasets. Conditional fidelity is partial but is not the binding premise.
+datasets, and the decay is lawful: it tracks the product of per-literal
+error rates, an account we confirm by intervening on reason length and
+landing on the prediction. Conditional fidelity is partial but is not
+the binding premise.
 \textbf{The failure is concentrated, not diffuse.} On the audited
 four-class subset, a single literal---yellow bill colour---occurs in every
 failing reason with no support in the part annotations, while every
