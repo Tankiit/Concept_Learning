@@ -68,9 +68,12 @@ datasets. Conditional fidelity is partial but is not the binding premise.
 \textbf{The failure is concentrated, not diffuse.} On the audited
 four-class subset, a single literal---yellow bill colour---occurs in every
 failing reason with no support in the part annotations, while every
-passing reason cites only the \emph{absence} of concepts---and none of the
-thirty passing reasons owes its pass to the scoring rule (all would
-survive the strict variant that excludes concepts on unobserved parts).
+passing reason cites only the \emph{absence} of concepts---a property
+of the smallest subset, not of the method, since fully supported
+reasons at the larger class counts routinely cite positive concepts.
+None of those passing reasons owes its pass to the scoring rule (all
+would survive the strict variant that excludes concepts on unobserved
+parts).
 The concentration replicates; the slot does not: re-drawing the subset at
 random keeps failure on a single literal but moves the carrier to
 different, negated slots. Across beds the same structure appears---on the
