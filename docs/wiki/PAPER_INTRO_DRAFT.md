@@ -118,7 +118,7 @@ counts, and three datasets, showing that verified reasons agree only
 partially with the neural teacher, that their premises are rarely all true
 of the image and become rarer as classes are added, and that failures
 concentrate in identifiable (concept, polarity) slots, so repair targets
-those slots rather than the model at large (\S\ref{sec:audit}).
+those slots rather than the model at large (\S\ref{sec:exp-conc}).
 \item \textbf{A calibration-gated abstention rule} under which raw
 concept confidence does not identify unreliable reasons where readers are
 miscalibrated---there it is no better than chance---whereas per-concept,
