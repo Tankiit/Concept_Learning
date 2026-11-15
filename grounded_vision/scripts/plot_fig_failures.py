@@ -145,10 +145,11 @@ def main():
     ax02.set_title("BDD-OIA — top carrier", fontsize=7, color=GREY)
     bdd = json.load(open(os.path.join(REPO, "results", "bdd_oia_audit.json")))
     gl = bdd["literal_marginals"]["green_light=1"]
-    ax02.text(0.5, 0.5, "green_light = 1\n(positive traffic literal)\n\n"
-              f"{gl['n']:,} occurrences,\nsupport {gl['support']:.1%}\n\n"
-              "(no local frames; no per-instance\nrecords committed)",
-              ha="center", va="center", fontsize=6.6, color=GREY,
+    ax02.text(0.5, 0.52, "top fault slot: green_light = 1\n"
+              f"(support {gl['support']:.1%}, {gl['n']:,} occurrences)\n\n"
+              "most stereotyped: rider = 0\nin 76% of failing reasons\n(support 0.92)\n\n"
+              "pick frame 6c0cc8ca-e1dd9997_3\n(bdd100k frames not local)",
+              ha="center", va="center", fontsize=6.2, color=GREY,
               transform=ax02.transAxes)
     ax02.add_patch(Rectangle((0.06, 0.18), 0.88, 0.64, fill=False, ec="#bbb", lw=0.8,
                              transform=ax02.transAxes))
@@ -170,6 +171,11 @@ def main():
     cur_c, nfc = share_curve(cele_rec)
     ax.plot(ks[:len(cur_c)], cur_c, "s-", color=GREY, ms=3.5, lw=1.4,
             label=f"CelebA ({nfc:,} failing)")
+    bdd_rec = [{"literals": [{"feature": l[0], "bit": l[1]} for l in r["reason"]],
+                "all_supported": r["all_true"]} for r in bdd["reasons"]]
+    cur_b, nfb = share_curve(bdd_rec)
+    ax.plot(ks[:len(cur_b)], cur_b, "^--", color="#2a6", ms=3.5, lw=1.4,
+            label=f"BDD-OIA ({nfb:,} failing)")
     ax.set_xlabel("top-$k$ carrier literals")
     ax.set_ylabel("share of failing reasons")
     ax.set_ylim(0, 1.02)
