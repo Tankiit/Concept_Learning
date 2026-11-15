@@ -694,36 +694,86 @@ replication above), and minimum-cardinality reasons (deferred by an
 isolated engine defect, supp.\ \cref{app:pyxai}).
 ```
 
-## §5 Limitations, §6 Conclusion (restored 2026-11-15 after accidental deletion in the §4 v4 span replace; limitations updated with the not-run list)
+## §5 Discussion (incl. limitations), §6 Conclusion (v2, 2026-11-15)
 
 ```latex
-\section{Limitations}
-The audit requires per-image concept ground truth, which is scarce; our
-replications span faces and driving actions, and the method transfers
-wherever such annotations exist, but the measured rates are properties
-of these datasets. The main audit uses oracle localisation; predicted
-boxes are untested---the claim that they can only lower the reported
-support is an assumption we state rather than measure, and the one
-design choice a reviewer could still flip. Also untested: backbone
-swaps on CUB (the inversion replicates across two feature stacks
-spanning three datasets) and minimum-cardinality reasons (isolated
-engine defect). Replications are single-seed with a single tree depth.
-The abstention trade-off survives into the intermediate class counts
-and thins at the full benchmark, where its margin holds at some
-operating points and not others; we do not claim a repair there---only
-a measurement and a gate.
+\section{Discussion}
+\label{sec:discussion}
+
+\paragraph{What a deployer can hold.}
+Two things survive the trip from proof to image, and only two: the
+exactness of the certificate, at every scale and for any concept bank
+it is given; and, at partial coverage, a calibration-gated reason whose
+premises are usually true. Everything else we tested---selection,
+stronger readers, cleaner training data, smarter reason
+queries---leaves premise support where it was on the main bed. A
+practical reading of our tables is therefore a menu of what \emph{not}
+to buy: a certified explanation is not evidence about the image at
+full coverage, and an accuracy improvement in the underlying model is
+not an improvement in its explanations.
+
+\paragraph{Repair must target slots, not aggregates.}
+The nulls and the reversals triangulate to one lesson. On CUB, a
+stronger reader lifts accuracy by seven points without touching
+support, because the yellow-bill shortcut fires exactly as before;
+on BDD-OIA, the same intervention works, because its failure is
+perceptual and slot-wide. Between datasets, the accuracy--support gap
+tracks reader quality ($35/19/19/8$ points as readers improve from
+$0.71$ to $0.95$). Reader quality helps when it repairs the specific
+failing (concept, polarity) slots---not in the aggregate---so the
+audit's concentration finding is also its repair manual.
+
+\paragraph{True premises are necessary, not sufficient.}
+The qualitative figure sharpens what ``success'' means: the success
+row's premises are all true, and its prediction is still wrong. A
+fully supported reason certifies the \emph{tree's} reasoning from true
+premises; it does not entail the correct class, because the teacher
+and the tree can disagree for other reasons. Premise support is the
+binding rung, not the only rung---which is exactly why the ladder
+keeps fidelity separate.
+
+\paragraph{The level that uncertainty estimation was missing.}
+Position papers argue that prediction-level uncertainty is
+fundamentally incomplete \cite{jimenez2026position,aldoma2026position}.
+Our gate is a small instance of the level they call for: it scores
+each \emph{literal} of a certified reason, not the prediction, and the
+diagnosis it enables (raw confidence is anti-informative exactly where
+readers are miscalibrated; discrete population-level reliability never
+separates) is invisible at the prediction level.
+
+\paragraph{Limitations.}
+The audit requires per-image concept ground truth, which is scarce;
+our replications span faces and driving actions, and the method
+transfers wherever such annotations exist, but the measured rates are
+properties of these datasets. The main audit uses oracle localisation;
+predicted boxes are untested---the claim that they can only lower the
+reported support is an assumption we state rather than measure, and
+the one design choice a reviewer could still flip. Also untested:
+backbone swaps on CUB (the inversion replicates across two feature
+stacks spanning three datasets) and minimum-cardinality reasons
+(isolated engine defect). Replications are single-seed with a single
+tree depth. The gate's margin thins at the full class count, holding
+at some operating points and not others; we do not claim a repair
+there---only a measurement and a gate.
 
 \section{Conclusion}
+\label{sec:conclusion}
+
 A formal sufficiency certificate is a statement about the symbolic
 model; what survives the trip to the image is a measurable, degrading
 quantity. We made the certificate's two unstated premises measurable,
 found premise support binding, structured, and identifiable across
-datasets, measured how fast it dies as the task grows, and showed what
-calibration-gated abstention can and cannot restore---robustly at
-intermediate scale, marginally at full scale, always paying in
-coverage. The audit is cheap---it requires one trained head, certified
-reasons, and held-out concept annotations---and we believe it should
-accompany any deployment of certified concept explanations.
+datasets---concentrated in few (concept, polarity) slots that differ
+by domain, and compounding per literal as reasons lengthen with the
+task, an account we confirmed interventionally. We measured what
+restores it: on the main bed, only calibration-gated abstention,
+robustly at intermediate scale, marginally at full scale, always
+paying in coverage---and nothing that buys accuracy instead. Even a
+fully true reason, we saw, does not entail the correct class. The
+audit is cheap---one trained head, certified reasons, held-out concept
+annotations---and we believe it should accompany any deployment of
+certified concept explanations: the certificate tells you what the
+tree knows; only the measurement tells you what the bird does.
 ```
 
 ## Appendix: other explanation methods and model families (moved from §4 v2 at the 2026-11-14 restructure)
@@ -1183,3 +1233,7 @@ User: "check if we could use RSBench results." Answer: YES — `bdd_oia_audit.js
 ## Changelog 2026-11-15 — fig_qualitative caption v2 (advisor's camera-ready text)
 
 n filled = **515** (the full K=20 audited set; same file as the 35/36 — no subsample; stated in both caption and app:qualitative). Caption claims verified against the dump: row (a) sid 513 default pred CORRECT + premises false ✓; row (b) sid 714 d2 wrong/default correct ✓; row (c) sid 462 all-supported but pred WRONG → added the honest clause "(here the prediction itself is wrong---full premises do not entail a correct class)". New supp stub `app:qualitative` (fixed selection rules + tie-breaks + row sids + provenance) resolves the caption's \cref. Preamble needs: \usepackage{pifont} (dings) + color defs ok/bad (= green/red).
+
+## Changelog 2026-11-15 — §5 Discussion (new) + §6 Conclusion v2
+
+§5 is now a five-paragraph Discussion that folds limitations in: (i) what a deployer can hold (exactness + gated reasons at partial coverage; the menu of what NOT to buy); (ii) repair targets slots not aggregates (MLP null vs BDD reversal vs between-dataset gradient — the audit as repair manual); (iii) true premises are necessary, not sufficient (the qualitative success row predicts wrong; premise support is the binding rung, fidelity stays separate); (iv) the per-literal gate as the level the UQ position papers call for (jimenez/aldoma cited); (v) limitations (oracle-localisation assumption flagged-not-claimed, two stacks, single-seed, gate thinning at 200). §6 Conclusion v2: survival summary + the interventional confirmation + "fully true ≠ correct class" + closing line "the certificate tells you what the tree knows; only the measurement tells you what the bird does." All claims trace to committed JSONs; no new numbers beyond those already in the ledger.
