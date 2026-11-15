@@ -618,25 +618,24 @@ limit rather than as a method.
 \begin{figure*}[t]
   \centering
   \includegraphics[width=\textwidth]{fig_qualitative.pdf}
-  \caption{\textbf{Depth, explanations, and their premises} (CUB, $K{=}20$;
-  one pre-registered sweep; rows by fixed rules, middle image id at the
-  median length). Each row: the image with the parts cited by its
-  default (depth-12) reason boxed by worst status (green = all
-  supported, red dashed = some refuted, grey = part not visible), then
-  its reason at depth $\le 2/4/6/12$; literals marked
-  supported~(\textcolor{green}{$\checkmark$}) /
-  refuted~(\textcolor{red}{$\times$}) / part-invisible~($\circ$), with
-  the prediction's correctness, $|R|$, and all-true flag under each
-  cell. \textbf{(a)}~Typical failure: the median-length failing default
-  reason. \textbf{(b)}~The trade-off: at depth $2$ the reason is fully
-  true but predicts the wrong class, while the default predicts
-  correctly with refuted premises. \textbf{(c)}~A success whose
-  premises include \emph{positive} literals---required by rule, and
-  available: $35$ of the $36$ fully-true default reasons at $K{=}20$
-  cite at least one positive literal, so the absence-only character of
-  the four-class successes does not persist at scale. Artefact:
-  \texttt{results/figures/fig\_qualitative.pdf} (per-instance dump:
-  \texttt{ablation\_depth\_K20\_perinstance.json}).}
+  \caption{\textbf{Certified reasons at increasing tree depth} (CUB,
+  $K=20$, Setting~T). Each row shows one test image and its sufficient
+  reason at four depths. Literals are marked \textcolor{ok}{\ding{51}}
+  supported, \textcolor{bad}{\ding{55}} refuted, or $\circ$ on a part
+  that is not visible. Boxes mark the parts cited by the default-depth
+  reason, coloured by their worst status.
+  (a)~A typical failure: the reason is valid for the tree and the
+  prediction is correct, but a premise is false.
+  (b)~The depth trade-off: the depth-two reason is fully true but
+  justifies the wrong class, whereas the default tree is correct; this
+  occurs for $92$ of the $515$ instances ($17.9\%$).
+  (c)~A success that cites positive evidence; $35$ of the $36$ fully
+  supported default reasons cite at least one positive literal (here
+  the prediction itself is wrong---full premises do not entail a
+  correct class).
+  Rows are selected by fixed rules: (a)~median-length failing default
+  reason, (b,\,c)~median length among qualifying instances, with ties
+  broken by the middle instance index (supp.\ \cref{app:qualitative}).}
   \label{fig:qualitative}
 \end{figure*}
 
@@ -853,6 +852,21 @@ share, reader probability, annotation. The reader asserts
 near-entirely non-yellow.}
 \label{fig:beakstrip}
 \end{figure}
+
+\section{Qualitative-figure selection rules}
+\label{app:qualitative}
+Rows of Fig.~\ref{fig:qualitative} are fixed before inspection, from
+the per-instance depth dump (\texttt{ablation\_depth\_K20\_perinstance.%
+json}; the full $515$-instance $K{=}20$ audited set---no subsample; its
+default-depth aggregate reproduces the committed sweep exactly).
+(a)~the median-length failing default (depth-12) reason;
+(b)~among instances whose depth-2 reason is fully true, whose depth-2
+prediction is wrong, and whose default prediction is correct
+($92$ instances), the median-length depth-2 reason; (c)~among fully
+supported default reasons citing at least one positive literal ($35$
+of $36$), the median-length reason. Ties in all cases are broken by
+the middle instance index; the selected instances are
+$\#513$, $\#714$ and $\#462$.
 
 \section{Unresolved-literal sensitivity}
 \label{app:unresolved}
@@ -1165,3 +1179,7 @@ User: "check if we could use RSBench results." Answer: YES — `bdd_oia_audit.js
 ## Changelog 2026-11-15 (page budget + the two new findings folded in)
 
 **Denominators (one file, `ablation_depth_K20_perinstance.json`, the full 515-instance K=20 set — no subsample):** row-(b) event = **92/515 = 17.9%**; fully supported default reasons = **36/515**, of which **35** cite ≥1 positive literal. Both now stated together in §4.7. **§4.3 concentration ¶** rewritten per the advisor: absence-only scoped to K=4 with the 35/36 at K=20 as the contrast finding (points at fig:qualitative c); the strict-rule clause survives attached to the K=4 thirty. **Intro** finding 2 scoped likewise, number-free ("a property of the smallest subset, not of the method…"). **Beak wording** fixed: "fires even on beaks with no yellow pixels at all—mean 3.3% across firing beaks". **PAGE BUDGET — two figures moved to the supplement: fig_failures and fig_ceiling.** Rationale: fig_qualitative row (a) now carries the typical-failure-with-boxes role; fig_failures' unique cargo (cross-dataset concentration curves + bed carriers) is fully quantified in §4.3 text, so its main-text sentence = the existing numbers sentence + "(supp. Fig. failures)"; fig_ceiling restates tab:ceiling, so its main-text sentence = the existing §4.5 opener + "(visual in supp.)". Main text now: 5 figures (fig_scale, fig_methods, fig_abstain full-width, fig_qualitative full-width, fig_mechanism) + 5 tables + tab:levels. Note: fig:abstain caption still describes the pre-restyle panel — flagged for .tex assembly.
+
+## Changelog 2026-11-15 — fig_qualitative caption v2 (advisor's camera-ready text)
+
+n filled = **515** (the full K=20 audited set; same file as the 35/36 — no subsample; stated in both caption and app:qualitative). Caption claims verified against the dump: row (a) sid 513 default pred CORRECT + premises false ✓; row (b) sid 714 d2 wrong/default correct ✓; row (c) sid 462 all-supported but pred WRONG → added the honest clause "(here the prediction itself is wrong---full premises do not entail a correct class)". New supp stub `app:qualitative` (fixed selection rules + tie-breaks + row sids + provenance) resolves the caption's \cref. Preamble needs: \usepackage{pifont} (dings) + color defs ok/bad (= green/red).
