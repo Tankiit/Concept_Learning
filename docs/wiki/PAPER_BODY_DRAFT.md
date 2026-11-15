@@ -502,7 +502,7 @@ picture. Its ceiling is close to $0.99$ on the \textsc{forward} and
 \textsc{stop} actions, its failures are almost entirely perceptual,
 and its premise errors sit at the independence prediction ($1.003$,
 CI $[1.00, 1.01]$). Across datasets, the gap between accuracy and
-support also tracks reader quality ($35/20/19/8$ points as reader
+support also tracks reader quality ($35/19/19/8$ points as reader
 accuracy rises from $0.71$ to $0.95$). This between-dataset gradient
 does not contradict the CUB null of \cref{tab:nulls}: the stronger MLP
 reader there gained $7.6$ points without touching the failing slots
@@ -1088,3 +1088,9 @@ User: "check if we could use RSBench results." Answer: YES — `bdd_oia_audit.js
 **Unused results added:** K=10 gate-vs-oracle (0.697 vs 0.727 — now the lead sentence of the gate subsection); aggregator rows replace the not-run rows in tab:ablate (footnoted K=10 @5% cov); the methods-comparison mechanism sentence (random-3 0.682 vs 0.534 — price of informativeness) in the concentration paragraph; the reader-strength gradient (35/20/19/8 pts) + its reconciliation with the CUB MLP null in sec:ceiling (between-dataset vs within-bed; the MLP didn't touch the failing slots).
 **Wording:** "rung"→variant, "audit"→sweep, "bed"→dataset, "rides"→tracks; sec:audit → sec:exp-conc (intro ref updated); garbled detector sentence replaced by the §5 not-run list; leading-zero 3-decimal numbers standardized in tab:scale; Q1–Q4 one-sentence answers close their subsections.
 **Repair:** §5/§6 had been accidentally deleted by the §4 v4 span replacement — RESTORED (limitations now carries the not-run list: predicted localisation as the flagged assumption, backbone swaps, min-cardinality).
+
+---
+
+## Changelog 2026-11-15 (camera-ready figures) — the advisor's styled figure script, LOADER-WIRED and run
+
+`scripts/plot_figs_v6.py` = the advisor's script (styling, panels, CVPR column width) with its own TODO honoured: every number loaded from the committed JSONs (fig_scale ← 3 audit JSONs + 2 independence JSONs; fig_abstain ← abstention_curves + task1_abstention files; fig_ceiling ← design_b_v2 ladder + bdd stage6; fig_methods ← bdd_oia_methods part1; fig_readers ← all four bed audits). Outputs to results/figures (not /home/claude). Regenerated fig_scale/fig_abstain (restyled) + new fig_ceiling/fig_methods/fig_readers; fig_slope superseded by fig_ceiling (kept on disk). Loader caught a data bug the hard-coded version hid: the BDD reader-gradient gap must average the FOUR ACTIVE actions (43.6 pts if the excluded fifth's ~0.997 teacher accuracy leaks in); correct values 34.8/18.7/18.6/8.3 → gradient stated as 35/19/19/8 in §4.5 and RESULTS_SUMMARY §9 (was 35/20/19/8). fig_readers footnote: SUN marked $^*$ (carved split).

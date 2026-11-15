@@ -114,7 +114,7 @@ K=4: min = product = mean = 1.000 at every coverage ≤ 20% (the 30 pipit reason
 | BDD-OIA (rsbench, pooled) | 0.883 | 0.69–0.75 | **0.534** [.522,.546] | 6,433 |
 | SUN (carved split, appendix) | 0.952 | 0.917/0.769 | **0.833**/0.704 (K=4/10) | 60/108 |
 
-Reader-strength gradient: 0.71 / 0.88 / 0.89 / 0.95 reader accuracy ↔ 35 / 20 / 19 / 8-pt support gaps. — `celeba_audit_smiling.json`, `bdd_oia_audit.json`, `sun_audit.json`.
+Reader-strength gradient: 0.71 / 0.88 / 0.89 / 0.95 reader accuracy ↔ 35 / 19 / 19 / 8-pt support gaps (loader-computed: 34.8/18.7/18.6/8.3, `plot_figs_v6.py`). — `celeba_audit_smiling.json`, `bdd_oia_audit.json`, `sun_audit.json`.
 
 ## 10. Methods & model families (BDD-OIA; supplement)
 
