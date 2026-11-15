@@ -12,58 +12,76 @@
 
 \paragraph{Concept bottleneck models.}
 CBMs \cite{koh2020concept} and their post-hoc and embedding variants
-\cite{yuksekgonul2023posthoc,zarlenga2022cem} predict through a layer of
-human-readable concepts. A substantial literature documents that this layer
-does not behave as intended: concepts are leaked or entangled
-\cite{margeloiu2021,mahinpei2021}, and models exploit \emph{reasoning
-shortcuts}---concept assignments that yield correct labels while being
-wrong \cite{marconato2024,bortolotti2024rsbench}. Our audit is
-complementary: rather than asking whether the concept layer is faithful,
-we ask what survives a formal sufficiency certificate over that
-layer---which of its claims hold by construction, and at what rate the
-two premises the proof omits (image truth and teacher agreement) die as
-the task grows. Our driving-action replication runs on
-the rsbench suite \cite{bortolotti2024rsbench} built to expose reasoning
-shortcuts, and the literals our audit flags (green light, red light) are
-precisely the shortcut-prone concepts that suite identifies.
+\cite{yuksekgonul2023posthoc,zarlenga2022concept} predict through a
+layer of human-readable concepts. A substantial literature documents
+that this layer does not behave as intended: concept scores leak
+task information \cite{margeloiu2021how}, learned representations
+escape their intended semantics \cite{mahinpei2021}, and models
+exploit \emph{reasoning shortcuts}---concept assignments that yield
+correct labels while being wrong \cite{marconato2024,rsbench}.
+\emph{We add}: the question one step further up. Rather than asking
+whether the concept layer is faithful, we ask what survives a formal
+sufficiency certificate \emph{over} that layer---which of its claims
+hold by construction, and at what rate the two premises the proof
+omits (image truth and teacher agreement) die as the task grows. Our
+driving-action replication runs on the rsbench suite
+\cite{rsbench} built to expose reasoning shortcuts, and the literals
+our audit flags (green light, red light) are precisely the
+shortcut-prone concepts that suite identifies.
 
 \paragraph{Formal explanations.}
-Abductive explanations (AXps) certify that a set of features provably
-entails a classifier's prediction \cite{ignatiev2019abduction}, with
-tooling such as PyXAI \cite{pyxai}. A growing line applies such
-certificates at the concept level or over partial input spaces
-\cite{teso,canizales,soria,huang}. Closest is the behavior-explainer work
-of Canizales et al.\ \cite{canizales}, which computes abductive and
-contrastive explanations for \emph{behaviors} of vision models by querying
-the network head through concept-erasure operators in aligned CLIP space.
-Because their oracle is the network itself, fidelity holds by
-construction---but exactness is conditional on an empirical head
-monotonicity assumption, explanations come in families of hundreds per
-image, and the truth of the cited concepts is graded by an LLM judge
-rather than measured, with spurious certificates such as \{Fairy(+)\}
-visible in their own analysis. Our audit is the mirror image: we certify
-against a symbolic head where exactness is unconditional and reasons are
-essentially unique, and we spend the saved effort measuring the premise
-their setting cannot express. We do not claim novelty for concept-level
-formal explanations; the contribution is the measurement of what
-survives the transfer.
+Abductive explanations certify that a set of inputs provably entails
+a classifier's prediction \cite{ignatiev2018abductionbased}, with the
+sufficient/complete-reason vocabulary fixed by Darwiche and Hirth
+\cite{darwiche2020reasons} and tooling such as PyXAI
+\cite{audemard2024pyxai}. A growing line applies such certificates to
+neuro-symbolic pipelines \cite{paul2024formal}, to concept
+bottlenecks \cite{teso2026when}, and to interpretable-by-design
+architectures such as prototype networks \cite{soria2026formal}---in
+contrast to heuristic saliency \cite{selvaraju2017gradcam}, which
+offers no guarantee at all. Closest is the behavior-explainer work of
+Canizales et al.\ \cite{canizales2026conceptbased}, which computes
+abductive and contrastive explanations for \emph{behaviors} of vision
+models by querying the network head through concept-erasure operators
+in aligned CLIP space. Because their oracle is the network itself,
+fidelity holds by construction---but exactness is conditional on an
+empirical head-monotonicity assumption, explanations come in families
+of hundreds per image, and the truth of the cited concepts is graded
+by an LLM judge rather than measured. \emph{We add} the mirror image:
+we certify against a symbolic head, where exactness is unconditional
+and reasons are essentially unique, and we spend the saved effort
+measuring the premise their setting cannot express---against held-out
+per-image annotations, with pre-registered criteria. Teso et al.\
+\cite{teso2026when} ask when CBM explanations can be faithful
+\emph{and compact}; we measure a complementary axis, when a faithful,
+compact, certified reason is actually \emph{true of the image}. We do
+not claim novelty for concept-level formal explanations; the
+contribution is the measurement of what survives the transfer.
 
 \paragraph{Trust, calibration, and abstention.}
-Selective prediction and conformal methods gate predictions on confidence
-\cite{geifman2017selective,angelopoulos2023conformal}. Our abstention rule
-inherits this idea but applies it per-\emph{literal} over a certified
-reason, with polarity-aware per-concept calibration fit on a small
-validation split; we show the discrete alternative---per-concept
-reliability statistics---fails to identify unreliable reasons on every
-dataset we test, and that whether calibration beats raw confidence is a
-property of reader calibration, not of the rule.
+Selective prediction gates predictions on confidence
+\cite{geifman2017selective}, and conformal methods calibrate that
+gate \cite{angelopoulos2023conformal}; a large literature supplies
+the uncertainty estimates such gates consume, from ensembles and
+Bayesian methods \cite{kendall2017uncertainties,gal2016dropout,lakshminarayanan2017simple,malinin2018predictive,sensoy2018evidential}
+to their surveys \cite{hullermeier2021aleatoric,gawlikowski2023survey,ulmer2023survey} and behaviour under shift \cite{ovadia2019trust,hendrycks2017baseline}; recent position papers argue prediction-level
+uncertainty is fundamentally incomplete
+\cite{jimenez2026position,aldoma2026position}. \emph{We add} the level
+that argument calls for, inside a certified explanation: the gate
+scores each \emph{literal} of a sufficient reason, not the prediction,
+with polarity-aware per-concept calibration---and we show the discrete
+alternative (population-level reliability rates) never identifies
+unreliable reasons on any dataset we test, that raw confidence is
+anti-informative exactly where readers are miscalibrated, and that the
+repair bar a gate must clear is fixed before the runs, not chosen
+after.
 ```
 
 ## §3 Method (v5, 2026-11-14 night: user's CVPR rewrite, all TODOs filled; DINOv3→DINOv2 corrected; protocol moved to §4.1)
 
 ```latex
 % NOTE: cleveref required (\cref). Macros: \phix \Rset \Lits \supp \acc \trust.
-% CVPR numeric citations: "Teso \etal~\cite{teso}", not \citet.
+% CVPR numeric citations: "Teso \etal~\cite{teso2026when}", not \citet.
 
 \section{Auditing certified concept reasons}
 \label{sec:method}
@@ -127,12 +145,12 @@ $\phix$, such that
   \label{eq:sufficient}
 \end{equation}
 We compute reasons with a reachability-based engine and cross-check
-them against PyXAI~\cite{pyxai}; the two agree on every audited
+them against PyXAI~\cite{audemard2024pyxai}; the two agree on every audited
 instance ($118/118$ reasons, $472/472$ sufficiency checks over the
 larger certified-literal pool; Supp.~\cref{app:pyxai}, which also
 covers literal- \vs feature-level minimality). These concept-level
-reasons are the same object used by Teso \etal~\cite{teso} and Soria
-\etal~\cite{soria}. We do not propose a new explanation. We audit what
+reasons are the same object used by Teso \etal~\cite{teso2026when} and Soria
+\etal~\cite{soria2026formal}. We do not propose a new explanation. We audit what
 this one guarantees.
 
 \subsection{What the certificate proves}
@@ -290,7 +308,7 @@ on a single workstation.
 \label{sec:exp-verify}
 
 Every reason issued by our engine is sufficient for its tree. We
-verify this against PyXAI~\cite{pyxai}, which agrees with our engine
+verify this against PyXAI~\cite{audemard2024pyxai}, which agrees with our engine
 on all $118$ four-class reasons and on all $472$ sufficiency checks
 over the larger pool of certified literals (supp.\ \cref{app:pyxai}).
 
@@ -646,7 +664,7 @@ Two comparisons hold everything but the method fixed on BDD-OIA.
 \emph{Explanation methods} (Table~\ref{tab:methods}, same frozen
 pipeline, same $6{,}423$ certified instances): certified reasons are the
 only method whose output is sufficient by construction (deletion-style
-erasure \cite{canizales} keeps $0.67$ bits on average and is \emph{never}
+erasure \cite{canizales2026conceptbased} keeps $0.67$ bits on average and is \emph{never}
 sufficient; top-$k$ global importance and random subsets rarely are) and
 the most faithful to the teacher at matched size ($0.635$). Yet random
 size-matched literals are \emph{more} often true of the image ($0.682$
@@ -824,7 +842,7 @@ failure is perceptual, not expressive. BDD continuous rung not run.}
 \label{app:pyxai}
 We extract minimal sufficient reasons natively (path literals plus backward
 elimination over the tree, each candidate checked by exhaustive
-reachability) and cross-check with PyXAI~2.0.1 \cite{pyxai}. On the main
+reachability) and cross-check with PyXAI~2.0.1 \cite{audemard2024pyxai}. On the main
 audit, prediction match and mutual sufficiency audits agree on every
 instance ($118/118$; mean reason $2.89$ literals), and a real-PyXAI
 re-run on a larger certified-literal pool agrees on $472/472$ sufficiency
@@ -990,3 +1008,9 @@ User: "i dont need fig 1 and fig pipeline." Removed from the paper: the teaser f
 ## Changelog 2026-11-15 — RSBench per-instance FOUND in the committed audit; fig_failures gains the BDD line
 
 User: "check if we could use RSBench results." Answer: YES — `bdd_oia_audit.json` carried per-instance records all along under the key `reasons` (6,433 records; my earlier schema probe looked for `per_instance` and wrongly concluded none existed — corrected; the fig caption and prior changelog claims about "no per-instance records" are fixed). New from those records: BDD concentration curve added to fig_failures (containment rule, same as CUB/CelebA); top fault-weighted slot green_light=1 (support 0.615) vs the most CONTAINED literal rider=0 in 2,288/2,996 = 76% of failing reasons at support 0.918 — BDD reasons are short and stereotyped, the fault sits in the traffic-light slots (caption states both). Deterministic qualitative pick (median-length failing reason citing green_light=1, middle idx): action forward, test idx 2284, frame 6c0cc8ca-e1dd9997_3.jpg, reason [green_light=1, rider=0, other_obstacle=0] — frame name from the local Zenodo bdd2048 bundle's sorted inputs listing; the image itself still needs bdd100k (registration). BDD card in fig_failures now data-rich (fault slot + stereotyped literal + named pick frame).
+
+---
+
+## Changelog 2026-11-15 — CITATION PASS: paper/refs.bib installed (user-supplied, 119 entries + 11 added); §2 rewritten with "We add" positioning; all cite keys re-keyed to the bib
+
+`paper/refs.bib` = the user's pasted bib verbatim + an "added for this paper" block (cub, celeba, bddoia, rsbench, dinov2, yuksekgonul2023posthoc, margeloiu2021how, mahinpei2021, marconato2024, geifman2017selective, angelopoulos2023conformal; TODO-VERIFY marks on memory-written fields: bddoia authors/pages, rsbench venue/authors, marconato2024 venue/year, margeloiu author list). §2 rewritten in three paragraphs, each ending with an explicit \emph{We add} clause: (1) CBMs — the question one step up from layer-faithfulness (what survives a certificate over the layer); (2) formal explanations — the mirror-image certificate (symbolic head ⇒ unconditional exactness, unique reasons) + premise measurement their settings cannot express (vs Canizales network-oracle/monotonicity/LLM-judge; vs Teso faithful-and-compact axis: we measure true-of-the-image); darwiche2020reasons credited for the sufficient-reason vocabulary; selvaraju2017gradcam one-clause contrast; (3) trust/calibration — the literal-level gate inside a certified explanation, with the jimenez2026/aldoma2026 "prediction-level UQ is incomplete" positions cited as exactly the gap our per-literal gate instantiates. All \cite keys in intro+body now resolve against refs.bib (verified by diff; re-key map: pyxai→audemard2024pyxai, teso→teso2026when, soria→soria2026formal, canizales→canizales2026conceptbased, huang→paul2024formal, ignatiev2019abduction→ignatiev2018abductionbased, margeloiu2021→margeloiu2021how, zarlenga2022cem→zarlenga2022concept, bortolotti2024rsbench→rsbench). Unused-in-text bib entries (uncertainty/active-learning/partial-ID families) stay in refs.bib — available for the supplement. NOTE: bortolotti2026autoformalizing (LLM constraint formalization) is in the bib but not yet cited — candidate for §2 ¶1 one-clause or the supplement; left out to keep §2 tight.
