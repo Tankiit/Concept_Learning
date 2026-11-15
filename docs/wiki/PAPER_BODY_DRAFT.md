@@ -776,7 +776,13 @@ the one design choice a reviewer could still flip. Also untested:
 backbone swaps on CUB (the inversion replicates across two feature
 stacks spanning three datasets) and minimum-cardinality reasons
 (isolated engine defect). Replications are single-seed with a single
-tree depth. The gate's margin thins at the full class count, holding
+tree depth. The pipeline is deliberately simple---a tree over
+thirty-six concepts---so the strongest heads remain untested directly;
+the between-dataset reader gradient (the gap shrinking from
+thirty-five to eight points as reader accuracy rises) extrapolates to
+a fifteen-to-twenty point gap at the reader strength of modern concept
+models, but that extrapolation, not the measurement, is what a
+strong-model run would test. The gate's margin thins at the full class count, holding
 at some operating points and not others; we do not claim a repair
 there---only a measurement and a gate.
 
