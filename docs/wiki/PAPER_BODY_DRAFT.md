@@ -585,7 +585,16 @@ population-level information does not. At $K=200$, $95\%$ of the
 literals in reasons have marginal support strictly between zero and
 one, so an oracle filter based on marginal support has no signal,
 whereas the calibrated channel continues to separate supported from
-unsupported reasons. Finally, a stricter gate, which accepts a reason
+unsupported reasons. A reviewer-level baseline completes the picture: abstaining on the
+\emph{prediction's} own confidence---the standard selective-prediction
+rule, scoring every literal of an instance with the tree's maximum
+class probability---does not substitute for the per-literal gate. At
+$K{=}10$ it raises support among issued reasons to only $0.212$
+[$0.11,0.38$] at $13.6\%$ coverage, a bootstrap lower-bound ratio of
+$0.8$ (no better than random ordering), where the calibrated
+per-literal gate reaches $0.727$ [$0.56,0.85$] with ratio $4.7$:
+prediction confidence is blind to \emph{which} literal fails. Finally,
+a stricter gate, which accepts a reason
 only if its trusted literals alone force the prediction, selects
 exactly the same instances as the ranking gate at every threshold and
 at the class counts we test (four and ten). The gate's limitations
@@ -1261,3 +1270,7 @@ n filled = **515** (the full K=20 audited set; same file as the 35/36 — no sub
 ## Changelog 2026-11-15 (tier-review response) — strict-scoring line, true-success row (c), abstract v2, Teso difference, prereg receipts, caption fixes
 
 **Strict scoring COMPUTED** (`strict_support_cub.py` → `strict_support_cub.json`, committed): strict = convention at K=4/10/50/200 (0.254/0.115/0.035/0.017); only K=20 moves (0.070→0.054). Wired as the dotted line in fig_scale + one §4.2 sentence + fig:scale caption clause — the "convention inflates support" attack is now answered in the headline figure itself. **Row (c) fixed**: select_rows now requires all-supported AND correct AND ≥1 positive literal (19 qualify; pick sid 603 by the median/middle rule); literal labels de-truncated (full attribute + part names); caption (c) rewritten as a true success with the 19/36-vs-35/36 numbers; app:qualitative updated. **Abstract v2** written into plan §9 (survival voice, number-free, scoped raw-confidence claim, polarity-domain correction, and the two non-obvious findings led with: sufficiency's own cost — unguaranteed explanations are more often fully true — and the compounding law confirmed interventionally). **§2**: explicit Teso difference (architecture-level faithfulness/compactness vs our image-truth axis; their sparsification lever = our accuracy-price finding). **app:prereg**: timestamped receipts (commits 848faba → 2f88002 → 9905d62; OSF mirror note). **fig:abstain caption** finally matches the two-panel design; sec:beds dangler (app:methods tab:families) → sec:ceiling. Combined-document ref check: all paper-text refs resolve.
+
+## Changelog 2026-11-15 (prediction-confidence baseline EXECUTED) — the selective-prediction attack closed
+
+`ablation_gate_predconf.py` → `ablation_gate_predconf.json` (committed): K=10 Setting T, task3 protocol (sanity: n=243, R=0.115 = committed exactly). Channels per instance: B calibrated min-p_true, **E = max tree class probability (== leaf purity for a CART; the standard selective-prediction score; Setting-D definition identical — proportions of teacher labels)**, C raw, A oracle marginal. Result at 13.6% coverage: **E = 0.212 [0.11,0.38], LB ratio 0.8 (≤ random-level) vs B = 0.727 [0.56,0.85], LB 4.7**; E never clears the 2× bar at any coverage. fig_abstain panel (b) gains the K=10 (T) row with the gate (orange dot) beside the prediction-confidence baseline (blue ×) over the same 2× bar — the visual answer to "abstention is just selective prediction". §4.6 sentence added. Advisor TODO resolved: for a CART, max class prob and leaf purity coincide (predict_proba = leaf class proportions), so the "fairer baseline" question is moot; the instance-constant score is exactly ranking by prediction confidence.

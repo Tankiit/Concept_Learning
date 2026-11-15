@@ -1,0 +1,98 @@
+{
+ "protocol": "task3-protocol K=10 Setting T; E = max tree class prob (leaf purity); channels B/E/C/A per instance",
+ "n": 243,
+ "unconditional_R": 0.11522633744855967,
+ "spearman_B_E": 0.061990997907540375,
+ "at_coverage": {
+  "0.050": {
+   "B": {
+    "support": 0.6667,
+    "LB_ratio": 3.27
+   },
+   "E": {
+    "support": 0.5,
+    "LB_ratio": 0.0
+   },
+   "C": {
+    "support": 0.1667,
+    "LB_ratio": 0.0
+   },
+   "A": {
+    "support": 0.75,
+    "LB_ratio": 3.07
+   }
+  },
+  "0.100": {
+   "B": {
+    "support": 0.7083,
+    "LB_ratio": 4.12
+   },
+   "E": {
+    "support": 0.25,
+    "LB_ratio": 0.58
+   },
+   "C": {
+    "support": 0.1667,
+    "LB_ratio": 0.36
+   },
+   "A": {
+    "support": 0.6667,
+    "LB_ratio": 4.17
+   }
+  },
+  "0.136": {
+   "B": {
+    "support": 0.7273,
+    "LB_ratio": 4.65
+   },
+   "E": {
+    "support": 0.2121,
+    "LB_ratio": 0.79
+   },
+   "C": {
+    "support": 0.2121,
+    "LB_ratio": 0.59
+   },
+   "A": {
+    "support": 0.6667,
+    "LB_ratio": 4.49
+   }
+  },
+  "0.200": {
+   "B": {
+    "support": 0.5306,
+    "LB_ratio": 4.06
+   },
+   "E": {
+    "support": 0.2041,
+    "LB_ratio": 0.9
+   },
+   "C": {
+    "support": 0.1837,
+    "LB_ratio": 0.83
+   },
+   "A": {
+    "support": 0.551,
+    "LB_ratio": 4.21
+   }
+  },
+  "0.300": {
+   "B": {
+    "support": 0.3562,
+    "LB_ratio": 2.72
+   },
+   "E": {
+    "support": 0.1644,
+    "LB_ratio": 0.95
+   },
+   "C": {
+    "support": 0.1781,
+    "LB_ratio": 1.0
+   },
+   "A": {
+    "support": 0.3699,
+    "LB_ratio": 3.04
+   }
+  }
+ }
+}
