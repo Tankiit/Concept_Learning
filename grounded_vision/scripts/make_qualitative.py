@@ -116,16 +116,13 @@ def main():
                                    ec=col, ls="--" if col == RED else "-",
                                    lw=1.4 if col != GREEN else 1.0))
         species = id2path[str(rec["sid"])].split("/")[0].split(".", 1)[1].replace("_", " ")
-        ax.set_title(f"{title}\n{species} (#{rec['sid']})", fontsize=6.4, loc="left")
+        ax.set_title(f"{title}\n{species}", fontsize=6.4, loc="left")
 
         for j, dep in enumerate(DEPTHS):
             cell = rec["by_depth"][dep]
             axc = fig.add_subplot(gs[i, j + 1])
             axc.axis("off")
             axc.set_xlim(0, 1); axc.set_ylim(0, 1)
-            if j == 0:
-                axc.text(-0.28, 0.5, f"true class {rec['true']}",
-                         rotation=90, va="center", fontsize=5.5, color=GREY)
             y = 0.97
             for l in cell["literals"][:11]:
                 m, col = lit_mark(l)
