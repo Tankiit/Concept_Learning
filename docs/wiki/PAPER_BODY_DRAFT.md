@@ -1094,3 +1094,9 @@ User: "check if we could use RSBench results." Answer: YES — `bdd_oia_audit.js
 ## Changelog 2026-11-15 (camera-ready figures) — the advisor's styled figure script, LOADER-WIRED and run
 
 `scripts/plot_figs_v6.py` = the advisor's script (styling, panels, CVPR column width) with its own TODO honoured: every number loaded from the committed JSONs (fig_scale ← 3 audit JSONs + 2 independence JSONs; fig_abstain ← abstention_curves + task1_abstention files; fig_ceiling ← design_b_v2 ladder + bdd stage6; fig_methods ← bdd_oia_methods part1; fig_readers ← all four bed audits). Outputs to results/figures (not /home/claude). Regenerated fig_scale/fig_abstain (restyled) + new fig_ceiling/fig_methods/fig_readers; fig_slope superseded by fig_ceiling (kept on disk). Loader caught a data bug the hard-coded version hid: the BDD reader-gradient gap must average the FOUR ACTIVE actions (43.6 pts if the excluded fifth's ~0.997 teacher accuracy leaks in); correct values 34.8/18.7/18.6/8.3 → gradient stated as 35/19/19/8 in §4.5 and RESULTS_SUMMARY §9 (was 35/20/19/8). fig_readers footnote: SUN marked $^*$ (carved split).
+
+---
+
+## Changelog 2026-11-15 (ablations figure) — fig_mechanism rebuilt camera-ready, loader-wired
+
+`plot_figs_v6.py` extended with the ablations figure (was hard-coded in the older style): support vs |R| across tree depths at fixed K=20, orange points labelled by depth with the accuracy in small grey beneath, dashed ink curve = the independence baseline at the same |R| — loaded from `ablation_depth_K20.json`. `save()` in the script is now skip-existing (never overwrites; delete a file to regenerate it), so the whole set is idempotent. Old `plot_fig_mechanism.py` output superseded (script kept). The aggregator stays in tab:ablate per the advisor's guidance (table rows, not a figure).

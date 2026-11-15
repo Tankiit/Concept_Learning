@@ -34,10 +34,10 @@ def wilson(p, n, z=1.96):
 
 
 def save(fig, name):
-    for ext in ("pdf", "png"):
-        p = os.path.join(OUT, f"{name}.{ext}")
-        if os.path.exists(p):
-            raise SystemExit(f"REFUSING to overwrite {p}")
+    # never overwrites: existing figures are skipped (delete to regenerate)
+    if os.path.exists(os.path.join(OUT, f"{name}.pdf")):
+        print(f"skip {name} (exists)")
+        return
     fig.savefig(os.path.join(OUT, f"{name}.pdf"), bbox_inches="tight")
     fig.savefig(os.path.join(OUT, f"{name}.png"), dpi=200, bbox_inches="tight")
 
@@ -195,4 +195,31 @@ ax.set_xlabel("concept-reader accuracy"); ax.set_ylabel("accuracy − support (p
 ax.set_xlim(.68, 1.0); ax.set_ylim(0, 40)
 ax.grid(color="#e6e6e3", lw=.5); ax.set_axisbelow(True)
 save(fig, "fig_readers")
+print("ok")
+
+
+# ================= Fig: mechanism (ablations) ==============================
+# ablation_depth_K20.json -- support vs |R| across tree depths at fixed
+# K=20, against the independence-baseline prediction at the same |R|.
+dep = jload("ablation_depth_K20.json")["cells"]
+xs = [c["mean_len_R"] for c in dep]
+fig, ax = plt.subplots(figsize=(W, 2.2))
+ax.plot(xs, [c["null"] for c in dep], "--", color=INK, lw=1.4,
+        label="independence baseline")
+ax.plot(xs, [c["support"] for c in dep], "-o", color=ORANGE, lw=2, ms=5,
+        label="measured support")
+for c in dep:
+    ax.annotate(f"d={c['depth']}", (c["mean_len_R"], c["support"]),
+                textcoords="offset points", xytext=(7, -9), fontsize=6.5, color=INK)
+    ax.annotate(f"{c['acc']:.2f}", (c["mean_len_R"], c["support"]),
+                textcoords="offset points", xytext=(7, 3), fontsize=6,
+                color="#777")
+ax.text(0.02, 0.04, "small grey = accuracy", transform=ax.transAxes, fontsize=6,
+        color="#777")
+ax.set_xlabel(r"mean reason length $|R|$  (tree depth, $K{=}20$ fixed)")
+ax.set_ylabel("premise support")
+ax.set_ylim(0, 0.62)
+ax.legend(frameon=False, fontsize=7, loc="upper right")
+ax.grid(color="#e6e6e3", lw=.5); ax.set_axisbelow(True)
+save(fig, "fig_mechanism")
 print("ok")
