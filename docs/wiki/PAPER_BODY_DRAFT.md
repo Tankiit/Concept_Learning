@@ -423,7 +423,7 @@ uniformly across the vocabulary (\cref{fig:failures}). At $K=4$, all
 $88$ failing reasons cite \texttt{bill\_color=yellow} as present, a
 literal the annotations never support. The corresponding reader fires
 on beak regions in which only $3.3\%$ of pixels are yellow on average,
-indicating a visual shortcut rather than a poorly chosen threshold.
+indicating a visual shortcut rather than a poorly chosen threshold (the reader fires on beaks with as little as zero percent yellow pixels; four examples in the supplement, Fig.~\ref{fig:beakstrip}).
 Conversely, all $30$ passing reasons rely exclusively on negated
 literals, and all of them remain valid under the stricter scoring rule
 that excludes concepts on unobserved parts. Concentration persists
@@ -635,6 +635,31 @@ where they also help accuracy (\cref{sec:ceiling}). This set of null
 results is the principal reason we present the paper as a measured
 limit rather than as a method.
 
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\textwidth]{fig_qualitative.pdf}
+  \caption{\textbf{Depth, explanations, and their premises} (CUB, $K{=}20$;
+  one pre-registered sweep; rows by fixed rules, middle image id at the
+  median length). Each row: the image with the parts cited by its
+  default (depth-12) reason boxed by worst status (green = all
+  supported, red dashed = some refuted, grey = part not visible), then
+  its reason at depth $\le 2/4/6/12$; literals marked
+  supported~(\textcolor{green}{$\checkmark$}) /
+  refuted~(\textcolor{red}{$\times$}) / part-invisible~($\circ$), with
+  the prediction's correctness, $|R|$, and all-true flag under each
+  cell. \textbf{(a)}~Typical failure: the median-length failing default
+  reason. \textbf{(b)}~The trade-off: at depth $2$ the reason is fully
+  true but predicts the wrong class, while the default predicts
+  correctly with refuted premises. \textbf{(c)}~A success whose
+  premises include \emph{positive} literals---required by rule, and
+  available: $35$ of the $36$ fully-true default reasons at $K{=}20$
+  cite at least one positive literal, so the absence-only character of
+  the four-class successes does not persist at scale. Artefact:
+  \texttt{results/figures/fig\_qualitative.pdf} (per-instance dump:
+  \texttt{ablation\_depth\_K20\_perinstance.json}).}
+  \label{fig:qualitative}
+\end{figure*}
+
 \subsection{Ablations}
 \label{sec:ablations}
 
@@ -797,6 +822,18 @@ sequential-T (ours, audit) & 0.721 & 0.370 & 0.849 & 0.534 [$0.521,0.546$] \\
 ## Appendix stubs: app:unresolved, app:beds, tab:replication (added 2026-11-14 night)
 
 ```latex
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{fig_beakstrip.pdf}
+\caption{\textbf{The yellow-bill shortcut, four beaks} (deterministic
+pick: min / quartile / median / max of the yellow-pixel distribution
+among the 88 firing beaks). Each crop: species, measured yellow-pixel
+share, reader probability, annotation. The reader asserts
+\texttt{bill\_colour=yellow} with high confidence on beaks that are
+near-entirely non-yellow.}
+\label{fig:beakstrip}
+\end{figure}
+
 \section{Unresolved-literal sensitivity}
 \label{app:unresolved}
 Under the convention of \cref{eq:support}, concepts on invisible parts
@@ -1100,3 +1137,7 @@ User: "check if we could use RSBench results." Answer: YES — `bdd_oia_audit.js
 ## Changelog 2026-11-15 (ablations figure) — fig_mechanism rebuilt camera-ready, loader-wired
 
 `plot_figs_v6.py` extended with the ablations figure (was hard-coded in the older style): support vs |R| across tree depths at fixed K=20, orange points labelled by depth with the accuracy in small grey beneath, dashed ink curve = the independence baseline at the same |R| — loaded from `ablation_depth_K20.json`. `save()` in the script is now skip-existing (never overwrites; delete a file to regenerate it), so the whole set is idempotent. Old `plot_fig_mechanism.py` output superseded (script kept). The aggregator stays in tab:ablate per the advisor's guidance (table rows, not a figure).
+
+## Changelog 2026-11-15 (qualitative figure + beak strip) — advisor layout implemented; row-(c) question answered empirically
+
+**Per-instance dump EXECUTED** (`ablation_depth_K20_perinstance.py` → `ablation_depth_K20_perinstance.json`, new file): K=20 × depths {2,4,6,8,12,16}, per instance sid/pred/correct + literals (feature, bit, supported, part_visible); default-depth aggregate reproduces the committed sweep exactly (0.070). **Row-(c) answer: 35 of 36 fully-true default K=20 reasons cite ≥1 positive literal** — the absence-only character of the K=4 successes does NOT persist at scale; the rule requires a positive literal and one exists (sid 462). Row picks (fixed rules, middle sid at median): (a) sid 513 (7-literal failing default), (b) 92 candidates → sid 714 (depth-2 all-true wrong-class vs correct default), (c) sid 462. **fig_qualitative** rendered per the advisor layout (image with worst-status boxes + 4 depth cells with ✓/✗/∘, footer pred/|R|/all-true below the box; QA-passed). **fig_beakstrip** (supplement) from committed yellow_bill_audit.json: 4 firing beaks at min/quartile/median/max yellow-pixel share with species, %, reader prob — decision: SUPPLEMENT (main text keeps the single 0%-crop in fig:failures + the 3.3% sentence + the new pointer). New §4.3 sentence notes the reader fires at as little as 0% yellow.
