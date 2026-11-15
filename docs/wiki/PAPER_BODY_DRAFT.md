@@ -380,12 +380,17 @@ accuracy of $0.69$--$0.75$.
   yellow pixels (bed average over firing beaks: $3\%$) and a tail crop
   asserted black; both refuted by the annotations. \emph{Bottom left:}
   each replication bed's top carrier of failing reasons (CelebA: a
-  negated attribute; BDD-OIA: a positive traffic literal---raw images
-  are not local for these beds, and BDD-OIA ships no per-instance
-  records). \emph{Bottom right:} the share of failing reasons
-  containing at least one of the top-$k$ carrier literals---CUB K=4
-  (thick red), the five re-drawn subsets (thin red; the shape is
-  stable while the top literal's identity changes), CelebA (grey).}
+  negated attribute; BDD-OIA: top fault slot \texttt{green\_light=1} at
+  support $0.62$, alongside the stereotyped co-resident
+  \texttt{rider=0} in $76\%$ of failing reasons at support $0.92$; the
+  deterministic pick is frame \texttt{6c0cc8ca-e1dd9997\_3}---bdd100k
+  frames are not local). \emph{Bottom right:} the share of failing
+  reasons containing at least one of the top-$k$ carrier literals---CUB
+  K=4 (thick red), the five re-drawn subsets (thin red; the shape is
+  stable while the top literal's identity changes), CelebA (grey),
+  BDD-OIA (green; its top-$1$ coverage is the stereotyped
+  \texttt{rider=0}, a usually-true co-resident---the fault sits in the
+  traffic-light slots).}
   \label{fig:failures}
 \end{figure}
 
