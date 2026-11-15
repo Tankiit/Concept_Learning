@@ -73,18 +73,38 @@ K=200 rule-3 verification clean (join exact, 0 structural-only reasons, 95% of m
 
 Escapes: oracle subset-selection gain **0.0003**; UAR ≡ ordinary 98.3%; trusted query 0.090 @full coverage (inside CUB's 0.067–0.10 band). Reversals: stronger readers **0.534→0.628**; certified-vocabulary retraining **→0.786** (certificate population reshapes: forward n 2,268→3,383, len 4.0; stop collapses to len→1); GT-bits tree **no collapse** (0.987/0.986). Positive control: i.i.d. annotation noise ε∈[5,30]% moves support within **0.002** of the analytic prediction at every ε. — `bdd_oia_experiments.json`.
 
-## 8. Ablations (pre-registered P-D1..D3)
+## 8. Ablations — the inversion is not a design artifact (all pre-registered; status per row)
 
-Depth sweep at fixed K (readers/seed fixed):
+### 8.1 Status of every candidate ablation (grouped by pipeline stage)
+
+| stage | ablation | status | what it answers / result |
+|---|---|---|---|
+| A perception | **predicted localisation** (vs oracle boxes) | **NOT RUN — flagged, not claimed** | §3.1 states the decrease assumption is untested; the one claim-relevant unknown (§5) |
+| A perception | **backbone** (DINOv2 default vs CLIP/supervised) | covered by argument | default IS DINOv2 (config-verified); the inversion replicates across 3 feature stacks already (CUB / CelebA / rsbench's BDD) |
+| A perception | region pooling (box size, mean vs max) | not run (supplement tier) | — |
+| B concepts | reader threshold θ (0.5 / F1-opt / precision-opt) | not run (supplement tier) | threshold artifact ruled out for ONE literal (3.3%-pixels shortcut) only |
+| B concepts | calibration method (isotonic vs Platt vs none) | not run (supplement tier) | the raw-vs-calibrated reversal is used as the diagnostic instead |
+| B concepts | vocabulary size F (36 vs subset vs more of 312) | not run (medium cost) | ceiling ladder is the adjacent executed evidence (§4) |
+| C reasoning | **tree depth → \|R\| → support** | **EXECUTED** (P-D1..D3) | table below — interventional mechanism |
+| C reasoning | minimum-cardinality reasons | DEFERRED (engine defect) | PyXAI `minimal_sufficient_reason` deadlocks on arm64 macOS (bug ii-b); depth knob delivers the same claim |
+| C reasoning | head family (tree vs other Boolean heads) | EXECUTED (supplement) | model-family table (§10): independent CBM worst, joint MLP best-acc but 0.807 post-hoc agreement |
+| D gate | **aggregator (min / product / mean)** | **EXECUTED** (P-A1) | numbers below — min weakly best |
+| — scoring | **unresolved-literal convention** (asserted-refuted/negated-supported vs strict) | **EXECUTED** (K=4) | 30/30 passing reasons survive the strict rule — the concentration finding is not a scoring artifact (`app:unresolved`) |
+
+### 8.2 Depth sweep (executed; readers/seed fixed, only max_depth varies)
 
 | K | depth 2 | depth 12/16 | reading |
 |---|---|---|---|
-| 4 | .254 (|R| 1.75) | .254 (|R| 3.61) | **flat** — the yellow-bill literal rides every tree |
-| 10 | **.358** (|R| 2.0) | .115 (|R| 6.0) | **3.1× ≥ pre-registered 3× bar** |
-| 20 | **.528** (|R| 2.0, acc .184) | .070 (|R| 7.2, acc .42) | null predicts **.522** — within 1% |
-| 200 | .672 (acc .000) | .028–.038 (acc .16) | trustable reasons from a head that can't classify |
+| 4 | .254 (\|R\| 1.75) | .254 (\|R\| 3.61) | **flat** — the yellow-bill literal rides every tree (concentration corroboration) |
+| 10 | **.358** (\|R\| 2.0) | .115 (\|R\| 6.0) | **3.1× ≥ pre-registered 3× bar** (P-D3 ✓) |
+| 20 | **.528** (\|R\| 2.0, acc .184) | .070 (\|R\| 7.2, acc .42) | null predicts **.522** — within 1% |
+| 200 | .672 (acc .000) | .028–.038 (acc .16) | trustable reasons from a head that cannot classify |
 
-K=20 cells: sid-order subsample — levels not comparable to §1 (trend is the measurement). Ratios to null in [1.00, 1.56] everywhere (P-D2 ✓); |R| monotone in depth (P-D1 ✓). — `ablation_depth_support.json`, `ablation_depth_K20.json`.
+P-D1 ✓ (\|R\| monotone in depth), P-D2 ✓ (ratio to null in [1.00, 1.56] at every cell). K=20/200 cells use sid-order subsamples — levels not comparable to §1, the within-column trend is the measurement. — `ablation_depth_support.json`, `ablation_depth_K20.json`.
+
+### 8.3 Aggregator (executed; from committed per-literal calibrated trust)
+
+K=4: min = product = mean = 1.000 at every coverage ≤ 20% (the 30 pipit reasons dominate). K=10: @5% cov **min 0.667 / product 0.583 / mean 0.583**; LB repair ratio @14% **min 4.70 / product 4.47 / mean 3.36** → min weakly best (failure mode = one bad literal), mean worst. Falsified honestly: rank-correlation sub-prediction (Spearman ≥ 0.9 predicted; measured 0.81 K=4 / **0.62 K=10**). K=200 aggregator unmeasured (dump covers K ∈ {4,10}). — `ablation_aggregator.json`.
 
 ## 9. Replication beds (single seed, §4.1 caveat)
 
